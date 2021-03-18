@@ -1,0 +1,122 @@
+[
+  {
+    "startDate": "24.04.2021",
+    "startTime": "7.00",
+    "totalTime": 13.5,
+    "distance": 200,
+    "title": "\"Москаленки\"",
+    "color": "yellowClass",
+    "route": "200Moskalenki",
+    "description": "10 лет веломарафонскому клубу \"Цепная Реакция\""
+  },
+  {
+    "startDate": "09.05.2021",
+    "startTime": "7.00",
+    "totalTime": 13.5,
+    "distance": 200,
+    "title": "\"Серебряное\"",
+    "color": "yellowClass",
+    "route": "200Serebryanoye",
+    "description": ""
+  },
+  {
+    "startDate": "15.05.2021",
+    "startTime": "7.00",
+    "totalTime": 20,
+    "distance": 300,
+    "title": "\"Черлак\"",
+    "color": "greenClass",
+    "route": "300Cherlak",
+    "description": ""
+  },
+  {
+    "startDate": "29.05.2021",
+    "startTime": "7.00",
+    "totalTime": 27,
+    "distance": 400,
+    "title": "\"Большеречье\"",
+    "color": "purpleClass",
+    "route": "400Bolsherechye",
+    "description": ""
+  },
+  {
+    "startDate": "12.06.2021",
+    "startTime": "7.00",
+    "totalTime": 40,
+    "distance": 600,
+    "title": "\"Черлак - Исилькуль\"",
+    "color": "orangeClass",
+    "route": "600CherlakIsilkul",
+    "description": ""
+  },
+  {
+    "startDate": "26.06.2021",
+    "startTime": "7.00",
+    "totalTime": 13.5,
+    "distance": 200,
+    "title": "\"Новоуральский\"",
+    "color": "yellowClass",
+    "route": "200Novouralsky",
+    "description": ""
+  },
+  {
+    "startDate": "10.07.2021",
+    "startTime": "7.00",
+    "totalTime": 20,
+    "distance": 300,
+    "title": "\"Таврическое - Саргатское\"",
+    "color": "greenClass",
+    "route": "300TavricheskoeSargatskoe",
+    "description": ""
+  },
+  {
+    "startDate": "24.07.2021",
+    "startTime": "7.00",
+    "totalTime": 27,
+    "distance": 400,
+    "title": "\"Москаленки - Иртыш\"",
+    "color": "purpleClass",
+    "route": "400MoskalenkiIrtysh",
+    "description": ""
+  },
+  {
+    "startDate": "07.08.2021",
+    "startTime": "7.00",
+    "totalTime": 40,
+    "distance": 600,
+    "title": "\"Черлак - Исилькуль\"",
+    "color": "orangeClass",
+    "route": "600CherlakIsilkul",
+    "description": ""
+  },
+  {
+    "startDate": "14.08.2021",
+    "startTime": "7.00",
+    "totalTime": 13.5,
+    "distance": 200,
+    "title": "\"Павлоградка\"",
+    "color": "yellowClass",
+    "route": "200Pavlogradka",
+    "description": ""
+  },
+  {
+    "startDate": "28.08.2021",
+    "startTime": "7.00",
+    "totalTime": 20,
+    "distance": 300,
+    "title": "\"Исилькуль\"",
+    "color": "greenClass",
+    "route": "300Isilkul",
+    "description": ""
+  },
+  {
+    "startDate": "11.09.2021",
+    "startTime": "7.00",
+    "totalTime": 13.5,
+    "distance": 200,
+    "title": "\"Иртыш\"",
+    "color": "yellowClass",
+    "route": "200Irtysh",
+    "description": "100 лет BRM"
+  }
+]

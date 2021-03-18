@@ -1,0 +1,22 @@
+<div>
+  <mat-toolbar color="primary">
+    {{data.brevet.title}} {{data.brevet.distance}}км
+    <div class="button-container">
+      <button (click)="showLegend()" mat-icon-button title="Легенда">
+        <mat-icon>receipt</mat-icon>
+      </button>
+      <button (click)="dialogClose()" mat-icon-button title="Закрыть">
+        <mat-icon>cancel</mat-icon>
+      </button>
+    </div>
+  </mat-toolbar>
+</div>
+<div (window:resize)="onResize($event)" id="map">
+</div>
+<div id="legend">
+  <div *ngFor="let item of legend">
+    <b>{{item[0]}}</b>
+    <br>
+    {{item[1]}}
+  </div>
+</div>

@@ -1,0 +1,36 @@
+<div class="head">
+  <form [formGroup]="navigationForm">
+    <mat-form-field appearance="fill">
+      <mat-label>Выберите дату</mat-label>
+      <input [matDatepicker]="picker" formControlName="inputDate" matInput>
+      <mat-datepicker-toggle [for]="picker" matSuffix></mat-datepicker-toggle>
+      <mat-datepicker #picker [dateClass]="dateClass" disabled="false"></mat-datepicker>
+    </mat-form-field>
+    <br>
+    <mat-slide-toggle color="primary" formControlName="allEvents">Показывать все события</mat-slide-toggle>
+  </form>
+</div>
+<div class="body">
+  <div *ngFor="let brevet of brevetsData" class="card">
+    <mat-card
+      *ngIf="(this.navigationForm.controls.inputDate.value | date: 'dd.MM.yyyy') === brevet.startDate || this.navigationForm.controls.allEvents.value === true">
+      <div [class]=brevet.color class="km">
+        {{brevet.distance}}
+      </div>
+      <mat-card-title>
+        {{brevet.title}}
+      </mat-card-title>
+      <mat-card-subtitle>
+        {{brevet.startDate}} в {{brevet.startTime}}, лимит {{brevet.totalTime}}ч.
+      </mat-card-subtitle>
+      <div class="openMap">
+        <button (click)="dialogShowRoute(brevet, routesData)" mat-icon-button title="Карта маршрута">
+          <mat-icon>map</mat-icon>
+        </button>
+      </div>
+      <mat-card-content>
+        {{brevet.description}}
+      </mat-card-content>
+    </mat-card>
+  </div>
+</div>

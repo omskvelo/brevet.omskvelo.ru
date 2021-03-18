@@ -1,0 +1,16 @@
+.button-container {
+  margin-left: auto;
+}
+#map {
+  padding: 0;
+}
+#legend{
+  top: 64px;
+  right: 0;
+  max-width: 300px;
+  position: absolute;
+  z-index: 1000;
+  background: #ffffff;
+  overflow: auto;
+  padding: 5px;
+}
