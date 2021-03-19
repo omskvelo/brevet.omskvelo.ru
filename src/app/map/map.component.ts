@@ -90,8 +90,8 @@ export class MapComponent implements OnInit {
         }
       }
 
-      function timing(startDate, startTime, distanceToCheckPoint, max, min, speed, time, route, numberWayPoints): any {
-        if (numberWayPoints === route.wayPoints.length - 1 && distanceToCheckPoint === brevet.distance) {
+      function timing(startDate, startTime, distanceToCheckPoint, max, min, speed, time, route, numberWayPoints, typeTime): any {
+        if (numberWayPoints === route.wayPoints.length - 1 && typeTime === 'close') {
           time = brevet.totalTime;
         } else {
           for (let j = 0; j < 6; j++) {
@@ -108,7 +108,8 @@ export class MapComponent implements OnInit {
           day++;
         }
         const startDateSplit = startDate.split('.');
-        return new Date(startDateSplit[2], startDateSplit[1], startDateSplit[0] + day, checkPointH, checkPointM);
+        const toStartDate = new Date(startDateSplit[2], startDateSplit[1], startDateSplit[0]);
+        return new Date(toStartDate.getFullYear(), toStartDate.getMonth(), toStartDate.getDate() + day, checkPointH, checkPointM);
       }
 
       function timeCheckPoint(brevet, distanceToCheckPoint, popupName, route, numberWayPoints): any {
@@ -116,7 +117,8 @@ export class MapComponent implements OnInit {
         let min = [200, 200, 400, 200, 600, 200];
         let speed = [32, 30, 28, 26, 25, 24];
         let time = Math.min(distanceToCheckPoint, 200) / 34;
-        const openResult = timing(brevet.startDate, brevet.startTime, distanceToCheckPoint, max, min, speed, time, route, numberWayPoints);
+        let typeTime = 'open';
+        const openResult = timing(brevet.startDate, brevet.startTime, distanceToCheckPoint, max, min, speed, time, route, numberWayPoints, typeTime);
         max = [60, 600, 1000, 1200, 1400, 1800];
         min = [540, 400, 200, 200, 400, 200];
         speed = [15, 1.428, 13.333, 11, 10, 9];
@@ -124,7 +126,8 @@ export class MapComponent implements OnInit {
         if (numberWayPoints === route.wayPoints.length - 1) {
           distanceToCheckPoint = brevet.distance;
         }
-        const closeResult = timing(brevet.startDate, brevet.startTime, distanceToCheckPoint, max, min, speed, time, route, numberWayPoints);
+        typeTime = 'close';
+        const closeResult = timing(brevet.startDate, brevet.startTime, distanceToCheckPoint, max, min, speed, time, route, numberWayPoints, typeTime);
         popupTitle = '<br>' + popupName + ': ' + distanceToCheckPoint + 'км'
           + '<br>Открытие: ' + openResult.toLocaleString('ru', optionsDate)
           + '<br>Закрытие: ' + closeResult.toLocaleString('ru', optionsDate);
