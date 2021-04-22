@@ -3,6 +3,7 @@ import {MAT_DIALOG_DATA, MatDialog} from '@angular/material/dialog';
 import * as L from 'leaflet/dist/leaflet';
 import 'leaflet-routing-machine';
 import {RoutesData} from '../main/main.component';
+import {HttpClient} from '@angular/common/http';
 
 
 @Component({
@@ -12,9 +13,10 @@ import {RoutesData} from '../main/main.component';
 })
 export class MapComponent implements OnInit {
   route: RoutesData;
-  legend = [];
+  legend;
 
-  constructor(private dialog: MatDialog, @Inject(MAT_DIALOG_DATA) public data) {
+  constructor(private dialog: MatDialog, @Inject(MAT_DIALOG_DATA) public data, private httpClient: HttpClient) {
+    this.httpClient.get('assets/legends/' + this.data.brevet.route + '.json').subscribe(data =>  this.legend = data);
   }
 
   ngOnInit(): any {
@@ -63,18 +65,14 @@ export class MapComponent implements OnInit {
       createMarker: function markerStyle(): any {
         return null;
       },
-      /*createMarker: function markerStyle(i, wp): any {
-        return L.marker(wp.latLng, {icon: greenIcon});
-      },*/
     }).addTo(myMap);
     const brevet = this.data.brevet;
     const route = this.route;
-    const legend = [];
     const optionsDate = {
       hour: 'numeric',
       minute: 'numeric',
       day: 'numeric',
-      month: 'long',
+      month: 'numeric',
       year: 'numeric',
     };
     routeControl.on('routeselected', function(e) {
@@ -109,7 +107,7 @@ export class MapComponent implements OnInit {
         }
         const startDateSplit = startDate.split('.');
         const toStartDate = new Date(startDateSplit[2], startDateSplit[1], startDateSplit[0]);
-        return new Date(toStartDate.getFullYear(), toStartDate.getMonth(), toStartDate.getDate() + day, checkPointH, checkPointM);
+        return new Date(toStartDate.getFullYear(), toStartDate.getMonth() - 1, toStartDate.getDate() + day, checkPointH, checkPointM);
       }
 
       function timeCheckPoint(brevet, distanceToCheckPoint, popupName, route, numberWayPoints): any {
@@ -158,7 +156,6 @@ export class MapComponent implements OnInit {
           popupName = popupNameCheckPoint(i, numberCheckPoint);
           popupTitle = timeCheckPoint(brevet, Math.round(selectRoute[i] / 1000), popupName.markerName, route, i);
           markers[f] = [route.wayPoints[i], popupName.markerIcon, route.checkPoints[numberCheckPoint][0], popupTitle];
-          legend[numberCheckPoint] = [popupName.markerName, route.checkPoints[numberCheckPoint][0], popupTitle];
           let doubleCheckPoint = numberCheckPoint;
           for (let j = i + 1; j < route.wayPoints.length; j++) {
             if (route.wayPoints[j][2] === 1 || route.wayPoints[j][2] === 2) {
@@ -172,7 +169,6 @@ export class MapComponent implements OnInit {
                 markers[f][1] = startfinishIcon;
               }
               markers[f][3] = markers[f][3] + '' + popupTitle;
-              legend[doubleCheckPoint] = [popupName.markerName, route.checkPoints[numberCheckPoint][0], popupTitle];
             }
           }
           numberCheckPoint++;
@@ -186,7 +182,6 @@ export class MapComponent implements OnInit {
         L.marker(item[0], {icon: item[1]}).addTo(myMap).bindPopup(item[2] + '' + item[3]);
       }
     });
-    this.legend = legend;
   }
 
   onResize(event): any {

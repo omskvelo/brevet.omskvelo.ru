@@ -21,9 +21,15 @@
         {{brevet.title}}
       </mat-card-title>
       <mat-card-subtitle>
-        {{brevet.startDate}} в {{brevet.startTime}}, лимит {{brevet.totalTime}}ч.
+        {{brevet.status}}
+        <a (click)="dialogShowResult(brevet.route)" *ngIf="brevet.status === 'Заезд закончился.'" mat-icon-button>
+          Результаты
+        </a>
       </mat-card-subtitle>
       <div class="openMap">
+        <a href="assets/tracks/{{brevet.route}}.gpx" mat-icon-button title="Скачать маршрут">
+          <mat-icon>download</mat-icon>
+        </a>
         <button (click)="dialogShowRoute(brevet, routesData)" mat-icon-button title="Карта маршрута">
           <mat-icon>map</mat-icon>
         </button>
