@@ -1,0 +1,9 @@
+table {
+  width: 100%;
+}
+.button-container {
+  margin-left: auto;
+}
+.no-result {
+  padding: 10px;
+}

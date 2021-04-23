@@ -1,0 +1,50 @@
+import {Component, Inject, OnInit, ViewChild} from '@angular/core';
+import {MAT_DIALOG_DATA, MatDialog} from '@angular/material/dialog';
+import {HttpClient} from '@angular/common/http';
+import {MatSort} from '@angular/material/sort';
+import {MatTableDataSource} from '@angular/material/table';
+
+export interface JsonData {
+  title: string;
+  results: any;
+}
+
+export interface ResultsData {
+  name: string;
+  resultTime: string;
+}
+
+@Component({
+  selector: 'app-result',
+  templateUrl: './result.component.html',
+  styleUrls: ['./result.component.css']
+})
+export class ResultComponent implements OnInit {
+  displayedColumns: string[] = ['name', 'resultTime'];
+  resultsData: MatTableDataSource<ResultsData>;
+  jsonData;
+  resultsTable = true;
+  @ViewChild(MatSort) sort: MatSort;
+
+  constructor(private dialog: MatDialog, @Inject(MAT_DIALOG_DATA) public data, private httpClient: HttpClient) {
+  }
+
+  ngOnInit(): void {
+    this.httpClient.get('assets/data/resultsData.json').subscribe((data: JsonData) => {
+      this.jsonData = data;
+      for (const item of this.jsonData) {
+        if (item.title === this.data.route) {
+          if (item.results.length === 0) {
+            this.resultsTable = false;
+          }
+          this.resultsData = new MatTableDataSource(item.results);
+          this.resultsData.sort = this.sort;
+        }
+      }
+    });
+  }
+
+  dialogClose(): any {
+    this.dialog.closeAll();
+  }
+}

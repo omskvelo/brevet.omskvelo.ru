@@ -1,0 +1,22 @@
+<mat-toolbar color="primary">
+  Результаты
+  <div class="button-container">
+    <button (click)="dialogClose()" mat-icon-button title="Закрыть">
+      <mat-icon>cancel</mat-icon>
+    </button>
+  </div>
+</mat-toolbar>
+<div *ngIf="resultsTable === false" class="no-result">Результаты еще не опубликовали!</div>
+<table *ngIf="resultsTable === true" [dataSource]="resultsData" mat-table matSort matSortActive="name" matSortDirection="asc"
+       matSortDisableClear>
+  <ng-container matColumnDef="name">
+    <th *matHeaderCellDef mat-header-cell mat-sort-header> Имя</th>
+    <td *matCellDef="let element" mat-cell> {{element.name}} </td>
+  </ng-container>
+  <ng-container matColumnDef="resultTime">
+    <th *matHeaderCellDef mat-header-cell mat-sort-header> Время</th>
+    <td *matCellDef="let element" mat-cell> {{element.resultTime}} </td>
+  </ng-container>
+  <tr *matHeaderRowDef="displayedColumns" mat-header-row></tr>
+  <tr *matRowDef="let row; columns: displayedColumns;" mat-row></tr>
+</table>
