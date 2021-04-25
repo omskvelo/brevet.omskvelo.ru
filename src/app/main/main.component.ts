@@ -96,7 +96,7 @@ export class MainComponent implements OnInit {
             item.status = 'Заезд начался. Окончание: ' + new Date(this.finishDate).toLocaleString('ru', this.optionsDate) + ', лимит ' + item.totalTime + 'ч.';
           }
           if (this.startDate < this.nowDate && this.finishDate < this.nowDate) {
-            item.status = 'Заезд закончился.';
+            item.status = 'Заезд завершен.';
           }
         }
       });

@@ -7,18 +7,23 @@
   </div>
 </mat-toolbar>
 <div *ngIf="resultsTable === false" class="no-result">Результаты еще не опубликовали!</div>
-<div class="table-container">
-<table *ngIf="resultsTable === true" [dataSource]="resultsData" mat-table matSort matSortActive="name" matSortDirection="asc"
-       matSortDisableClear>
-  <ng-container matColumnDef="name">
-    <th *matHeaderCellDef mat-header-cell mat-sort-header> Имя</th>
-    <td *matCellDef="let element" mat-cell> {{element.name}} </td>
-  </ng-container>
-  <ng-container matColumnDef="resultTime">
-    <th *matHeaderCellDef mat-header-cell mat-sort-header> Время</th>
-    <td *matCellDef="let element" mat-cell> {{element.resultTime}} </td>
-  </ng-container>
-  <tr *matHeaderRowDef="displayedColumns sticky: true" mat-header-row></tr>
-  <tr *matRowDef="let row; columns: displayedColumns;" mat-row></tr>
-</table>
+<div *ngIf="resultsTable === true">
+  <div class="table-container">
+    <table [dataSource]="resultsData" mat-table matSort matSortActive="name" matSortDirection="asc"
+           matSortDisableClear>
+      <ng-container matColumnDef="name">
+        <th *matHeaderCellDef mat-header-cell mat-sort-header> Имя</th>
+        <td *matCellDef="let element" mat-cell> {{element.name}} </td>
+      </ng-container>
+      <ng-container matColumnDef="resultTime">
+        <th *matHeaderCellDef mat-header-cell mat-sort-header> Время</th>
+        <td *matCellDef="let element" mat-cell> {{element.resultTime}} </td>
+      </ng-container>
+      <tr *matHeaderRowDef="displayedColumns sticky: true" mat-header-row></tr>
+      <tr *matRowDef="let row; columns: displayedColumns;" mat-row></tr>
+    </table>
+  </div>
+  <div class="amount">
+    {{amount}} участников
+  </div>
 </div>

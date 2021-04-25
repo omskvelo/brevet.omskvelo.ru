@@ -24,6 +24,7 @@ export class ResultComponent implements OnInit {
   displayedColumns: string[] = ['name', 'resultTime'];
   resultsData: MatTableDataSource<ResultsData>;
   jsonData;
+  amount;
   resultsTable = true;
   @ViewChild(MatSort) sort: MatSort;
 
@@ -40,6 +41,7 @@ export class ResultComponent implements OnInit {
           }
           this.resultsData = new MatTableDataSource(item.results);
           this.resultsData.sort = this.sort;
+          this.amount = item.results.length;
         }
       }
     });
