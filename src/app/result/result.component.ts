@@ -3,6 +3,7 @@ import {MAT_DIALOG_DATA, MatDialog} from '@angular/material/dialog';
 import {HttpClient} from '@angular/common/http';
 import {MatSort} from '@angular/material/sort';
 import {MatTableDataSource} from '@angular/material/table';
+import {take} from 'rxjs/operators';
 
 export interface JsonData {
   title: string;
@@ -30,7 +31,7 @@ export class ResultComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.httpClient.get('assets/data/resultsData.json').subscribe((data: JsonData) => {
+    this.httpClient.get('assets/data/resultsData.json').pipe(take(1)).subscribe((data: JsonData) => {
       this.jsonData = data;
       for (const item of this.jsonData) {
         if (item.title === this.data.route) {

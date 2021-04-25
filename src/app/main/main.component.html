@@ -22,17 +22,17 @@
       </mat-card-title>
       <mat-card-subtitle>
         {{brevet.status}}
-        <a (click)="dialogShowResult(brevet.route)" *ngIf="brevet.status === 'Заезд закончился.'" mat-icon-button>
+        <a (click)="dialogShowResult(brevet.route)" *ngIf="brevet.status === 'Заезд закончился.'">
           Результаты
         </a>
       </mat-card-subtitle>
       <div class="openMap">
         <a href="assets/tracks/{{brevet.route}}.gpx" mat-icon-button title="Скачать маршрут">
           <mat-icon>download</mat-icon>
-        </a>
-        <button (click)="dialogShowRoute(brevet, routesData)" mat-icon-button title="Карта маршрута">
+        </a><br>
+        <a (click)="dialogShowRoute(brevet, routesData)" mat-icon-button title="Карта маршрута">
           <mat-icon>map</mat-icon>
-        </button>
+        </a>
       </div>
       <mat-card-content>
         {{brevet.description}}

@@ -1,9 +1,16 @@
 table {
   width: 100%;
 }
+td {
+  padding: 10px !important;
+}
 .button-container {
   margin-left: auto;
 }
 .no-result {
   padding: 10px;
+}
+.table-container {
+  max-height: 500px;
+  overflow: auto;
 }

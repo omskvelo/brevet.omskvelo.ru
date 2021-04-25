@@ -4,6 +4,7 @@ import * as L from 'leaflet/dist/leaflet';
 import 'leaflet-routing-machine';
 import {RoutesData} from '../main/main.component';
 import {HttpClient} from '@angular/common/http';
+import {take} from 'rxjs/operators';
 
 
 @Component({
@@ -16,7 +17,7 @@ export class MapComponent implements OnInit {
   legend;
 
   constructor(private dialog: MatDialog, @Inject(MAT_DIALOG_DATA) public data, private httpClient: HttpClient) {
-    this.httpClient.get('assets/legends/' + this.data.brevet.route + '.json').subscribe(data =>  this.legend = data);
+    this.httpClient.get('assets/legends/' + this.data.brevet.route + '.json').pipe(take(1)).subscribe(data =>  this.legend = data);
   }
 
   ngOnInit(): any {

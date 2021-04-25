@@ -3,6 +3,7 @@ import {FormControl, FormGroup} from '@angular/forms';
 import {now} from 'moment';
 import {MatDialog} from '@angular/material/dialog';
 import {HttpClient} from '@angular/common/http';
+import {take} from 'rxjs/operators';
 
 
 export const MY_FORMATS = {
@@ -79,7 +80,7 @@ export class MainComponent implements OnInit {
   };
 
   ngOnInit(): void {
-    this.httpClient.get('assets/data/brevetsData.json')
+    this.httpClient.get('assets/data/brevetsData.json').pipe(take(1))
       .subscribe((data: BrevetsData[]) => {
         this.brevetsData = data;
         for (const item of this.brevetsData) {
@@ -99,7 +100,7 @@ export class MainComponent implements OnInit {
           }
         }
       });
-    this.httpClient.get('assets/data/routesData.json')
+    this.httpClient.get('assets/data/routesData.json').pipe(take(1))
       .subscribe((data: RoutesData[]) => this.routesData = data);
   }
 
