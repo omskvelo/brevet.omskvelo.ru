@@ -259,7 +259,44 @@
   },
   {
     "title": "300Cherlak",
-    "results": []
+    "results": [
+      {
+        "name": "Ермаков Артём",
+        "resultTime": "14.19"
+      },
+      {
+        "name": "Ноженко Роман",
+        "resultTime": "12.40"
+      },
+      {
+        "name": "Соколов Максим",
+        "resultTime": "12.39"
+      },
+      {
+        "name": "Лоенко Евгений",
+        "resultTime": "12.38"
+      },
+      {
+        "name": "Малахов Андрей",
+        "resultTime": "13.44"
+      },
+      {
+        "name": "Лемаев Алексей",
+        "resultTime": "11.51"
+      },
+      {
+        "name": "Осипов Алексей",
+        "resultTime": "13.25"
+      },
+      {
+        "name": "Дружняев Константин",
+        "resultTime": "DNF"
+      },
+      {
+        "name": "Крупкин Андрей",
+        "resultTime": "DSQ"
+      }
+    ]
   },
   {
     "title": "400Bolsherechye",
