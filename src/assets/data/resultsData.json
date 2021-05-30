@@ -300,7 +300,48 @@
   },
   {
     "title": "400Bolsherechye",
-    "results": []
+    "results": [
+      {
+        "name": "Ермаков Артём",
+        "resultTime": "18.55"
+      },
+      {
+        "name": "Ноженко Роман",
+        "resultTime": "17.18"
+      },
+      {
+        "name": "Малахов Андрей",
+        "resultTime": "19.53"
+      },
+      {
+        "name": "Крупкин Андрей",
+        "resultTime": "17.18"
+      },
+      {
+        "name": "Клапотовский Денис",
+        "resultTime": "17.18"
+      },
+      {
+        "name": "Оборин Павел",
+        "resultTime": "19.43"
+      },
+      {
+        "name": "Лоенко Евгений",
+        "resultTime": "DNF"
+      },
+      {
+        "name": "Соколов Максим",
+        "resultTime": "17.18"
+      },
+      {
+        "name": "Осипов Алексей",
+        "resultTime": "19.43"
+      },
+      {
+        "name": "Лемаев Алексей",
+        "resultTime": "19.20"
+      }
+    ]
   },
   {
     "title": "600CherlakIsilkul",
