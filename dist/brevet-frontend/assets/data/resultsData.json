@@ -345,7 +345,40 @@
   },
   {
     "title": "600CherlakIsilkul",
-    "results": []
+    "results": [
+      {
+        "name": "Малахов Андрей",
+        "resultTime": "30.15"
+      },
+      {
+        "name": "Крупкин Андрей",
+        "resultTime": "31.53"
+      },
+      {
+        "name": "Клапотовский Денис",
+        "resultTime": "30.15"
+      },
+      {
+        "name": "Лемаев Алексей",
+        "resultTime": "28.30"
+      },
+      {
+        "name": "Лоенко Евгений",
+        "resultTime": "33.35"
+      },
+      {
+        "name": "Оборин Павел",
+        "resultTime": "31.03"
+      },
+      {
+        "name": "Соколов Максим",
+        "resultTime": "DNF"
+      },
+      {
+        "name": "Чигадайкин Игорь",
+        "resultTime": "DNF"
+      }
+    ]
   },
   {
     "title": "200Novouralsky",
