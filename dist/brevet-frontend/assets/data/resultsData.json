@@ -382,7 +382,48 @@
   },
   {
     "title": "200Novouralsky",
-    "results": []
+    "results": [
+      {
+        "name": "Ермаков Артём",
+        "resultTime": "10.07"
+      },
+      {
+        "name": "Кулик Александр",
+        "resultTime": "DNS"
+      },
+      {
+        "name": "Крупкин Андрей",
+        "resultTime": "8.30"
+      },
+      {
+        "name": "Арнаут Станислав",
+        "resultTime": "9.45"
+      },
+      {
+        "name": "Асташов Владимир",
+        "resultTime": "11.38"
+      },
+      {
+        "name": "Еськов Виталий",
+        "resultTime": "11.54"
+      },
+      {
+        "name": "Суставов Алексей",
+        "resultTime": "12.50"
+      },
+      {
+        "name": "Глазырин Андрей",
+        "resultTime": "11.19"
+      },
+      {
+        "name": "Барановский Дмитрий",
+        "resultTime": "DNS"
+      },
+      {
+        "name": "Соколов Максим",
+        "resultTime": "8.05"
+      }
+    ]
   },
   {
     "title": "300TavricheskoeSargatskoe",
