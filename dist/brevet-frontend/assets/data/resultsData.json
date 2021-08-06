@@ -1,6 +1,7 @@
 [
   {
     "title": "200Moskalenki",
+    "index": 1,
     "results": [
       {
         "name": "Ермаков Артем",
@@ -146,6 +147,7 @@
   },
   {
     "title": "200Serebryanoye",
+    "index": 1,
     "results": [
       {
         "name": "Крупкин Андрей",
@@ -259,6 +261,7 @@
   },
   {
     "title": "300Cherlak",
+    "index": 1,
     "results": [
       {
         "name": "Ермаков Артём",
@@ -300,6 +303,7 @@
   },
   {
     "title": "400Bolsherechye",
+    "index": 1,
     "results": [
       {
         "name": "Ермаков Артём",
@@ -345,6 +349,7 @@
   },
   {
     "title": "600CherlakIsilkul",
+    "index": 1,
     "results": [
       {
         "name": "Малахов Андрей",
@@ -382,6 +387,7 @@
   },
   {
     "title": "200Novouralsky",
+    "index": 1,
     "results": [
       {
         "name": "Ермаков Артём",
@@ -427,22 +433,86 @@
   },
   {
     "title": "300TavricheskoeSargatskoe",
-    "results": []
+    "index": 1,
+    "results": [
+      {
+        "name": "Арнаут Станислав",
+        "resultTime": "11.46"
+      },
+      {
+        "name": "Соколов Максим",
+        "resultTime": "11.46"
+      },
+      {
+        "name": "Чигадайкин Игорь",
+        "resultTime": "11.43"
+      },
+      {
+        "name": "Клапотовский Денис",
+        "resultTime": "13.00"
+      },
+      {
+        "name": "Маслова Елена",
+        "resultTime": "DNF"
+      },
+      {
+        "name": "Крупкин Андрей",
+        "resultTime": "13.00"
+      }
+    ]
   },
   {
     "title": "400MoskalenkiIrtysh",
+    "index": 1,
+    "results": [
+      {
+        "name": "Ермаков Артем",
+        "resultTime": "18.01"
+      },
+      {
+        "name": "Крупкин Андрей",
+        "resultTime": "16.17"
+      },
+      {
+        "name": "Арнаут Станислав",
+        "resultTime": "17.58"
+      },
+      {
+        "name": "Чигадайкин Игорь",
+        "resultTime": "16.27"
+      },
+      {
+        "name": "Осипов Алексей",
+        "resultTime": "18.40"
+      },
+      {
+        "name": "Оборин Павел",
+        "resultTime": "18.01"
+      },
+      {
+        "name": "Соколов Максим",
+        "resultTime": "18.01"
+      }
+    ]
+  },
+  {
+    "title": "600CherlakIsilkul",
+    "index": 2,
     "results": []
   },
   {
     "title": "200Pavlogradka",
+    "index": 1,
     "results": []
   },
   {
     "title": "300Isilkul",
+    "index": 1,
     "results": []
   },
   {
     "title": "200Irtysh",
+    "index": 1,
     "results": []
   }
 ]

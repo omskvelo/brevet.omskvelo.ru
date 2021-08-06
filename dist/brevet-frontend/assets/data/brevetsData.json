@@ -7,6 +7,7 @@
     "title": "\"Москаленки\"",
     "color": "yellowClass",
     "route": "200Moskalenki",
+    "index": 1,
     "description": "10 лет веломарафонскому клубу \"Цепная Реакция\""
   },
   {
@@ -17,6 +18,7 @@
     "title": "\"Серебряное\"",
     "color": "yellowClass",
     "route": "200Serebryanoye",
+    "index": 1,
     "description": ""
   },
   {
@@ -27,6 +29,7 @@
     "title": "\"Черлак\"",
     "color": "greenClass",
     "route": "300Cherlak",
+    "index": 1,
     "description": ""
   },
   {
@@ -37,6 +40,7 @@
     "title": "\"Большеречье\"",
     "color": "purpleClass",
     "route": "400Bolsherechye",
+    "index": 1,
     "description": ""
   },
   {
@@ -47,6 +51,7 @@
     "title": "\"Черлак - Исилькуль\"",
     "color": "orangeClass",
     "route": "600CherlakIsilkul",
+    "index": 1,
     "description": ""
   },
   {
@@ -57,6 +62,7 @@
     "title": "\"Новоуральский\"",
     "color": "yellowClass",
     "route": "200Novouralsky",
+    "index": 1,
     "description": ""
   },
   {
@@ -67,6 +73,7 @@
     "title": "\"Таврическое - Саргатское\"",
     "color": "greenClass",
     "route": "300TavricheskoeSargatskoe",
+    "index": 1,
     "description": ""
   },
   {
@@ -77,16 +84,18 @@
     "title": "\"Москаленки - Иртыш\"",
     "color": "purpleClass",
     "route": "400MoskalenkiIrtysh",
+    "index": 1,
     "description": ""
   },
   {
     "startDate": "07.08.2021",
-    "startTime": "7.00",
+    "startTime": "8.00",
     "totalTime": 40,
     "distance": 600,
     "title": "\"Черлак - Исилькуль\"",
     "color": "orangeClass",
     "route": "600CherlakIsilkul",
+    "index": 2,
     "description": ""
   },
   {
@@ -97,6 +106,7 @@
     "title": "\"Павлоградка\"",
     "color": "yellowClass",
     "route": "200Pavlogradka",
+    "index": 1,
     "description": ""
   },
   {
@@ -107,6 +117,7 @@
     "title": "\"Исилькуль\"",
     "color": "greenClass",
     "route": "300Isilkul",
+    "index": 1,
     "description": ""
   },
   {
@@ -117,6 +128,7 @@
     "title": "\"Иртыш\"",
     "color": "yellowClass",
     "route": "200Irtysh",
+    "index": 1,
     "description": "100 лет BRM"
   }
 ]

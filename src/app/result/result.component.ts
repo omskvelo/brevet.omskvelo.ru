@@ -7,6 +7,7 @@ import {take} from 'rxjs/operators';
 
 export interface JsonData {
   title: string;
+  index: number;
   results: any;
 }
 
@@ -35,7 +36,7 @@ export class ResultComponent implements OnInit {
     this.httpClient.get('assets/data/resultsData.json').pipe(take(1)).subscribe((data: JsonData) => {
       this.jsonData = data;
       for (const item of this.jsonData) {
-        if (item.title === this.data.route) {
+        if (item.title === this.data.route && item.index === this.data.index) {
           if (item.results.length === 0) {
             this.resultsTable = false;
           }

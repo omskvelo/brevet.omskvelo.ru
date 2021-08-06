@@ -26,6 +26,7 @@ export interface BrevetsData {
   title: string;
   color: string;
   route: string;
+  index: number;
   description: string;
   status: string;
 }
@@ -109,9 +110,9 @@ export class MainComponent implements OnInit {
       data: {brevet, routes}
     });
   }
-  dialogShowResult(route): void {
+  dialogShowResult(route, index): void {
     this.dialog.open(DialogShowResultComponent, {
-      data: {route}
+      data: {route, index}
     });
   }
 }
