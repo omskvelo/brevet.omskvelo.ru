@@ -498,7 +498,28 @@
   {
     "title": "600CherlakIsilkul",
     "index": 2,
-    "results": []
+    "results": [
+      {
+        "name": "Арнаут Станислав",
+        "resultTime": "36.32"
+      },
+      {
+        "name": "Крупкин Андрей",
+        "resultTime": "31.02"
+      },
+      {
+        "name": "Ноженко Роман",
+        "resultTime": "28.43"
+      },
+      {
+        "name": "Чигадайкин Игорь",
+        "resultTime": "DNS"
+      },
+      {
+        "name": "Осипов Алексей",
+        "resultTime": "37.02"
+      }
+    ]
   },
   {
     "title": "200Pavlogradka",
