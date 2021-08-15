@@ -1,0 +1,11 @@
+<div id="total">
+<table id="table">
+  <tr>
+    <th>Участники</th>
+    <th *ngFor="let brevet of brevetsData">{{brevet.title}}<br>{{brevet.distance}}</th>
+  </tr>
+  <tr *ngFor="let element of total">
+    <td *ngFor="let item of element">{{item}}</td>
+  </tr>
+</table>
+</div>

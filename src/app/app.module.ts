@@ -13,12 +13,19 @@ import {HttpClientModule} from '@angular/common/http';
 import {MatButtonModule} from '@angular/material/button';
 import {MatIconModule} from '@angular/material/icon';
 import {MatDialogModule} from '@angular/material/dialog';
-import {DialogShowResultComponent, DialogShowRouteComponent, MainComponent, MY_FORMATS} from './main/main.component';
+import {
+  DialogShowResultComponent,
+  DialogShowRouteComponent,
+  DialogShowTotalResultsComponent,
+  MainComponent,
+  MY_FORMATS
+} from './main/main.component';
 import {MapComponent} from './map/map.component';
 import {MatSlideToggleModule} from '@angular/material/slide-toggle';
 import { ResultComponent } from './result/result.component';
 import {MatTableModule} from '@angular/material/table';
 import {MatSortModule} from '@angular/material/sort';
+import { TotalResultsComponent } from './total-results/total-results.component';
 
 @NgModule({
   declarations: [
@@ -26,7 +33,9 @@ import {MatSortModule} from '@angular/material/sort';
     MapComponent,
     DialogShowRouteComponent,
     DialogShowResultComponent,
-    ResultComponent
+    ResultComponent,
+    TotalResultsComponent,
+    DialogShowTotalResultsComponent
   ],
   imports: [
     BrowserModule,
@@ -49,7 +58,8 @@ import {MatSortModule} from '@angular/material/sort';
   ],
   entryComponents: [
     DialogShowRouteComponent,
-    DialogShowResultComponent
+    DialogShowResultComponent,
+    DialogShowTotalResultsComponent
   ],
   providers: [
     {provide: DateAdapter, useClass: MomentDateAdapter},

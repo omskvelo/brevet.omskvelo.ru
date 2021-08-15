@@ -110,10 +110,15 @@ export class MainComponent implements OnInit {
       data: {brevet, routes}
     });
   }
+
   dialogShowResult(route, index): void {
     this.dialog.open(DialogShowResultComponent, {
       data: {route, index}
     });
+  }
+
+  dialogShowTotalResults(): void {
+    this.dialog.open(DialogShowTotalResultsComponent);
   }
 }
 
@@ -133,6 +138,16 @@ export class DialogShowRouteComponent {
   styleUrls: ['./main.component.css'],
 })
 export class DialogShowResultComponent {
+  constructor() {
+  }
+}
+
+@Component({
+  selector: 'app-dialog-show-total-results',
+  templateUrl: './dialog-show-total-results.component.html',
+  styleUrls: ['./main.component.css'],
+})
+export class DialogShowTotalResultsComponent {
   constructor() {
   }
 }

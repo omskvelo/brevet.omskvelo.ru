@@ -1,0 +1,17 @@
+table {
+  border-collapse: collapse;
+}
+
+th {
+  border: 1px solid #000000;
+}
+
+td {
+  text-align: center;
+  border: 1px solid #000000;
+}
+
+#total {
+  overflow: auto;
+}
+

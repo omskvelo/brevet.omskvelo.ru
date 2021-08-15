@@ -8,7 +8,7 @@
 }
 
 .body {
-  margin-top: 100px;
+  margin-top: 140px;
 }
 
 .card {
@@ -81,4 +81,7 @@ a {
 
 a:hover {
   cursor: pointer;
+}
+button {
+  margin: 5px !important;
 }
