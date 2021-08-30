@@ -594,7 +594,28 @@
   {
     "title": "300Isilkul",
     "index": 1,
-    "results": []
+    "results": [
+      {
+        "name": "Ермаков Артём",
+        "resultTime": "12.50"
+      },
+      {
+        "name": "Крупкин Андрей",
+        "resultTime": "13.17"
+      },
+      {
+        "name": "Щербак Александр",
+        "resultTime": "DNF"
+      },
+      {
+        "name": "Соколов Максим",
+        "resultTime": "DNF"
+      },
+      {
+        "name": "Арнаут Станислав",
+        "resultTime": "DNF"
+      }
+    ]
   },
   {
     "title": "200Irtysh",
