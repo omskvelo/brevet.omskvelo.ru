@@ -8,7 +8,7 @@
     "color": "yellowClass",
     "route": "200Moskalenki",
     "index": 1,
-    "description": "10 лет веломарафонскому клубу \"Цепная Реакция\""
+    "description": "10 лет веломарафонскому клубу \"Цепная Реакция\"!"
   },
   {
     "startDate": "09.05.2021",
@@ -122,13 +122,13 @@
   },
   {
     "startDate": "11.09.2021",
-    "startTime": "7.00",
+    "startTime": "8.00",
     "totalTime": 13.5,
     "distance": 200,
     "title": "\"Иртыш\"",
     "color": "yellowClass",
     "route": "200Irtysh",
     "index": 1,
-    "description": "100 лет BRM"
+    "description": "100 лет мировому рандоннёрскому движению!"
   }
 ]
