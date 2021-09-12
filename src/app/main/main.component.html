@@ -1,15 +1,22 @@
 <div class="head">
   <form [formGroup]="navigationForm">
-    <mat-form-field appearance="fill">
-      <mat-label>Выберите дату</mat-label>
-      <input [matDatepicker]="picker" formControlName="inputDate" matInput>
-      <mat-datepicker-toggle [for]="picker" matSuffix></mat-datepicker-toggle>
-      <mat-datepicker #picker [dateClass]="dateClass" disabled="false"></mat-datepicker>
-    </mat-form-field>
-    <br>
-    <mat-slide-toggle color="primary" formControlName="allEvents">Показывать все события</mat-slide-toggle>
-    <br>
-    <button mat-stroked-button (click)="dialogShowTotalResults()">Общие результаты</button>
+    <table>
+      <tr>
+        <td>
+          <mat-form-field appearance="fill">
+            <mat-label>Выберите дату</mat-label>
+            <input [matDatepicker]="picker" formControlName="inputDate" matInput>
+            <mat-datepicker-toggle [for]="picker" matSuffix></mat-datepicker-toggle>
+            <mat-datepicker #picker [dateClass]="dateClass" disabled="false"></mat-datepicker>
+          </mat-form-field>
+        </td>
+        <td>
+          <mat-slide-toggle color="primary" formControlName="allEvents">Все события</mat-slide-toggle>
+          <br>
+          <a (click)="dialogShowTotalResults()">Общие результаты</a>
+        </td>
+      </tr>
+    </table>
   </form>
 </div>
 <div class="body">

@@ -1,8 +1,18 @@
+<mat-toolbar color="primary">
+  Общие результаты
+  <div class="button-container">
+    <button (click)="dialogClose()" mat-icon-button title="Закрыть">
+      <mat-icon>cancel</mat-icon>
+    </button>
+  </div>
+</mat-toolbar>
 <div id="total">
 <table id="table">
   <tr>
     <th>Участники</th>
     <th *ngFor="let brevet of brevetsData">{{brevet.title}}<br>{{brevet.distance}}</th>
+    <th>Итого, км</th>
+    <th>СР</th>
   </tr>
   <tr *ngFor="let element of total">
     <td *ngFor="let item of element">{{item}}</td>

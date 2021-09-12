@@ -1,14 +1,17 @@
 .head {
   position: fixed;
   top: 0;
-  text-align: center;
   width: 100%;
   background: #ffffff;
   z-index: 99;
 }
 
+table {
+  margin: auto;
+}
+
 .body {
-  margin-top: 140px;
+  margin-top: 85px;
 }
 
 .card {
@@ -82,6 +85,8 @@ a {
 a:hover {
   cursor: pointer;
 }
+
 button {
   margin: 5px !important;
 }
+
