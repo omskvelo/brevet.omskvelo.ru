@@ -1,51 +1,44 @@
-<div class="head">
-  <form [formGroup]="navigationForm">
-    <table>
-      <tr>
-        <td>
-          <mat-form-field appearance="fill">
-            <mat-label>Выберите дату</mat-label>
-            <input [matDatepicker]="picker" formControlName="inputDate" matInput>
-            <mat-datepicker-toggle [for]="picker" matSuffix></mat-datepicker-toggle>
-            <mat-datepicker #picker [dateClass]="dateClass" disabled="false"></mat-datepicker>
-          </mat-form-field>
-        </td>
-        <td>
-          <mat-slide-toggle color="primary" formControlName="allEvents">Все события</mat-slide-toggle>
-          <br>
-          <a (click)="dialogShowTotalResults()">Общие результаты</a>
-        </td>
-      </tr>
-    </table>
-  </form>
-</div>
-<div class="body">
-  <div *ngFor="let brevet of brevetsData" class="card">
-    <mat-card
-      *ngIf="(this.navigationForm.controls.inputDate.value | date: 'dd.MM.yyyy') === brevet.startDate || this.navigationForm.controls.allEvents.value === true">
-      <div [class]=brevet.color class="km">
-        {{brevet.distance}}
-      </div>
-      <mat-card-title>
-        {{brevet.title}}
-      </mat-card-title>
-      <mat-card-subtitle>
-        {{brevet.status}}
-        <a (click)="dialogShowResult(brevet.route, brevet.index)" *ngIf="brevet.status === 'Заезд завершен.'">
-          Результаты
-        </a>
-      </mat-card-subtitle>
-      <div class="openMap">
-        <a href="assets/tracks/{{brevet.route}}.gpx" mat-icon-button title="Скачать маршрут">
-          <mat-icon>download</mat-icon>
-        </a><br>
-        <a (click)="dialogShowRoute(brevet, routesData)" mat-icon-button title="Карта маршрута">
-          <mat-icon>map</mat-icon>
-        </a>
-      </div>
-      <mat-card-content>
-        {{brevet.description}}
-      </mat-card-content>
-    </mat-card>
+<mat-toolbar class="head" color="primary">
+  <div class="center">
+    <mat-form-field appearance="fill">
+      <mat-label>Год</mat-label>
+      <mat-select (selectionChange)="selectYear(year)" [(value)]="year">
+        <mat-option *ngFor="let year of years" [value]="year">
+          {{year}}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+    <a (click)="showTotalResults(year)" title="Общие результаты">
+      <mat-icon>analytics</mat-icon>
+    </a>
   </div>
+</mat-toolbar>
+<div *ngIf="emptyBrevetsData !== true" class="body">
+  <mat-card *ngFor="let brevet of brevetsData" class="card">
+    <div [style.border-left-color]='brevet.color' [style.border-top-color]='brevet.color' class="km_triangle"></div>
+    <div class="km_text">
+      {{brevet.distance}}
+    </div>
+    <mat-card-title>
+      {{brevet.title}}
+    </mat-card-title>
+    <mat-card-subtitle>
+      {{brevet.status}}
+      <a (click)="dialogShowResult(brevet.route, brevet.index)" *ngIf="brevet.status === 'Заезд завершен.'">
+        Результаты
+      </a>
+    </mat-card-subtitle>
+    <a (click)="showRoute(year, brevet.route)" title="Карта маршрута">
+      <mat-icon class="openMap">keyboard_arrow_right</mat-icon>
+    </a>
+    <mat-card-content>
+      <hr *ngIf="brevet.description">
+      &nbsp;
+      {{brevet.description}}
+    </mat-card-content>
+  </mat-card>
+</div>
+<div class="footer "></div>
+<div *ngIf="emptyBrevetsData === true" class="body">
+  нет данных
 </div>

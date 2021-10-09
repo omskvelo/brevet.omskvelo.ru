@@ -1,11 +1,15 @@
-import {Component, Inject, OnInit} from '@angular/core';
-import {MAT_DIALOG_DATA, MatDialog} from '@angular/material/dialog';
+import {Component, OnInit} from '@angular/core';
 import * as L from 'leaflet/dist/leaflet';
 import 'leaflet-routing-machine';
-import {RoutesData} from '../main/main.component';
-import {HttpClient} from '@angular/common/http';
 import {take} from 'rxjs/operators';
+import {ActivatedRoute, Router} from '@angular/router';
+import {BrevetsData} from '../main/main.component';
 
+export interface RoutesData {
+  title: string;
+  checkPoints: any;
+  wayPoints: any;
+}
 
 @Component({
   selector: 'app-map',
@@ -13,24 +17,48 @@ import {take} from 'rxjs/operators';
   styleUrls: ['./map.component.css']
 })
 export class MapComponent implements OnInit {
+  brevetsData: BrevetsData[];
+  brevet: BrevetsData;
+  routesData: RoutesData[];
   route: RoutesData;
-  legend;
+  legend = [];
+  year: string;
+  routeTitle: string;
+  link = window.location.href;
 
-  constructor(private dialog: MatDialog, @Inject(MAT_DIALOG_DATA) public data, private httpClient: HttpClient) {
-    this.httpClient.get('assets/legends/' + this.data.brevet.route + '.json').pipe(take(1)).subscribe(data =>  this.legend = data);
+  constructor(private activatedRoute: ActivatedRoute, private router: Router) {
   }
 
   ngOnInit(): any {
-    document.getElementById('map').style.width = (window.innerWidth).toString() + 'px';
-    document.getElementById('map').style.height = (window.innerHeight - 64).toString() + 'px';
     document.getElementById('legend').style.display = 'none';
-    document.getElementById('legend').style.height = (window.innerHeight - 64).toString() + 'px';
+    document.getElementById('legend').style.height = (window.innerHeight - 74).toString() + 'px';
+    this.brevetsData = this.activatedRoute.snapshot.data.brevetsResolver;
+    this.routesData = this.activatedRoute.snapshot.data.routesResolver;
+    this.legend = this.activatedRoute.snapshot.data.legendsResolver;
+    this.activatedRoute.paramMap.pipe(take(1))
+      .subscribe(data => this.year = data.get('year'));
+    this.activatedRoute.paramMap.pipe(take(1))
+      .subscribe(data => {
+        this.routeTitle = data.get('routeTitle');
+        for (const item of this.brevetsData) {
+          if (item.route === this.routeTitle) {
+            this.brevet = item;
+          }
+        }
+        for (const item of this.routesData) {
+          if (item.title === this.routeTitle) {
+            this.route = item;
+          }
+        }
+        if (!this.routeTitle || !this.brevet || !this.route) {
+          this.router.navigate([this.year]).then();
+        } else {
+          this.routeBuilding();
+        }
+      });
+  }
 
-    for (const item of this.data.routes) {
-      if (item.title === this.data.brevet.route) {
-        this.route = item;
-      }
-    }
+  routeBuilding(): void {
     const LeafIcon = L.Icon.extend({
       options: {
         iconSize: [30, 50],
@@ -63,11 +91,11 @@ export class MapComponent implements OnInit {
       draggableWaypoints: false,
       show: false,
       waypoints: this.route.wayPoints,
-      createMarker: function markerStyle(): any {
+      createMarker() {
         return null;
-      },
+      }
     }).addTo(myMap);
-    const brevet = this.data.brevet;
+    const brevet = this.brevet;
     const route = this.route;
     const optionsDate = {
       hour: 'numeric',
@@ -117,7 +145,8 @@ export class MapComponent implements OnInit {
         let speed = [32, 30, 28, 26, 25, 24];
         let time = Math.min(distanceToCheckPoint, 200) / 34;
         let typeTime = 'open';
-        const openResult = timing(brevet.startDate, brevet.startTime, distanceToCheckPoint, max, min, speed, time, route, numberWayPoints, typeTime);
+        const openResult =
+          timing(brevet.startDate, brevet.startTime, distanceToCheckPoint, max, min, speed, time, route, numberWayPoints, typeTime);
         max = [60, 600, 1000, 1200, 1400, 1800];
         min = [540, 400, 200, 200, 400, 200];
         speed = [15, 1.428, 13.333, 11, 10, 9];
@@ -126,7 +155,8 @@ export class MapComponent implements OnInit {
           distanceToCheckPoint = brevet.distance;
         }
         typeTime = 'close';
-        const closeResult = timing(brevet.startDate, brevet.startTime, distanceToCheckPoint, max, min, speed, time, route, numberWayPoints, typeTime);
+        const closeResult =
+          timing(brevet.startDate, brevet.startTime, distanceToCheckPoint, max, min, speed, time, route, numberWayPoints, typeTime);
         popupTitle = '<br>' + popupName + ': ' + distanceToCheckPoint + 'км'
           + '<br>Открытие: ' + openResult.toLocaleString('ru', optionsDate)
           + '<br>Закрытие: ' + closeResult.toLocaleString('ru', optionsDate);
@@ -199,7 +229,7 @@ export class MapComponent implements OnInit {
     }
   }
 
-  dialogClose(): any {
-    this.dialog.closeAll();
+  dialogClose(year): any {
+    this.router.navigate([year]).then();
   }
 }

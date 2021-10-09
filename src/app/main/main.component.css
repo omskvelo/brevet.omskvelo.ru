@@ -1,51 +1,38 @@
 .head {
   position: fixed;
   top: 0;
-  width: 100%;
-  background: #ffffff;
   z-index: 99;
+  text-align: center;
+  padding: 5px;
+  font-size: 14px;
 }
 
-table {
+.center {
   margin: auto;
 }
 
+mat-icon {
+  transform: scale(2);
+  margin-left: 20px;
+}
+
 .body {
-  margin-top: 85px;
+  margin-top: 70px;
 }
 
-.card {
-  margin-top: 10px;
-}
-
-.yellowClass {
-  background: #ffc90d;
-  border-radius: 100%;
-}
-
-.greenClass {
-  background: #23b14d;
-  border-radius: 100%;
-}
-
-.purpleClass {
-  background: #a349a3;
-  border-radius: 100%;
-}
-
-.orangeClass {
-  background: #ff7f26;
-  border-radius: 100%;
+.footer {
+  height: 1px;
 }
 
 mat-card {
   max-width: 500px;
-  margin: auto;
+  margin: auto auto 10px;
   background-color: #f5f5f5 !important;
+  padding: 16px 0 0 0;
 }
 
 mat-card-title, mat-card-subtitle {
-  margin-left: 60px;
+  margin-left: 70px;
   margin-top: 5px !important;
 }
 
@@ -53,29 +40,40 @@ mat-card-subtitle {
   margin-bottom: 0 !important;
 }
 
-.openMap {
-  position: absolute;
-  top: 1px;
-  right: 1px;
+mat-card-content {
+  text-align: center;
 }
 
-.km {
+.openMap {
+  position: absolute;
+  top: 30px;
+  right: 30px;
+  color: #707070;
+}
+
+.km_text {
   position: absolute;
   text-align: center;
   font-size: 20px;
   color: #ffffff;
-  padding: 10px 0 10px 0;
   width: 40px;
-  top: 10px;
+  top: 13px;
+  left: 0;
+  transform: rotate(-45deg);
+}
+
+.km_triangle {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  border: 30px solid transparent;
+  border-radius: 4px 0 0 0;
 }
 
 .cdk-overlay-pane {
   max-width: 5000px !important;
   max-height: 5000px !important;
-}
-
-.mat-dialog-container {
-  padding: 0 !important;
 }
 
 a {
@@ -85,8 +83,3 @@ a {
 a:hover {
   cursor: pointer;
 }
-
-button {
-  margin: 5px !important;
-}
-

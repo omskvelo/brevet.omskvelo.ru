@@ -5,7 +5,7 @@
     "totalTime": 13.5,
     "distance": 200,
     "title": "\"Москаленки\"",
-    "color": "yellowClass",
+    "color": "#ffc90d",
     "route": "200Moskalenki",
     "index": 1,
     "description": "10 лет веломарафонскому клубу \"Цепная Реакция\"!"
@@ -16,7 +16,7 @@
     "totalTime": 13.5,
     "distance": 200,
     "title": "\"Серебряное\"",
-    "color": "yellowClass",
+    "color": "#ffc90d",
     "route": "200Serebryanoye",
     "index": 1,
     "description": ""
@@ -27,7 +27,7 @@
     "totalTime": 20,
     "distance": 300,
     "title": "\"Черлак\"",
-    "color": "greenClass",
+    "color": "#23b14d",
     "route": "300Cherlak",
     "index": 1,
     "description": ""
@@ -38,7 +38,7 @@
     "totalTime": 27,
     "distance": 400,
     "title": "\"Большеречье\"",
-    "color": "purpleClass",
+    "color": "#a349a3",
     "route": "400Bolsherechye",
     "index": 1,
     "description": ""
@@ -49,7 +49,7 @@
     "totalTime": 40,
     "distance": 600,
     "title": "\"Черлак - Исилькуль\"",
-    "color": "orangeClass",
+    "color": "#ff7f26",
     "route": "600CherlakIsilkul",
     "index": 1,
     "description": ""
@@ -60,7 +60,7 @@
     "totalTime": 13.5,
     "distance": 200,
     "title": "\"Новоуральский\"",
-    "color": "yellowClass",
+    "color": "#ffc90d",
     "route": "200Novouralsky",
     "index": 1,
     "description": ""
@@ -71,7 +71,7 @@
     "totalTime": 20,
     "distance": 300,
     "title": "\"Таврическое - Саргатское\"",
-    "color": "greenClass",
+    "color": "#23b14d",
     "route": "300TavricheskoeSargatskoe",
     "index": 1,
     "description": ""
@@ -82,7 +82,7 @@
     "totalTime": 27,
     "distance": 400,
     "title": "\"Москаленки - Иртыш\"",
-    "color": "purpleClass",
+    "color": "#a349a3",
     "route": "400MoskalenkiIrtysh",
     "index": 1,
     "description": ""
@@ -93,7 +93,7 @@
     "totalTime": 40,
     "distance": 600,
     "title": "\"Черлак - Исилькуль\"",
-    "color": "orangeClass",
+    "color": "#ff7f26",
     "route": "600CherlakIsilkul",
     "index": 2,
     "description": ""
@@ -104,7 +104,7 @@
     "totalTime": 13.5,
     "distance": 200,
     "title": "\"Павлоградка\"",
-    "color": "yellowClass",
+    "color": "#ffc90d",
     "route": "200Pavlogradka",
     "index": 1,
     "description": ""
@@ -115,7 +115,7 @@
     "totalTime": 20,
     "distance": 300,
     "title": "\"Исилькуль\"",
-    "color": "greenClass",
+    "color": "#23b14d",
     "route": "300Isilkul",
     "index": 1,
     "description": ""
@@ -126,7 +126,7 @@
     "totalTime": 13.5,
     "distance": 200,
     "title": "\"Иртыш\"",
-    "color": "yellowClass",
+    "color": "#ffc90d",
     "route": "200Irtysh",
     "index": 1,
     "description": "100 лет мировому рандоннёрскому движению!"

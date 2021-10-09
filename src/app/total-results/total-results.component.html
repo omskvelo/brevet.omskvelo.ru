@@ -1,21 +1,28 @@
 <mat-toolbar color="primary">
   Общие результаты
   <div class="button-container">
-    <button (click)="dialogClose()" mat-icon-button title="Закрыть">
+    <button (click)="dialogClose(this.year)" mat-icon-button title="Закрыть">
       <mat-icon>cancel</mat-icon>
     </button>
   </div>
 </mat-toolbar>
-<div id="total">
-<table id="table">
-  <tr>
-    <th>Участники</th>
-    <th *ngFor="let brevet of brevetsData">{{brevet.title}}<br>{{brevet.distance}}</th>
-    <th>Итого, км</th>
-    <th>СР</th>
-  </tr>
-  <tr *ngFor="let element of total">
-    <td *ngFor="let item of element">{{item}}</td>
-  </tr>
+<table [dataSource]="total" mat-table>
+  <ng-container matColumnDef="participant">
+    <th *matHeaderCellDef mat-header-cell>Участники: {{this.amount}}</th>
+    <td *matCellDef="let element" class="participant" mat-cell>{{element[0]}}</td>
+  </ng-container>
+  <ng-container *ngFor="let brevet of brevetsData; let i = index;" [matColumnDef]="brevet.route + brevet.index">
+    <th *matHeaderCellDef mat-header-cell>{{brevet.title}}<br>{{brevet.distance}}</th>
+    <td *matCellDef="let element" mat-cell>{{element[i + 1]}}</td>
+  </ng-container>
+  <ng-container matColumnDef="inAll">
+    <th *matHeaderCellDef mat-header-cell>Итого, км</th>
+    <td *matCellDef="let element" mat-cell>{{element[element.length - 2]}}</td>
+  </ng-container>
+  <ng-container matColumnDef="sr">
+    <th *matHeaderCellDef mat-header-cell>СР</th>
+    <td *matCellDef="let element" mat-cell>{{element[element.length - 1]}}</td>
+  </ng-container>
+  <tr *matHeaderRowDef="displayedColumns; sticky: true" mat-header-row></tr>
+  <tr *matRowDef="let row; columns: displayedColumns;" mat-row></tr>
 </table>
-</div>

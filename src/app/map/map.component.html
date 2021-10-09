@@ -1,16 +1,20 @@
-<div>
-  <mat-toolbar color="primary">
-    {{data.brevet.title}} {{data.brevet.distance}}км
-    <div class="button-container">
-      <button (click)="showLegend()" mat-icon-button title="Легенда">
-        <mat-icon>receipt</mat-icon>
-      </button>
-      <button (click)="dialogClose()" mat-icon-button title="Закрыть">
-        <mat-icon>cancel</mat-icon>
-      </button>
-    </div>
-  </mat-toolbar>
-</div>
+<mat-toolbar color="primary">
+  {{brevet.title}} {{brevet.distance}}км
+  <div class="button-container">
+    <button [cdkCopyToClipboard]="link" mat-icon-button title="Скопировать ссылку">
+      <mat-icon>share</mat-icon>
+    </button>
+    <a href="assets/{{year}}/tracks/{{routeTitle}}.gpx" mat-icon-button title="Скачать маршрут">
+      <mat-icon>download</mat-icon>
+    </a>
+    <button (click)="showLegend()" mat-icon-button title="Легенда">
+      <mat-icon>receipt</mat-icon>
+    </button>
+    <button (click)="dialogClose(year)" mat-icon-button title="Закрыть">
+      <mat-icon>cancel</mat-icon>
+    </button>
+  </div>
+</mat-toolbar>
 <div (window:resize)="onResize($event)" id="map">
 </div>
 <div id="legend">
