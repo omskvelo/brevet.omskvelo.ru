@@ -1,0 +1,134 @@
+[
+  {
+    "startDate": "24.04.2021",
+    "startTime": "8.00",
+    "totalTime": 13.5,
+    "distance": 200,
+    "title": "\"Москаленки\"",
+    "color": "#ffc90d",
+    "route": "200Moskalenki",
+    "index": 1,
+    "description": "10 лет веломарафонскому клубу \"Цепная Реакция\"!"
+  },
+  {
+    "startDate": "09.05.2021",
+    "startTime": "7.00",
+    "totalTime": 13.5,
+    "distance": 200,
+    "title": "\"Серебряное\"",
+    "color": "#ffc90d",
+    "route": "200Serebryanoye",
+    "index": 1,
+    "description": ""
+  },
+  {
+    "startDate": "15.05.2021",
+    "startTime": "7.00",
+    "totalTime": 20,
+    "distance": 300,
+    "title": "\"Черлак\"",
+    "color": "#23b14d",
+    "route": "300Cherlak",
+    "index": 1,
+    "description": ""
+  },
+  {
+    "startDate": "29.05.2021",
+    "startTime": "7.00",
+    "totalTime": 27,
+    "distance": 400,
+    "title": "\"Большеречье\"",
+    "color": "#a349a3",
+    "route": "400Bolsherechye",
+    "index": 1,
+    "description": ""
+  },
+  {
+    "startDate": "12.06.2021",
+    "startTime": "7.00",
+    "totalTime": 40,
+    "distance": 600,
+    "title": "\"Черлак - Исилькуль\"",
+    "color": "#ff7f26",
+    "route": "600CherlakIsilkul",
+    "index": 1,
+    "description": ""
+  },
+  {
+    "startDate": "26.06.2021",
+    "startTime": "7.00",
+    "totalTime": 13.5,
+    "distance": 200,
+    "title": "\"Новоуральский\"",
+    "color": "#ffc90d",
+    "route": "200Novouralsky",
+    "index": 1,
+    "description": ""
+  },
+  {
+    "startDate": "10.07.2021",
+    "startTime": "7.00",
+    "totalTime": 20,
+    "distance": 300,
+    "title": "\"Таврическое - Саргатское\"",
+    "color": "#23b14d",
+    "route": "300TavricheskoeSargatskoe",
+    "index": 1,
+    "description": ""
+  },
+  {
+    "startDate": "24.07.2021",
+    "startTime": "7.00",
+    "totalTime": 27,
+    "distance": 400,
+    "title": "\"Москаленки - Иртыш\"",
+    "color": "#a349a3",
+    "route": "400MoskalenkiIrtysh",
+    "index": 1,
+    "description": ""
+  },
+  {
+    "startDate": "07.08.2021",
+    "startTime": "8.00",
+    "totalTime": 40,
+    "distance": 600,
+    "title": "\"Черлак - Исилькуль\"",
+    "color": "#ff7f26",
+    "route": "600CherlakIsilkul",
+    "index": 2,
+    "description": ""
+  },
+  {
+    "startDate": "14.08.2021",
+    "startTime": "7.00",
+    "totalTime": 13.5,
+    "distance": 200,
+    "title": "\"Павлоградка\"",
+    "color": "#ffc90d",
+    "route": "200Pavlogradka",
+    "index": 1,
+    "description": ""
+  },
+  {
+    "startDate": "28.08.2021",
+    "startTime": "7.00",
+    "totalTime": 20,
+    "distance": 300,
+    "title": "\"Исилькуль\"",
+    "color": "#23b14d",
+    "route": "300Isilkul",
+    "index": 1,
+    "description": ""
+  },
+  {
+    "startDate": "11.09.2021",
+    "startTime": "8.00",
+    "totalTime": 13.5,
+    "distance": 200,
+    "title": "\"Иртыш\"",
+    "color": "#ffc90d",
+    "route": "200Irtysh",
+    "index": 1,
+    "description": "100 лет мировому рандоннёрскому движению!"
+  }
+]
