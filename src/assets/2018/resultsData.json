@@ -1,0 +1,420 @@
+[
+  {
+    "title": "200Moskalenki",
+    "index": 1,
+    "results": [
+      {
+        "name": "Ноженко Роман",
+        "resultTime": "DNF"
+      },
+      {
+        "name": "Ступаков Владимир",
+        "resultTime": "9.40"
+      },
+      {
+        "name": "Шалыгин Дмитрий",
+        "resultTime": "12.20"
+      },
+      {
+        "name": "Голуб Сергей",
+        "resultTime": "10.08"
+      },
+      {
+        "name": "Рябков Михаил",
+        "resultTime": "10.08"
+      },
+      {
+        "name": "Обсянкин Антон",
+        "resultTime": "9.25"
+      },
+      {
+        "name": "Кудрящев Александр",
+        "resultTime": "DNF"
+      },
+      {
+        "name": "Макщеев Павел",
+        "resultTime": "8.43"
+      },
+      {
+        "name": "Ермаков Артем",
+        "resultTime": "9.20"
+      },
+      {
+        "name": "Бревнов Евгений",
+        "resultTime": "9.40"
+      },
+      {
+        "name": "Сотак Владимир",
+        "resultTime": "9.25"
+      },
+      {
+        "name": "Доценко Сергей",
+        "resultTime": "DNF"
+      }
+    ]
+  },
+  {
+    "title": "200Irtysh",
+    "index": 1,
+    "results": [
+      {
+        "name": "Буховец Игорь",
+        "resultTime": "8.00"
+      },
+      {
+        "name": "Ермаков Артем",
+        "resultTime": "9.17"
+      },
+      {
+        "name": "Лемаев Алексей",
+        "resultTime": "12.13"
+      },
+      {
+        "name": "Бревнов Евгений",
+        "resultTime": "9.31"
+      },
+      {
+        "name": "Лазаренко Алексей",
+        "resultTime": "11.36"
+      },
+      {
+        "name": "Чигадайкин Игорь",
+        "resultTime": "8.05"
+      }
+    ]
+  },
+  {
+    "title": "300TavricheskoeMoskalenki",
+    "index": 1,
+    "results": [
+      {
+        "name": "Ермаков Артем",
+        "resultTime": "16.50"
+      },
+      {
+        "name": "Сотак Владимир",
+        "resultTime": "16.00"
+      },
+      {
+        "name": "Оборин Павел",
+        "resultTime": "19.55"
+      },
+      {
+        "name": "Махмутов Артур",
+        "resultTime": "DNF"
+      }
+    ]
+  },
+  {
+    "title": "200Moskalenki",
+    "index": 2,
+    "results": [
+      {
+        "name": "Бревнов Евгений",
+        "resultTime": "8.23"
+      },
+      {
+        "name": "Буховец Игорь",
+        "resultTime": "8.17"
+      },
+      {
+        "name": "Рыбак Павел",
+        "resultTime": "10.06"
+      }
+    ]
+  },
+  {
+    "title": "200Irtysh",
+    "index": 2,
+    "results": [
+      {
+        "name": "Ратахин Евгений",
+        "resultTime": "13.24"
+      },
+      {
+        "name": "Суставов Алексей",
+        "resultTime": "12.52"
+      },
+      {
+        "name": "Лысенко Антон",
+        "resultTime": "13.24"
+      },
+      {
+        "name": "Денис Муравьев",
+        "resultTime": "13.24"
+      }
+    ]
+  },
+  {
+    "title": "400MoskalenkiIrtysh",
+    "index": 1,
+    "results": [
+      {
+        "name": "Ермаков Артем",
+        "resultTime": "22.01"
+      },
+      {
+        "name": "Сотак Владимир",
+        "resultTime": "21.32"
+      },
+      {
+        "name": "Лемаев Алексей",
+        "resultTime": "24.57"
+      },
+      {
+        "name": "Малахов Андрей",
+        "resultTime": "19.45"
+      },
+      {
+        "name": "Сафонов Слава",
+        "resultTime": "23.25"
+      },
+      {
+        "name": "Оборин Павел",
+        "resultTime": "23.09"
+      },
+      {
+        "name": "Ступаков Владимир",
+        "resultTime": "DNF"
+      }
+    ]
+  },
+  {
+    "title": "1000OmskayaTysyacha",
+    "index": 1,
+    "results": [
+      {
+        "name": "Сяськов Сергей",
+        "resultTime": "63.15"
+      }
+    ]
+  },
+  {
+    "title": "200Irtysh",
+    "index": 3,
+    "results": [
+      {
+        "name": "Бревнов Евгений",
+        "resultTime": "8.06"
+      },
+      {
+        "name": "Токарев Юрий",
+        "resultTime": "8.35"
+      },
+      {
+        "name": "Гаценко Виталий",
+        "resultTime": "12.15"
+      },
+      {
+        "name": "Малышев Федор",
+        "resultTime": "10.35"
+      },
+      {
+        "name": "Чигадайкин Игорь",
+        "resultTime": "8.00"
+      },
+      {
+        "name": "Соколов Максим",
+        "resultTime": "10.25"
+      },
+      {
+        "name": "Ермаков Артем",
+        "resultTime": "8.15"
+      }
+    ]
+  },
+  {
+    "title": "600CherlakIsilkul",
+    "index": 1,
+    "results": [
+      {
+        "name": "Сяськов Сергей",
+        "resultTime": "35:47"
+      },
+      {
+        "name": "Лазаренко Алексей",
+        "resultTime": "35:47"
+      },
+      {
+        "name": "Оборин Павел",
+        "resultTime": "35:47"
+      },
+      {
+        "name": "Рыбак Павел",
+        "resultTime": "31:49"
+      },
+      {
+        "name": "Малахов Андрей",
+        "resultTime": "31:55"
+      },
+      {
+        "name": "Сотак Владимир",
+        "resultTime": "31:49"
+      },
+      {
+        "name": "Сафонов Слава",
+        "resultTime": "DNF"
+      }
+    ]
+  },
+  {
+    "title": "300Cherlak",
+    "index": 1,
+    "results": [
+      {
+        "name": "Лазаренко Алексей",
+        "resultTime": "16.20"
+      },
+      {
+        "name": "Малахов Андрей",
+        "resultTime": "12.19"
+      },
+      {
+        "name": "Малышев Федор",
+        "resultTime": "DNF"
+      }
+    ]
+  },
+  {
+    "title": "200Moskalenki",
+    "index": 3,
+    "results": [
+      {
+        "name": "Моисеев Иван",
+        "resultTime": "12.16"
+      },
+      {
+        "name": "Ермаков Артем",
+        "resultTime": "9.19"
+      },
+      {
+        "name": "Суставов Алексей",
+        "resultTime": "11.15"
+      },
+      {
+        "name": "Буховец Игорь",
+        "resultTime": "7.27"
+      },
+      {
+        "name": "Лысенко Антон",
+        "resultTime": "12.40"
+      },
+      {
+        "name": "Токарев Юрий",
+        "resultTime": "DNF"
+      }
+    ]
+  },
+  {
+    "title": "400MoskalenkiIrtysh",
+    "index": 2,
+    "results": [
+      {
+        "name": "Лазаренко Алексей",
+        "resultTime": "23.37"
+      }
+    ]
+  },
+  {
+    "title": "200Irtysh",
+    "index": 4,
+    "results": [
+      {
+        "name": "Чигадайкин Игорь",
+        "resultTime": "7.14"
+      },
+      {
+        "name": "Ноженко Роман",
+        "resultTime": "12.48"
+      }
+    ]
+  },
+  {
+    "title": "600CherlakIsilkul",
+    "index": 2,
+    "results": [
+      {
+        "name": "Ермаков Артем",
+        "resultTime": "DNF"
+      },
+      {
+        "name": "Буховец Игорь",
+        "resultTime": "DNS"
+      }
+    ]
+  },
+  {
+    "title": "200TavricheskoeMaryanovka",
+    "index": 1,
+    "results": [
+      {
+        "name": "Бутаков Александр",
+        "resultTime": "8.18"
+      },
+      {
+        "name": "Суставов Алексей",
+        "resultTime": "11.33"
+      },
+      {
+        "name": "Бревнов Евгений",
+        "resultTime": "7.28"
+      },
+      {
+        "name": "Ермаков Артем",
+        "resultTime": "7.55"
+      }
+    ]
+  },
+  {
+    "title": "300TavricheskoeMoskalenki",
+    "index": 2,
+    "results": [
+      {
+        "name": "Лемаев Алексей",
+        "resultTime": "15.16"
+      }
+    ]
+  },
+  {
+    "title": "200Novouralsky",
+    "index": 1,
+    "results": [
+      {
+        "name": "Крупкин Андрей",
+        "resultTime": "8.15"
+      },
+      {
+        "name": "Арсланов Дмитрий",
+        "resultTime": "12.16"
+      },
+      {
+        "name": "Токарев Юрий",
+        "resultTime": "9.27"
+      },
+      {
+        "name": "Рыбак Павел",
+        "resultTime": "9.43"
+      },
+      {
+        "name": "Лемаев Алексей",
+        "resultTime": "9.46"
+      },
+      {
+        "name": "Соколов Максим",
+        "resultTime": "8.15"
+      },
+      {
+        "name": "Анохов Константин",
+        "resultTime": "8.12"
+      },
+      {
+        "name": "Ковтун Антон",
+        "resultTime": "9.16"
+      },
+      {
+        "name": "Ермаков Артем",
+        "resultTime": "9.07"
+      }
+    ]
+  }
+]

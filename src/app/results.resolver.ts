@@ -13,7 +13,7 @@ export class ResultsResolver implements Resolve<any> {
 
   resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<any> {
     const year = route.paramMap.get('year');
-    return this.http.get('assets/' + year + '/data/resultsData.json').pipe(catchError(_ => {
+    return this.http.get('assets/' + year + '/resultsData.json').pipe(catchError(_ => {
       return of([]);
     }));
   }

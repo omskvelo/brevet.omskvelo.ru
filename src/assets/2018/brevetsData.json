@@ -1,0 +1,172 @@
+[
+  {
+    "route": "200Moskalenki",
+    "index": 1,
+    "title": "\"Москаленки\"",
+    "startDate": "14.04.2018",
+    "startTime": "9.00",
+    "totalTime": 13.5,
+    "distance": 200,
+    "description": ""
+  },
+  {
+    "route": "200Irtysh",
+    "index": 1,
+    "title": "\"Иртыш\"",
+    "startDate": "29.04.2018",
+    "startTime": "9.00",
+    "totalTime": 13.5,
+    "distance": 200,
+    "description": ""
+  },
+  {
+    "route": "300TavricheskoeMoskalenki",
+    "index": 1,
+    "title": "\"Таврическое - Москаленки\"",
+    "startDate": "12.05.2018",
+    "startTime": "7.00",
+    "totalTime": 20,
+    "distance": 300,
+    "description": ""
+  },
+  {
+    "route": "200Moskalenki",
+    "index": 2,
+    "title": "\"Москаленки\"",
+    "startDate": "19.05.2018",
+    "startTime": "9.00",
+    "totalTime": 13.5,
+    "distance": 200,
+    "description": ""
+  },
+  {
+    "route": "200Irtysh",
+    "index": 2,
+    "title": "\"Иртыш\"",
+    "startDate": "02.06.2018",
+    "startTime": "7.00",
+    "totalTime": 13.5,
+    "distance": 200,
+    "description": ""
+  },
+  {
+    "route": "400MoskalenkiIrtysh",
+    "index": 1,
+    "title": "\"Москаленки - Иртыш\"",
+    "startDate": "02.06.2018",
+    "startTime": "7.00",
+    "totalTime": 27,
+    "distance": 400,
+    "description": ""
+  },
+  {
+    "route": "1000OmskayaTysyacha",
+    "index": 1,
+    "title": "\"Омская 1000\"",
+    "startDate": "10.06.2018",
+    "startTime": "5.00",
+    "totalTime": 75,
+    "distance": 1000,
+    "description": ""
+  },
+  {
+    "route": "200Irtysh",
+    "index": 3,
+    "title": "\"Иртыш\"",
+    "startDate": "16.06.2018",
+    "startTime": "7.00",
+    "totalTime": 13.5,
+    "distance": 200,
+    "description": ""
+  },
+  {
+    "route": "600CherlakIsilkul",
+    "index": 1,
+    "title": "\"Черлак - Исилькуль\"",
+    "startDate": "16.06.2018",
+    "startTime": "7.00",
+    "totalTime": 40,
+    "distance": 600,
+    "description": ""
+  },
+  {
+    "route": "300Cherlak",
+    "index": 1,
+    "title": "\"Черлак\"",
+    "startDate": "30.06.2018",
+    "startTime": "7.00",
+    "totalTime": 20,
+    "distance": 300,
+    "description": ""
+  },
+  {
+    "route": "200Moskalenki",
+    "index": 3,
+    "title": "\"Москаленки\"",
+    "startDate": "14.07.2018",
+    "startTime": "7.00",
+    "totalTime": 13.5,
+    "distance": 200,
+    "description": ""
+  },
+  {
+    "route": "400MoskalenkiIrtysh",
+    "index": 2,
+    "title": "\"Москаленки - Иртыш\"",
+    "startDate": "14.07.2018",
+    "startTime": "7.00",
+    "totalTime": 27,
+    "distance": 400,
+    "description": ""
+  },
+  {
+    "route": "200Irtysh",
+    "index": 4,
+    "title": "\"Иртыш\"",
+    "startDate": "28.07.2018",
+    "startTime": "7.00",
+    "totalTime": 13.5,
+    "distance": 200,
+    "description": ""
+  },
+  {
+    "route": "600CherlakIsilkul",
+    "index": 2,
+    "title": "\"Черлак - Исилькуль\"",
+    "startDate": "28.07.2018",
+    "startTime": "7.00",
+    "totalTime": 40,
+    "distance": 600,
+    "description": ""
+  },
+  {
+    "route": "200TavricheskoeMaryanovka",
+    "index": 1,
+    "title": "\"Таврическое - Марьяновка\"",
+    "startDate": "25.08.2018",
+    "startTime": "7.00",
+    "totalTime": 13.5,
+    "distance": 200,
+    "description": ""
+  },
+  {
+    "route": "300TavricheskoeMoskalenki",
+    "index": 2,
+    "title": "\"Таврическое - Москаленки\"",
+    "startDate": "25.08.2018",
+    "startTime": "7.00",
+    "totalTime": 20,
+    "distance": 300,
+    "description": ""
+  },
+  {
+    "route": "200Novouralsky",
+    "index": 1,
+    "title": "\"Новоуральский\"",
+    "startDate": "09.09.2018",
+    "startTime": "9.00",
+    "totalTime": 13.5,
+    "distance": 200,
+    "description": ""
+  }
+]

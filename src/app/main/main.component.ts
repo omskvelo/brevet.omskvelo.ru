@@ -3,25 +3,7 @@ import {now} from 'moment';
 import {MatDialog} from '@angular/material/dialog';
 import {ActivatedRoute, Router} from '@angular/router';
 import {DatePipe} from '@angular/common';
-
-export interface BrevetsData {
-  startDate: string;
-  startTime: string;
-  totalTime: number;
-  distance: number;
-  title: string;
-  color: string;
-  route: string;
-  index: number;
-  description: string;
-  status: string;
-}
-
-export interface ResultsData {
-  title: string;
-  index: number;
-  results: any;
-}
+import {BrevetsData, ResultsData} from '../shell/shell.component';
 
 @Component({
   selector: 'app-main',
@@ -35,6 +17,7 @@ export class MainComponent implements OnInit {
   startDate: number;
   finishDate: number;
   years = [];
+  colors = [];
   yearNow = this.datePipe.transform(new Date(now()), 'yyyy');
   year: string;
   emptyBrevetsData = false;
@@ -46,15 +29,15 @@ export class MainComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.resultsData = this.activatedRoute.snapshot.data.resultsResolver;
-    this.years = this.activatedRoute.snapshot.data.yearsResolver;
     this.activatedRoute.paramMap
       .subscribe(data => {
         this.year = data.get('year');
-        if (this.year === null || this.years.filter(x => x === this.year).length === 0) {
-          this.year = this.yearNow;
-          this.router.navigate([this.year]).then();
+        if (this.year === null || this.activatedRoute.snapshot.data.propertiesResolver.years.filter(x => x === this.year).length === 0) {
+          this.router.navigate([this.yearNow]).then();
         } else {
+          this.years = this.activatedRoute.snapshot.data.propertiesResolver.years;
+          this.colors = this.activatedRoute.snapshot.data.propertiesResolver.colors;
+          this.resultsData = this.activatedRoute.snapshot.data.resultsResolver;
           this.loadCalendar();
         }
       });
@@ -108,24 +91,25 @@ export class MainComponent implements OnInit {
         });
   }
 
-  showRoute(year, routeTitle): void {
-    this.router.navigate([year + '/' + routeTitle]).then();
-  }
-
-  dialogShowResult(route, index): void {
+  dialogShowResult(route, index, distance): void {
     for (const item of this.resultsData) {
       if (item.title === route && item.index === index) {
         this.dialog.open(DialogShowResultComponent, {
-          data: {results: item.results}
+          data: {results: item.results, distance}
         });
         break;
       }
     }
   }
 
+  showRoute(year, routeTitle): void {
+    this.router.navigate([year + '/' + routeTitle]).then();
+  }
+
   showTotalResults(year): void {
     this.router.navigate([year + '/total_results']).then();
   }
+
 }
 
 @Component({

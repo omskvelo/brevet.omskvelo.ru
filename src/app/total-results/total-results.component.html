@@ -13,7 +13,7 @@
   </ng-container>
   <ng-container *ngFor="let brevet of brevetsData; let i = index;" [matColumnDef]="brevet.route + brevet.index">
     <th *matHeaderCellDef mat-header-cell>{{brevet.title}}<br>{{brevet.distance}}</th>
-    <td *matCellDef="let element" mat-cell>{{element[i + 1]}}</td>
+    <td *matCellDef="let element" mat-cell [style.background-color]='colors[brevet.distance]'>{{element[i + 1]}}</td>
   </ng-container>
   <ng-container matColumnDef="inAll">
     <th *matHeaderCellDef mat-header-cell>Итого, км</th>

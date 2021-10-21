@@ -8,14 +8,15 @@
         </mat-option>
       </mat-select>
     </mat-form-field>
-    <a (click)="showTotalResults(year)" title="Общие результаты">
+    <a (click)="showTotalResults(year)" title="Результаты за год">
       <mat-icon>analytics</mat-icon>
     </a>
   </div>
 </mat-toolbar>
 <div *ngIf="emptyBrevetsData !== true" class="body">
   <mat-card *ngFor="let brevet of brevetsData" class="card">
-    <div [style.border-left-color]='brevet.color' [style.border-top-color]='brevet.color' class="km_triangle"></div>
+    <div [style.border-left-color]='colors[brevet.distance]' [style.border-top-color]='colors[brevet.distance]'
+         class="km_triangle"></div>
     <div class="km_text">
       {{brevet.distance}}
     </div>
@@ -24,7 +25,8 @@
     </mat-card-title>
     <mat-card-subtitle>
       {{brevet.status}}
-      <a (click)="dialogShowResult(brevet.route, brevet.index)" *ngIf="brevet.status === 'Заезд завершен.'">
+      <a (click)="dialogShowResult(brevet.route, brevet.index, brevet.distance)"
+         *ngIf="brevet.status === 'Заезд завершен.'">
         Результаты
       </a>
     </mat-card-subtitle>

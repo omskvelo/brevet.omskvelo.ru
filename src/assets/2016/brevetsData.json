@@ -1,0 +1,162 @@
+[
+  {
+    "route": "200Irtysh",
+    "index": 1,
+    "title": "\"Иртыш\"",
+    "startDate": "23.04.2016",
+    "startTime": "9.00",
+    "totalTime": 13.5,
+    "distance": 200,
+    "description": ""
+  },
+  {
+    "route": "200Moskalenki",
+    "index": 1,
+    "title": "\"Москаленки\"",
+    "startDate": "19.05.2016",
+    "startTime": "7.00",
+    "totalTime": 13.5,
+    "distance": 200,
+    "description": ""
+  },
+  {
+    "route": "300Isilkul",
+    "index": 1,
+    "title": "\"Исилькуль\"",
+    "startDate": "19.05.2016",
+    "startTime": "7.00",
+    "totalTime": 20,
+    "distance": 300,
+    "description": ""
+  },
+  {
+    "route": "200Irtysh",
+    "index": 2,
+    "title": "\"Иртыш\"",
+    "startDate": "04.05.2016",
+    "startTime": "7.00",
+    "totalTime": 13.5,
+    "distance": 200,
+    "description": ""
+  },
+  {
+    "route": "400MoskalenkiIrtysh",
+    "index": 1,
+    "title": "\"Москаленки - Иртыш\"",
+    "startDate": "04.05.2016",
+    "startTime": "7.00",
+    "totalTime": 27,
+    "distance": 400,
+    "description": ""
+  },
+  {
+    "route": "300Cherlak",
+    "index": 1,
+    "title": "\"Черлак\"",
+    "startDate": "13.06.2016",
+    "startTime": "7.00",
+    "totalTime": 20,
+    "distance": 300,
+    "description": ""
+  },
+  {
+    "route": "600CherlakIsilkul",
+    "index": 1,
+    "title": "\"Черлак - Исилькуль\"",
+    "startDate": "18.06.2016",
+    "startTime": "7.00",
+    "totalTime": 40,
+    "distance": 600,
+    "description": "Памяти Ефимова Сергея!"
+  },
+  {
+    "route": "200Pavlogradka",
+    "index": 1,
+    "title": "\"Павлоградка\"",
+    "startDate": "25.06.2016",
+    "startTime": "9.00",
+    "totalTime": 13.5,
+    "distance": 200,
+    "description": ""
+  },
+  {
+    "route": "200Irtysh",
+    "index": 3,
+    "title": "\"Иртыш\"",
+    "startDate": "09.07.2016",
+    "startTime": "7.00",
+    "totalTime": 13.5,
+    "distance": 200,
+    "description": ""
+  },
+  {
+    "route": "300Cherlak",
+    "index": 2,
+    "title": "\"Черлак\"",
+    "startDate": "09.07.2016",
+    "startTime": "7.00",
+    "totalTime": 20,
+    "distance": 300,
+    "description": ""
+  },
+  {
+    "route": "200Irtysh",
+    "index": 4,
+    "title": "\"Иртыш\"",
+    "startDate": "30.07.2016",
+    "startTime": "7.00",
+    "totalTime": 13.5,
+    "distance": 200,
+    "description": ""
+  },
+  {
+    "route": "400MoskalenkiIrtysh",
+    "index": 2,
+    "title": "\"Москаленки - Иртыш\"",
+    "startDate": "30.07.2016",
+    "startTime": "7.00",
+    "totalTime": 27,
+    "distance": 400,
+    "description": ""
+  },
+  {
+    "route": "200Moskalenki",
+    "index": 2,
+    "title": "\"Москаленки\"",
+    "startDate": "13.08.2016",
+    "startTime": "7.00",
+    "totalTime": 13.5,
+    "distance": 200,
+    "description": ""
+  },
+  {
+    "route": "300Isilkul",
+    "index": 2,
+    "title": "\"Исилькуль\"",
+    "startDate": "13.08.2016",
+    "startTime": "7.00",
+    "totalTime": 20,
+    "distance": 300,
+    "description": ""
+  },
+  {
+    "route": "200Irtysh",
+    "index": 5,
+    "title": "\"Иртыш\"",
+    "startDate": "20.08.2016",
+    "startTime": "7.00",
+    "totalTime": 13.5,
+    "distance": 200,
+    "description": ""
+  },
+  {
+    "route": "600CherlakIsilkul",
+    "index": 2,
+    "title": "\"Черлак - Исилькуль\"",
+    "startDate": "20.08.2016",
+    "startTime": "7.00",
+    "totalTime": 40,
+    "distance": 600,
+    "description": ""
+  }
+]

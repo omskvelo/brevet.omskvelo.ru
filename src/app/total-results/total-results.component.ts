@@ -1,7 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
 import {take} from 'rxjs/operators';
-import {BrevetsData, ResultsData} from '../main/main.component';
+import {BrevetsData, ResultsData} from '../shell/shell.component';
 
 @Component({
   selector: 'app-total-results',
@@ -14,6 +14,7 @@ export class TotalResultsComponent implements OnInit {
   jsonData: ResultsData[];
   name = [];
   total = [];
+  colors = [];
   amount: number;
   year: string;
 
@@ -25,6 +26,7 @@ export class TotalResultsComponent implements OnInit {
       .subscribe(data => this.year = data.get('year'));
     this.brevetsData = this.activatedRoute.snapshot.data.brevetsResolver;
     this.jsonData = this.activatedRoute.snapshot.data.resultsResolver;
+    this.colors = this.activatedRoute.snapshot.data.propertiesResolver.colors;
     for (const item of this.brevetsData) {
       this.displayedColumns.push(item.route + item.index);
     }

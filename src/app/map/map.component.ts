@@ -3,13 +3,7 @@ import * as L from 'leaflet/dist/leaflet';
 import 'leaflet-routing-machine';
 import {take} from 'rxjs/operators';
 import {ActivatedRoute, Router} from '@angular/router';
-import {BrevetsData} from '../main/main.component';
-
-export interface RoutesData {
-  title: string;
-  checkPoints: any;
-  wayPoints: any;
-}
+import {BrevetsData, RoutesData} from '../shell/shell.component';
 
 @Component({
   selector: 'app-map',

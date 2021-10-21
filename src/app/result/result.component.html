@@ -19,6 +19,10 @@
         <th *matHeaderCellDef mat-header-cell mat-sort-header>Время</th>
         <td *matCellDef="let element" mat-cell>{{element.resultTime}}</td>
       </ng-container>
+      <ng-container matColumnDef="averageSpeed">
+        <th *matHeaderCellDef mat-header-cell>Средняя<br>скорость</th>
+        <td *matCellDef="let element" mat-cell>{{(distance/element.resultTime).toFixed(1)}}</td>
+      </ng-container>
       <tr *matHeaderRowDef="displayedColumns sticky: true" mat-header-row></tr>
       <tr *matRowDef="let row; columns: displayedColumns;" mat-row></tr>
     </table>

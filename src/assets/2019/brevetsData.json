@@ -1,0 +1,122 @@
+[
+  {
+    "route": "200Moskalenki",
+    "index": 1,
+    "title": "\"Москаленки\"",
+    "startDate": "27.04.2019",
+    "startTime": "9.00",
+    "totalTime": 13.5,
+    "distance": 200,
+    "description": ""
+  },
+  {
+    "route": "200Gorkovskoe",
+    "index": 1,
+    "title": "\"Горьковское\"",
+    "startDate": "05.05.2019",
+    "startTime": "9.00",
+    "totalTime": 13.5,
+    "distance": 200,
+    "description": ""
+  },
+  {
+    "route": "300Cherlak",
+    "index": 1,
+    "title": "\"Черлак\"",
+    "startDate": "11.05.2019",
+    "startTime": "7.00",
+    "totalTime": 20,
+    "distance": 300,
+    "description": ""
+  },
+  {
+    "route": "400MoskalenkiIrtysh",
+    "index": 1,
+    "title": "\"Москаленки - Иртыш\"",
+    "startDate": "18.05.2019",
+    "startTime": "7.00",
+    "totalTime": 27,
+    "distance": 400,
+    "description": ""
+  },
+  {
+    "route": "200Sargatskoe",
+    "index": 1,
+    "title": "\"Саргатское\"",
+    "startDate": "01.06.2019",
+    "startTime": "9.00",
+    "totalTime": 13.5,
+    "distance": 200,
+    "description": ""
+  },
+  {
+    "route": "600CherlakIsilkul",
+    "index": 1,
+    "title": "\"Черлак - Исилькуль\"",
+    "startDate": "15.06.2019",
+    "startTime": "8.00",
+    "totalTime": 40,
+    "distance": 600,
+    "description": ""
+  },
+  {
+    "route": "400MoskalenkiIrtysh",
+    "index": 2,
+    "title": "\"Москаленки - Иртыш\"",
+    "startDate": "29.06.2019",
+    "startTime": "7.00",
+    "totalTime": 27,
+    "distance": 400,
+    "description": ""
+  },
+  {
+    "route": "300TavricheskoeMoskalenki",
+    "index": 1,
+    "title": "\"Таврическое - Москаленки\"",
+    "startDate": "13.07.2019",
+    "startTime": "7.00",
+    "totalTime": 20,
+    "distance": 300,
+    "description": ""
+  },
+  {
+    "route": "600CherlakIsilkul",
+    "index": 2,
+    "title": "\"Черлак - Исилькуль\"",
+    "startDate": "20.07.2019",
+    "startTime": "8.00",
+    "totalTime": 40,
+    "distance": 600,
+    "description": ""
+  },
+  {
+    "route": "200Pavlogradka",
+    "index": 1,
+    "title": "\"Павлоградка\"",
+    "startDate": "27.07.2019",
+    "startTime": "9.00",
+    "totalTime": 13.5,
+    "distance": 200,
+    "description": ""
+  },
+  {
+    "route": "200Kalachinsk",
+    "index": 1,
+    "title": "\"Калачинск\"",
+    "startDate": "29.08.2019",
+    "startTime": "9.00",
+    "totalTime": 13.5,
+    "distance": 200,
+    "description": ""
+  },
+  {
+    "route": "200Novouralsky",
+    "index": 1,
+    "title": "\"Новоуральский\"",
+    "startDate": "21.09.2019",
+    "startTime": "9.00",
+    "totalTime": 13.5,
+    "distance": 200,
+    "description": "Памяти Токарева Юрия Петровича!"
+  }
+]

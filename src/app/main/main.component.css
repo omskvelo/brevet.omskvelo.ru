@@ -31,6 +31,10 @@ mat-card {
   padding: 16px 0 0 0;
 }
 
+mat-card:hover {
+  box-shadow: 0 10px 5px -5px rgba(34, 60, 80, 0.6);
+}
+
 mat-card-title, mat-card-subtitle {
   margin-left: 70px;
   margin-top: 5px !important;

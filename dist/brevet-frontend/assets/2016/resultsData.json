@@ -1,0 +1,345 @@
+[
+  {
+    "title": "200Irtysh",
+    "index": 1,
+    "results": [
+      {
+        "name": "Рыжаков Никита",
+        "resultTime": "8.06"
+      },
+      {
+        "name": "Илларионов Дмитрий",
+        "resultTime": "8.30"
+      },
+      {
+        "name": "Малахов Андрей",
+        "resultTime": "8.25"
+      },
+      {
+        "name": "Валиков Александр",
+        "resultTime": "9.00"
+      },
+      {
+        "name": "Окишев Андрей",
+        "resultTime": "11.50"
+      },
+      {
+        "name": "Соколов Максим",
+        "resultTime": "11.10"
+      },
+      {
+        "name": "Ермаков Артем",
+        "resultTime": "9.20"
+      },
+      {
+        "name": "Кононов Владимир",
+        "resultTime": "9.15"
+      },
+      {
+        "name": "Сметюк Евгений",
+        "resultTime": "8.30"
+      },
+      {
+        "name": "Токарев Юрий",
+        "resultTime": "8.46"
+      },
+      {
+        "name": "Хужен Антон",
+        "resultTime": "DNF"
+      },
+      {
+        "name": "Патронов Константин",
+        "resultTime": "DNF"
+      },
+      {
+        "name": "Филимонов Александр",
+        "resultTime": "9.56"
+      }
+    ]
+  },
+  {
+    "title": "200Moskalenki",
+    "index": 1,
+    "results": [
+      {
+        "name": "Сметюк Евгений",
+        "resultTime": "9:15"
+      },
+      {
+        "name": "Киселев Петр",
+        "resultTime": "10:25"
+      },
+      {
+        "name": "Дорошенко Валентин",
+        "resultTime": "12:14"
+      }
+    ]
+  },
+  {
+    "title": "300Isilkul",
+    "index": 1,
+    "results": [
+      {
+        "name": "Малахов Андрей",
+        "resultTime": "14.27"
+      },
+      {
+        "name": "Рыжаков Никита",
+        "resultTime": "14.00"
+      },
+      {
+        "name": "Анохов Константин",
+        "resultTime": "12.57"
+      },
+      {
+        "name": "Оборин Павел",
+        "resultTime": "16.23"
+      },
+      {
+        "name": "Ермаков Артем",
+        "resultTime": "16.00"
+      },
+      {
+        "name": "Валиков Александр",
+        "resultTime": "13.15"
+      }
+    ]
+  },
+  {
+    "title": "200Irtysh",
+    "index": 2,
+    "results": [
+      {
+        "name": "Соколов Максим",
+        "resultTime": "10.10"
+      },
+      {
+        "name": "Степаненко Алексей",
+        "resultTime": "11.55"
+      },
+      {
+        "name": "Токарев Юрий",
+        "resultTime": "9.40"
+      },
+      {
+        "name": "Ермаков Артем",
+        "resultTime": "9.55"
+      },
+      {
+        "name": "Иванов Андрей",
+        "resultTime": "9.40"
+      },
+      {
+        "name": "Терехин Александр",
+        "resultTime": "13.15"
+      },
+      {
+        "name": "Миронов Алексей",
+        "resultTime": "11.55"
+      }
+    ]
+  },
+  {
+    "title": "400MoskalenkiIrtysh",
+    "index": 1,
+    "results": [
+      {
+        "name": "Валиков Александр",
+        "resultTime": "16.30"
+      },
+      {
+        "name": "Малахов Андрей",
+        "resultTime": "19.15"
+      }
+    ]
+  },
+  {
+    "title": "300Cherlak",
+    "index": 1,
+    "results": [
+      {
+        "name": "Сафонов Вячеслав",
+        "resultTime": "16.47"
+      },
+      {
+        "name": "Сотак Владимир",
+        "resultTime": "16.47"
+      },
+      {
+        "name": "Илларионов Дмитрий",
+        "resultTime": "14.46"
+      },
+      {
+        "name": "Филимонов Александр",
+        "resultTime": "13.48"
+      },
+      {
+        "name": "Соколов Максим",
+        "resultTime": "16.16"
+      }
+    ]
+  },
+  {
+    "title": "600CherlakIsilkul",
+    "index": 1,
+    "results": [
+      {
+        "name": "Валиков Александр",
+        "resultTime": "28.40"
+      },
+      {
+        "name": "Малахов Андрей",
+        "resultTime": "30.40"
+      },
+      {
+        "name": "Оборин Павел",
+        "resultTime": "38.12"
+      }
+    ]
+  },
+  {
+    "title": "200Pavlogradka",
+    "index": 1,
+    "results": [
+      {
+        "name": "Соколов Максим",
+        "resultTime": "9.45"
+      },
+      {
+        "name": "Рыжаков Никита",
+        "resultTime": "8.30"
+      }
+    ]
+  },
+  {
+    "title": "200Irtysh",
+    "index": 3,
+    "results": [
+      {
+        "name": "Сафонов Вячеслав",
+        "resultTime": "9.45"
+      }
+    ]
+  },
+  {
+    "title": "300Cherlak",
+    "index": 2,
+    "results": []
+  },
+  {
+    "title": "200Irtysh",
+    "index": 4,
+    "results": [
+      {
+        "name": "Ермаков Артем",
+        "resultTime": "11.05"
+      },
+      {
+        "name": "Сметюк Евгений",
+        "resultTime": "12.20"
+      },
+      {
+        "name": "Могильникова Ольга",
+        "resultTime": "12.20"
+      },
+      {
+        "name": "Трапезников Андрей",
+        "resultTime": "12.20"
+      },
+      {
+        "name": "Рыбак Павел",
+        "resultTime": "11.21"
+      }
+    ]
+  },
+  {
+    "title": "400MoskalenkiIrtysh",
+    "index": 2,
+    "results": [
+      {
+        "name": "Рыжаков Никита",
+        "resultTime": "18.59"
+      },
+      {
+        "name": "Оборин Павел",
+        "resultTime": "24.50"
+      }
+    ]
+  },
+  {
+    "title": "200Moskalenki",
+    "index": 2,
+    "results": [
+      {
+        "name": "Сафонов Вячеслав",
+        "resultTime": "11.09"
+      },
+      {
+        "name": "Токарев Юрий",
+        "resultTime": "8.59"
+      },
+      {
+        "name": "Рядовой Сергей",
+        "resultTime": "9.53"
+      },
+      {
+        "name": "Криволуцкий Юрий",
+        "resultTime": "9.53"
+      }
+    ]
+  },
+  {
+    "title": "300Isilkul",
+    "index": 2,
+    "results": [
+      {
+        "name": "Ермаков Артем",
+        "resultTime": "14:53"
+      },
+      {
+        "name": "Рыбак Павел",
+        "resultTime": "16:05"
+      },
+      {
+        "name": "Бревнов Евгений",
+        "resultTime": "15:00"
+      }
+    ]
+  },
+  {
+    "title": "200Irtysh",
+    "index": 5,
+    "results": [
+      {
+        "name": "Ермаков Артем",
+        "resultTime": "8.43"
+      },
+      {
+        "name": "Оборин Павел",
+        "resultTime": "10.19"
+      },
+      {
+        "name": "Токарев Юрий",
+        "resultTime": "9.04"
+      },
+      {
+        "name": "Пикало Андрей",
+        "resultTime": "12.12"
+      },
+      {
+        "name": "Моисеев Иван",
+        "resultTime": "11.02"
+      }
+    ]
+  },
+  {
+    "title": "600CherlakIsilkul",
+    "index": 2,
+    "results": [
+      {
+        "name": "Рыжаков Никита",
+        "resultTime": "29.58"
+      }
+    ]
+  }
+]

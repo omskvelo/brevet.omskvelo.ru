@@ -12,9 +12,8 @@ export class LegendsResolver implements Resolve<any> {
   }
 
   resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<any> {
-    const year = route.paramMap.get('year');
     const routeTitle = route.paramMap.get('routeTitle');
-    return this.http.get('assets/' + year + '/legends/' + routeTitle + '.json').pipe(catchError(_ => {
+    return this.http.get('assets/legends/' + routeTitle + '.json').pipe(catchError(_ => {
       return of([]);
     }));
   }

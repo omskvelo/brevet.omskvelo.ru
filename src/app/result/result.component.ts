@@ -9,9 +9,10 @@ import {MatTableDataSource} from '@angular/material/table';
   styleUrls: ['./result.component.css']
 })
 export class ResultComponent implements AfterViewInit {
-  displayedColumns: string[] = ['name', 'resultTime'];
+  displayedColumns: string[] = ['name', 'resultTime', 'averageSpeed'];
   results = new MatTableDataSource(this.data.results);
   amount = this.data.results.length;
+  distance = this.data.distance;
   resultsTable = true;
   @ViewChild(MatSort) sort: MatSort;
 

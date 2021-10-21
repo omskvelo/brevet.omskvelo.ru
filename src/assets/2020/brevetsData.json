@@ -1,0 +1,132 @@
+[
+  {
+    "route": "200Pavlogradka",
+    "index": 1,
+    "title": "\"Павлоградка\"",
+    "startDate": "06.06.2020",
+    "startTime": "7.00",
+    "totalTime": 13.5,
+    "distance": 200,
+    "description": ""
+  },
+  {
+    "route": "300Cherlak",
+    "index": 1,
+    "title": "\"Черлак\"",
+    "startDate": "12.06.2020",
+    "startTime": "20.00",
+    "totalTime": 20,
+    "distance": 300,
+    "description": ""
+  },
+  {
+    "route": "200Sargatskoe",
+    "index": 1,
+    "title": "\"Саргатское\"",
+    "startDate": "20.06.2020",
+    "startTime": "7.00",
+    "totalTime": 13.5,
+    "distance": 200,
+    "description": ""
+  },
+  {
+    "route": "400MoskalenkiIrtysh",
+    "index": 1,
+    "title": "\"Москаленки - Иртыш\"",
+    "startDate": "27.06.2020",
+    "startTime": "8.00",
+    "totalTime": 27,
+    "distance": 400,
+    "description": ""
+  },
+  {
+    "route": "300TavricheskoeMoskalenki",
+    "index": 1,
+    "title": "\"Таврическое - Москаленки\"",
+    "startDate": "04.07.2020",
+    "startTime": "7.00",
+    "totalTime": 20,
+    "distance": 300,
+    "description": ""
+  },
+  {
+    "route": "600CherlakIsilkul",
+    "index": 1,
+    "title": "\"Черлак - Исилькуль\"",
+    "startDate": "11.07.2020",
+    "startTime": "7.00",
+    "totalTime": 40,
+    "distance": 600,
+    "description": ""
+  },
+  {
+    "route": "400MoskalenkiIrtysh",
+    "index": 2,
+    "title": "\"Москаленки - Иртыш\"",
+    "startDate": "18.07.2020",
+    "startTime": "7.00",
+    "totalTime": 27,
+    "distance": 400,
+    "description": ""
+  },
+  {
+    "route": "200Irtysh",
+    "index": 1,
+    "title": "\"Иртыш\"",
+    "startDate": "25.07.2020",
+    "startTime": "7.00",
+    "totalTime": 13.5,
+    "distance": 200,
+    "description": ""
+  },
+  {
+    "route": "1000OmskayaTysyacha",
+    "index": 1,
+    "title": "\"Омская 1000\"",
+    "startDate": "25.07.2020",
+    "startTime": "7.00",
+    "totalTime": 75,
+    "distance": 1000,
+    "description": ""
+  },
+  {
+    "route": "600CherlakIsilkul",
+    "index": 2,
+    "title": "\"Черлак - Исилькуль\"",
+    "startDate": "01.08.2020",
+    "startTime": "9.00",
+    "totalTime": 40,
+    "distance": 600,
+    "description": ""
+  },
+  {
+    "route": "200Gorkovskoe",
+    "index": 1,
+    "title": "\"Горьковское\"",
+    "startDate": "15.08.2020",
+    "startTime": "7.00",
+    "totalTime": 13.5,
+    "distance": 200,
+    "description": ""
+  },
+  {
+    "route": "200Serebryanoye",
+    "index": 1,
+    "title": "\"Серебряное\"",
+    "startDate": "29.08.2020",
+    "startTime": "8.00",
+    "totalTime": 13.5,
+    "distance": 200,
+    "description": ""
+  },
+  {
+    "route": "200Novouralsky",
+    "index": 1,
+    "title": "\"Новоуральский\"",
+    "startDate": "19.09.2020",
+    "startTime": "8.00",
+    "totalTime": 13.5,
+    "distance": 200,
+    "description": "Памяти Токарева Юрия Петровича!"
+  }
+]

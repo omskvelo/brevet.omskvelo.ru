@@ -22,7 +22,7 @@ import {TotalResultsComponent} from './total-results/total-results.component';
 import {MatSelectModule} from '@angular/material/select';
 import {RouterModule, Routes} from '@angular/router';
 import {ShellComponent} from './shell/shell.component';
-import {YearsResolver} from './years.resolver';
+import {PropertiesResolver} from './properties.resolver';
 import {DatePipe} from '@angular/common';
 import {BrevetsResolver} from './brevets.resolver';
 import {RoutesResolver} from './routes.resolver';
@@ -34,7 +34,7 @@ const routes: Routes = [
   {path: '', component: MainComponent},
   {
     path: ':year', component: MainComponent, resolve: {
-      yearsResolver: YearsResolver,
+      propertiesResolver: PropertiesResolver,
       brevetsResolver: BrevetsResolver,
       resultsResolver: ResultsResolver
     }
@@ -42,7 +42,8 @@ const routes: Routes = [
   {
     path: ':year/total_results', component: TotalResultsComponent, resolve: {
       brevetsResolver: BrevetsResolver,
-      resultsResolver: ResultsResolver
+      resultsResolver: ResultsResolver,
+      propertiesResolver: PropertiesResolver
     }
   },
   {
@@ -62,7 +63,7 @@ const routes: Routes = [
     DialogShowResultComponent,
     ResultComponent,
     TotalResultsComponent,
-    ShellComponent
+    ShellComponent,
   ],
   imports: [
     BrowserModule,

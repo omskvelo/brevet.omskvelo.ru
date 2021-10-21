@@ -1,13 +1,13 @@
 import { TestBed } from '@angular/core/testing';
 
-import { YearsResolver } from './years.resolver';
+import { PropertiesResolver } from './properties.resolver';
 
-describe('YearsResolver', () => {
-  let resolver: YearsResolver;
+describe('PropertiesResolver', () => {
+  let resolver: PropertiesResolver;
 
   beforeEach(() => {
     TestBed.configureTestingModule({});
-    resolver = TestBed.inject(YearsResolver);
+    resolver = TestBed.inject(PropertiesResolver);
   });
 
   it('should be created', () => {

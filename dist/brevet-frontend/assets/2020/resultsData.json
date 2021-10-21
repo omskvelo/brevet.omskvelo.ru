@@ -1,0 +1,648 @@
+[
+  {
+    "title": "200Pavlogradka",
+    "index": 1,
+    "results": [
+      {
+        "name": "Ноженко Роман",
+        "resultTime": "9.15"
+      },
+      {
+        "name": "Крупкин Андрей",
+        "resultTime": "10.00"
+      },
+      {
+        "name": "Маслова Елена",
+        "resultTime": "9.55"
+      },
+      {
+        "name": "Махмутов Артур",
+        "resultTime": "12.15"
+      },
+      {
+        "name": "Глазырин Андрей",
+        "resultTime": "12.00"
+      },
+      {
+        "name": "Махамбетов Жанат",
+        "resultTime": "9.45"
+      },
+      {
+        "name": "Клапотовский Денис",
+        "resultTime": "9.29"
+      },
+      {
+        "name": "Суставов Алексей",
+        "resultTime": "11.15"
+      },
+      {
+        "name": "Вавин Игорь",
+        "resultTime": "10.50"
+      },
+      {
+        "name": "Скрягин Артем",
+        "resultTime": "DNF"
+      },
+      {
+        "name": "Малахов Андрей",
+        "resultTime": "10.45"
+      },
+      {
+        "name": "Байда Александр",
+        "resultTime": "11.45"
+      },
+      {
+        "name": "Гаценко Виталий",
+        "resultTime": "11.50"
+      },
+      {
+        "name": "Решетняк Игорь",
+        "resultTime": "11.50"
+      },
+      {
+        "name": "Коротаева Анна",
+        "resultTime": "11.50"
+      },
+      {
+        "name": "Тюменцев Иван",
+        "resultTime": "11.38"
+      },
+      {
+        "name": "Бутаков Александр",
+        "resultTime": "8.20"
+      },
+      {
+        "name": "Соколов Максим",
+        "resultTime": "9.55"
+      },
+      {
+        "name": "Буховец Игорь",
+        "resultTime": "DNF"
+      },
+      {
+        "name": "Симочкина Ольга",
+        "resultTime": "11.55"
+      },
+      {
+        "name": "Олюнин Денис",
+        "resultTime": "11.55"
+      },
+      {
+        "name": "Преслер Михаил",
+        "resultTime": "DNS"
+      },
+      {
+        "name": "Коротун Денис",
+        "resultTime": "12.00"
+      },
+      {
+        "name": "Судорженко Александр",
+        "resultTime": "9.45"
+      },
+      {
+        "name": "Софийчук Евгений",
+        "resultTime": "9.45"
+      },
+      {
+        "name": "Оборин Павел",
+        "resultTime": "8.59"
+      },
+      {
+        "name": "Дружняев Константин",
+        "resultTime": "11.38"
+      }
+    ]
+  },
+  {
+    "title": "300Cherlak",
+    "index": 1,
+    "results": [
+      {
+        "name": "Ермаков Артем",
+        "resultTime": "13.27"
+      },
+      {
+        "name": "Лемаев Алексей",
+        "resultTime": "13.26"
+      },
+      {
+        "name": "Ноженко Роман",
+        "resultTime": "12.32"
+      },
+      {
+        "name": "Малахов Андрей",
+        "resultTime": "14.32"
+      },
+      {
+        "name": "Клапотовский Денис",
+        "resultTime": "12.00"
+      },
+      {
+        "name": "Маслова Елена",
+        "resultTime": "14.07"
+      },
+      {
+        "name": "Соколов Максим",
+        "resultTime": "12.00"
+      },
+      {
+        "name": "Крупкин Андрей",
+        "resultTime": "14.29"
+      },
+      {
+        "name": "Оборин Павел",
+        "resultTime": "13.07"
+      },
+      {
+        "name": "Бутаков Александр",
+        "resultTime": "12.00"
+      }
+    ]
+  },
+  {
+    "title": "200Sargatskoe",
+    "index": 1,
+    "results": [
+      {
+        "name": "Ермаков Артем",
+        "resultTime": "9.48"
+      },
+      {
+        "name": "Клапотовский Денис",
+        "resultTime": "9.52"
+      },
+      {
+        "name": "Шарф Екатерина",
+        "resultTime": "9.48"
+      },
+      {
+        "name": "Сохар Сергей",
+        "resultTime": "9.48"
+      },
+      {
+        "name": "Шарф Сергей",
+        "resultTime": "9.48"
+      },
+      {
+        "name": "Масаутов Ильдар",
+        "resultTime": "DNS"
+      },
+      {
+        "name": "Бревнов Евгений",
+        "resultTime": "7.52"
+      },
+      {
+        "name": "Суставов Алексей",
+        "resultTime": "11.15"
+      },
+      {
+        "name": "Буховец Игорь",
+        "resultTime": "7.17"
+      },
+      {
+        "name": "Карант Михаил",
+        "resultTime": "9.48"
+      },
+      {
+        "name": "Лемаев Алексей",
+        "resultTime": "8.56"
+      },
+      {
+        "name": "Скиданов Ярослав",
+        "resultTime": "9.56"
+      },
+      {
+        "name": "Дружняев Константин",
+        "resultTime": "DNS"
+      },
+      {
+        "name": "Тонких Михаил",
+        "resultTime": "8.56"
+      },
+      {
+        "name": "Соколов Максим",
+        "resultTime": "7.24"
+      }
+    ]
+  },
+  {
+    "title": "400MoskalenkiIrtysh",
+    "index": 1,
+    "results": [
+      {
+        "name": "Ермаков Артем",
+        "resultTime": "DNF"
+      },
+      {
+        "name": "Малахов Андрей",
+        "resultTime": "22.10"
+      },
+      {
+        "name": "Ноженко Роман",
+        "resultTime": "DNF"
+      },
+      {
+        "name": "Маслова Елена",
+        "resultTime": "18.07"
+      },
+      {
+        "name": "Соколов Максим",
+        "resultTime": "18.07"
+      },
+      {
+        "name": "Клапотовский Денис",
+        "resultTime": "DNF"
+      },
+      {
+        "name": "Крупкин Андрей",
+        "resultTime": "DNF"
+      },
+      {
+        "name": "Гришечко Виктория",
+        "resultTime": "DNF"
+      }
+    ]
+  },
+  {
+    "title": "300TavricheskoeMoskalenki",
+    "index": 1,
+    "results": [
+      {
+        "name": "Шарф Екатерина",
+        "resultTime": "15.40"
+      },
+      {
+        "name": "Шарф Сергей",
+        "resultTime": "DNF"
+      },
+      {
+        "name": "Сохар Сергей",
+        "resultTime": "15.40"
+      },
+      {
+        "name": "Бревнов Евгений",
+        "resultTime": "14.49"
+      },
+      {
+        "name": "Лемаев Алексей",
+        "resultTime": "16.16"
+      },
+      {
+        "name": "Ермаков Артем",
+        "resultTime": "15.30"
+      },
+      {
+        "name": "Сабодаж Александр",
+        "resultTime": "19.20"
+      },
+      {
+        "name": "Махмутов Артур",
+        "resultTime": "19.20"
+      },
+      {
+        "name": "Оборин Павел",
+        "resultTime": "13.57"
+      },
+      {
+        "name": "Дружняев Константин",
+        "resultTime": "15.30"
+      }
+    ]
+  },
+  {
+    "title": "600CherlakIsilkul",
+    "index": 1,
+    "results": [
+      {
+        "name": "Малахов Андрей",
+        "resultTime": "33.00"
+      },
+      {
+        "name": "Крупкин Андрей",
+        "resultTime": "29.26"
+      },
+      {
+        "name": "Ноженко Роман",
+        "resultTime": "30.38"
+      },
+      {
+        "name": "Клапотовский Денис",
+        "resultTime": "35.05"
+      },
+      {
+        "name": "Маслова Елена",
+        "resultTime": "DNF"
+      }
+    ]
+  },
+  {
+    "title": "400MoskalenkiIrtysh",
+    "index": 2,
+    "results": [
+      {
+        "name": "Шарф Екатерина",
+        "resultTime": "DNF"
+      },
+      {
+        "name": "Сохар Сергей",
+        "resultTime": "DNF"
+      },
+      {
+        "name": "Ермаков Артем",
+        "resultTime": "18.56"
+      },
+      {
+        "name": "Крупкин Андрей",
+        "resultTime": "18.22"
+      },
+      {
+        "name": "Ноженко Роман",
+        "resultTime": "18.22"
+      },
+      {
+        "name": "Оборин Павел",
+        "resultTime": "20.32"
+      },
+      {
+        "name": "Буховец Игорь",
+        "resultTime": "DNS"
+      },
+      {
+        "name": "Дружняев Константин",
+        "resultTime": "DNS"
+      },
+      {
+        "name": "Бревнов Евгений",
+        "resultTime": "20.58"
+      },
+      {
+        "name": "Клапотовский Денис",
+        "resultTime": "18.56"
+      }
+    ]
+  },
+  {
+    "title": "200Irtysh",
+    "index": 1,
+    "results": [
+      {
+        "name": "Ермаков Артем",
+        "resultTime": "08.00"
+      },
+      {
+        "name": "Дружняев Константин",
+        "resultTime": "08.29"
+      },
+      {
+        "name": "Лемаев Алексей",
+        "resultTime": "08.00"
+      },
+      {
+        "name": "Арнаут Станислав",
+        "resultTime": "08.29"
+      },
+      {
+        "name": "Лебедев Владимир",
+        "resultTime": "12.16"
+      },
+      {
+        "name": "Карташов Иван",
+        "resultTime": "12.16"
+      },
+      {
+        "name": "Соколов Максим",
+        "resultTime": "08.59"
+      },
+      {
+        "name": "Осипов Алексей",
+        "resultTime": "08.00"
+      },
+      {
+        "name": "Шарф Екатерина",
+        "resultTime": "DNS"
+      },
+      {
+        "name": "Шарф Сергей",
+        "resultTime": "DNS"
+      },
+      {
+        "name": "Сохар Сергей",
+        "resultTime": "DNS"
+      },
+      {
+        "name": "Масаутов Ильдар",
+        "resultTime": "DNS"
+      },
+      {
+        "name": "Чигадайкин Игорь",
+        "resultTime": "DNS"
+      }
+    ]
+  },
+  {
+    "title": "1000OmskayaTysyacha",
+    "index": 1,
+    "results": [
+      {
+        "name": "Лемаев Алексей",
+        "resultTime": "71.40"
+      },
+      {
+        "name": "Крупкин Андрей",
+        "resultTime": "DNF"
+      },
+      {
+        "name": "Сяськов Сергей",
+        "resultTime": "DNF"
+      }
+    ]
+  },
+  {
+    "title": "600CherlakIsilkul",
+    "index": 2,
+    "results": [
+      {
+        "name": "Ермаков Артем",
+        "resultTime": "36.53"
+      },
+      {
+        "name": "Соколов Максим",
+        "resultTime": "36.53"
+      },
+      {
+        "name": "Бревнов Евгений",
+        "resultTime": "31.55"
+      }
+    ]
+  },
+  {
+    "title": "200Gorkovskoe",
+    "index": 1,
+    "results": [
+      {
+        "name": "Ермаков Артем",
+        "resultTime": "9.05"
+      },
+      {
+        "name": "Суставов Алексей",
+        "resultTime": "9.55"
+      },
+      {
+        "name": "Соколов Максим",
+        "resultTime": "7.46"
+      },
+      {
+        "name": "Айропетян Александр",
+        "resultTime": "9.05"
+      },
+      {
+        "name": "Арнаут Станислав",
+        "resultTime": "8.55"
+      },
+      {
+        "name": "Тюменцев Иван",
+        "resultTime": "9.05"
+      },
+      {
+        "name": "Чигадайкин Игорь",
+        "resultTime": "7.56"
+      }
+    ]
+  },
+  {
+    "title": "200Serebryanoye",
+    "index": 1,
+    "results": [
+      {
+        "name": "Ноженко Роман",
+        "resultTime": "6.26"
+      },
+      {
+        "name": "Редько Алексей",
+        "resultTime": "8.05"
+      },
+      {
+        "name": "Арнаут Станислав",
+        "resultTime": "7.24"
+      },
+      {
+        "name": "Маслова Елена",
+        "resultTime": "9.43"
+      },
+      {
+        "name": "Борисов Михаил",
+        "resultTime": "9.25"
+      },
+      {
+        "name": "Клапотовский Денис",
+        "resultTime": "7.48"
+      },
+      {
+        "name": "Крупкин Андрей",
+        "resultTime": "7.36"
+      },
+      {
+        "name": "Суставов Алексей",
+        "resultTime": "10.20"
+      },
+      {
+        "name": "Соколов Максим",
+        "resultTime": "6.26"
+      },
+      {
+        "name": "Махмутов Артур",
+        "resultTime": "11.05"
+      },
+      {
+        "name": "Сабодаж Александр",
+        "resultTime": "11.05"
+      },
+      {
+        "name": "Осипов Алексей",
+        "resultTime": "9.09"
+      },
+      {
+        "name": "Коротун Денис",
+        "resultTime": "9.33"
+      },
+      {
+        "name": "Скиданов Ярослав",
+        "resultTime": "10.03"
+      },
+      {
+        "name": "Горбачев Иван",
+        "resultTime": "5.22"
+      },
+      {
+        "name": "Арсланов Дмитрий",
+        "resultTime": "12.04"
+      },
+      {
+        "name": "Чигадайкин Игорь",
+        "resultTime": "6.40"
+      },
+      {
+        "name": "Буховец Игорь",
+        "resultTime": "7.10"
+      },
+      {
+        "name": "Яковец Михаил",
+        "resultTime": "13.05"
+      }
+    ]
+  },
+  {
+    "title": "200Novouralsky",
+    "index": 1,
+    "results": [
+      {
+        "name": "Айропетян Александр",
+        "resultTime": "10.40"
+      },
+      {
+        "name": "Сахаров Иван",
+        "resultTime": "12.20"
+      },
+      {
+        "name": "Ермаков Артем",
+        "resultTime": "10.24"
+      },
+      {
+        "name": "Соколов Максим",
+        "resultTime": "8.21"
+      },
+      {
+        "name": "Ноженко Роман",
+        "resultTime": "8.21"
+      },
+      {
+        "name": "Клапотовский Денис",
+        "resultTime": "9.45"
+      },
+      {
+        "name": "Овчаренко Павел",
+        "resultTime": "DNF"
+      },
+      {
+        "name": "Арнаут Станислав",
+        "resultTime": "11.31"
+      },
+      {
+        "name": "Крупкин Андрей",
+        "resultTime": "11.08"
+      },
+      {
+        "name": "Чигадайкин Игорь",
+        "resultTime": "7.40"
+      },
+      {
+        "name": "Кучковский Владимир",
+        "resultTime": "9.45"
+      },
+      {
+        "name": "Моторин Роман",
+        "resultTime": "11.28"
+      }
+    ]
+  }
+]
