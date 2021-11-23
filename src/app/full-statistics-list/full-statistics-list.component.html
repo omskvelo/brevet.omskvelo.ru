@@ -1,0 +1,70 @@
+<mat-toolbar color="primary">
+  Общий ретинг
+  <div class="button-container">
+    <button (click)="dialogClose()" mat-icon-button title="Закрыть">
+      <mat-icon>cancel</mat-icon>
+    </button>
+  </div>
+</mat-toolbar>
+<div class="table-container">
+<table [dataSource]="statisticsData" mat-table>
+  <ng-container matColumnDef="num">
+    <th *matHeaderCellDef mat-header-cell>№</th>
+    <td *matCellDef="let element" mat-cell>{{element.number}}</td>
+  </ng-container>
+  <ng-container matColumnDef="name">
+    <th *matHeaderCellDef mat-header-cell>Имя</th>
+    <td *matCellDef="let element" mat-cell>{{element.name}}</td>
+  </ng-container>
+  <ng-container matColumnDef="brevet200">
+    <th *matHeaderCellDef mat-header-cell>200</th>
+    <td *matCellDef="let element" mat-cell>{{element.brevet200.resultTime}}<br>{{element.brevet200.title}}
+      <br>{{element.brevet200.startDate}}</td>
+  </ng-container>
+  <ng-container matColumnDef="brevet300">
+    <th *matHeaderCellDef mat-header-cell>300</th>
+    <td *matCellDef="let element" mat-cell>{{element.brevet300.resultTime}}<br>{{element.brevet300.title}}
+      <br>{{element.brevet300.startDate}}</td>
+  </ng-container>
+  <ng-container matColumnDef="brevet400">
+    <th *matHeaderCellDef mat-header-cell>400</th>
+    <td *matCellDef="let element" mat-cell>{{element.brevet400.resultTime}}<br>{{element.brevet400.title}}
+      <br>{{element.brevet400.startDate}}</td>
+  </ng-container>
+  <ng-container matColumnDef="brevet600">
+    <th *matHeaderCellDef mat-header-cell>600</th>
+    <td *matCellDef="let element" mat-cell>{{element.brevet600.resultTime}}<br>{{element.brevet600.title}}
+      <br>{{element.brevet600.startDate}}</td>
+  </ng-container>
+  <ng-container matColumnDef="brevet1000">
+    <th *matHeaderCellDef mat-header-cell>1000</th>
+    <td *matCellDef="let element" mat-cell>{{element.brevet1000.resultTime}}</td>
+  </ng-container>
+  <ng-container matColumnDef="successfulBrevets">
+    <th *matHeaderCellDef mat-header-cell>Удачные</th>
+    <td *matCellDef="let element" mat-cell>{{element.successfulBrevets}}</td>
+  </ng-container>
+  <ng-container matColumnDef="unsuccessfulBrevets">
+    <th *matHeaderCellDef mat-header-cell>Неудачные</th>
+    <td *matCellDef="let element" mat-cell>{{element.unsuccessfulBrevets}}</td>
+  </ng-container>
+  <ng-container matColumnDef="totalDistance">
+    <th *matHeaderCellDef mat-header-cell>Всего км</th>
+    <td *matCellDef="let element" mat-cell>{{element.totalDistance}}</td>
+  </ng-container>
+  <ng-container matColumnDef="totalTime">
+    <th *matHeaderCellDef mat-header-cell>Всего время</th>
+    <td *matCellDef="let element" mat-cell>{{element.totalTime | number:'1.2-2'}}</td>
+  </ng-container>
+  <ng-container matColumnDef="SR">
+    <th *matHeaderCellDef mat-header-cell>СР</th>
+    <td *matCellDef="let element" mat-cell>{{element.SR}}</td>
+  </ng-container>
+  <ng-container matColumnDef="rating">
+    <th *matHeaderCellDef mat-header-cell>Рейтинг</th>
+    <td *matCellDef="let element" mat-cell>{{element.rating}}</td>
+  </ng-container>
+  <tr *matHeaderRowDef="displayedColumnsStatistics; sticky: true" mat-header-row></tr>
+  <tr *matRowDef="let row; columns: displayedColumnsStatistics;" mat-row></tr>
+</table>
+</div>

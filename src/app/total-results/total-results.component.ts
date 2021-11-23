@@ -2,6 +2,7 @@ import {Component, OnInit} from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
 import {take} from 'rxjs/operators';
 import {BrevetsData, ResultsData} from '../shell/shell.component';
+import {StatisticsComponent} from '../statistics/statistics.component';
 
 @Component({
   selector: 'app-total-results',
@@ -18,7 +19,7 @@ export class TotalResultsComponent implements OnInit {
   amount: number;
   year: string;
 
-  constructor(private activatedRoute: ActivatedRoute, private router: Router) {
+  constructor(private activatedRoute: ActivatedRoute, private router: Router, private statisticsComponent: StatisticsComponent) {
   }
 
   ngOnInit(): void {
@@ -78,32 +79,30 @@ export class TotalResultsComponent implements OnInit {
       totalKM = 0;
       SR = [0, 0, 0, 0];
       for (j = 1; j < item.length; j++) {
-        if (item[j] !== '-' && item[j] !== 'DNS' && item[j] !== 'DNF' && item[j] !== 'DNQ' && item[j] !== 'OTL') {
+        if (item[j] !== '-' && item[j] !== 'DNS' && item[j] !== 'DNF' && item[j] !== 'DSQ' && item[j] !== 'OTL') {
           totalKM = totalKM + this.brevetsData[j - 1].distance;
           switch (this.brevetsData[j - 1].distance) {
             case 200: {
-              SR[0] = 1;
+              SR[0]++;
               break;
             }
             case 300: {
-              SR[1] = 1;
+              SR[1]++;
               break;
             }
             case 400: {
-              SR[2] = 1;
+              SR[2]++;
               break;
             }
             case 600: {
-              SR[3] = 1;
+              SR[3]++;
               break;
             }
           }
         }
       }
       item[this.jsonData.length + 1] = totalKM;
-      if (SR[0] === 1 && SR[1] === 1 && SR[2] === 1 && SR[3] === 1) {
-        item[this.jsonData.length + 2] = 'СР';
-      }
+      item[this.jsonData.length + 2] = this.statisticsComponent.SR(SR);
     }
     this.amount = this.total.length;
   }

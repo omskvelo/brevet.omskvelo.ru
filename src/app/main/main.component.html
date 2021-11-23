@@ -10,6 +10,9 @@
     </mat-form-field>
     <a (click)="showTotalResults(year)" title="Результаты за год">
       <mat-icon>analytics</mat-icon>
+    </a>&nbsp;
+    <a (click)="showStatistics(year)" title="Статистика за год">
+      <mat-icon>insights</mat-icon>
     </a>
   </div>
 </mat-toolbar>
@@ -34,8 +37,7 @@
       <mat-icon class="openMap">keyboard_arrow_right</mat-icon>
     </a>
     <mat-card-content>
-      <hr *ngIf="brevet.description">
-      &nbsp;
+      <hr *ngIf="brevet.description">&nbsp;
       {{brevet.description}}
     </mat-card-content>
   </mat-card>

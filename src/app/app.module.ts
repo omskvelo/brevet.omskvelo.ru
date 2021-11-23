@@ -29,6 +29,10 @@ import {RoutesResolver} from './routes.resolver';
 import {LegendsResolver} from './legends.resolver';
 import {ClipboardModule} from '@angular/cdk/clipboard';
 import {ResultsResolver} from './results.resolver';
+import {DialogShowBrevetsComponent, DialogShowStatisticsComponent, StatisticsComponent} from './statistics/statistics.component';
+import {MatGridListModule} from '@angular/material/grid-list';
+import { FullStatisticsListComponent } from './full-statistics-list/full-statistics-list.component';
+import { FullStatisticsBrevetsListComponent } from './full-statistics-brevets-list/full-statistics-brevets-list.component';
 
 const routes: Routes = [
   {path: '', component: MainComponent},
@@ -41,6 +45,13 @@ const routes: Routes = [
   },
   {
     path: ':year/total_results', component: TotalResultsComponent, resolve: {
+      brevetsResolver: BrevetsResolver,
+      resultsResolver: ResultsResolver,
+      propertiesResolver: PropertiesResolver
+    }
+  },
+  {
+    path: ':year/statistics', component: StatisticsComponent, resolve: {
       brevetsResolver: BrevetsResolver,
       resultsResolver: ResultsResolver,
       propertiesResolver: PropertiesResolver
@@ -61,9 +72,14 @@ const routes: Routes = [
     MainComponent,
     MapComponent,
     DialogShowResultComponent,
+    DialogShowStatisticsComponent,
+    DialogShowBrevetsComponent,
     ResultComponent,
     TotalResultsComponent,
     ShellComponent,
+    StatisticsComponent,
+    FullStatisticsListComponent,
+    FullStatisticsBrevetsListComponent,
   ],
   imports: [
     BrowserModule,
@@ -85,12 +101,15 @@ const routes: Routes = [
     MatSortModule,
     MatSelectModule,
     RouterModule.forRoot(routes),
-    ClipboardModule
+    ClipboardModule,
+    MatGridListModule
   ],
   entryComponents: [
     DialogShowResultComponent,
+    DialogShowStatisticsComponent,
+    DialogShowBrevetsComponent
   ],
-  providers: [DatePipe],
+  providers: [DatePipe, StatisticsComponent],
   bootstrap: [ShellComponent]
 })
 export class AppModule {

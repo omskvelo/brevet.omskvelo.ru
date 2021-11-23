@@ -1,0 +1,30 @@
+<mat-toolbar color="primary">
+  {{data.km}}
+  <div class="button-container">
+    <button (click)="dialogClose()" mat-icon-button title="Закрыть">
+      <mat-icon>cancel</mat-icon>
+    </button>
+  </div>
+</mat-toolbar>
+<div class="table-container">
+  <table [dataSource]="data.brevets" mat-table>
+    <ng-container matColumnDef="num">
+      <th *matHeaderCellDef mat-header-cell>№</th>
+      <td *matCellDef="let element" mat-cell>{{element.number}}</td>
+    </ng-container>
+    <ng-container matColumnDef="name">
+      <th *matHeaderCellDef mat-header-cell>Имя</th>
+      <td *matCellDef="let element" mat-cell>{{element.name}}</td>
+    </ng-container>
+    <ng-container matColumnDef="resultTime">
+      <th *matHeaderCellDef mat-header-cell>Время</th>
+      <td *matCellDef="let element" mat-cell>{{element.resultTime}}</td>
+    </ng-container>
+    <ng-container matColumnDef="route">
+      <th *matHeaderCellDef mat-header-cell>Бревет</th>
+      <td *matCellDef="let element" mat-cell>{{element.route}}<br>{{element.startDate}}</td>
+    </ng-container>
+    <tr *matHeaderRowDef="displayedColumns;" mat-header-row></tr>
+    <tr *matRowDef="let row; columns: displayedColumns;" mat-row></tr>
+  </table>
+</div>

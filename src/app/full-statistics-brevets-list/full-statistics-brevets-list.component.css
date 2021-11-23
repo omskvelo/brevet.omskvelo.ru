@@ -1,0 +1,16 @@
+.button-container {
+  margin-left: auto;
+}
+
+.table-container {
+  max-height: 500px;
+  overflow: auto;
+}
+
+table {
+  width: 100%;
+}
+
+th.mat-header-cell, td.mat-cell {
+  padding: 5px !important;
+}

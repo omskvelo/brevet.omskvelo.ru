@@ -110,6 +110,9 @@ export class MainComponent implements OnInit {
     this.router.navigate([year + '/total_results']).then();
   }
 
+  showStatistics(year): void {
+    this.router.navigate([year + '/statistics']).then();
+  }
 }
 
 @Component({

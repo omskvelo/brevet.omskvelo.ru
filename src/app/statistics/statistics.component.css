@@ -1,0 +1,50 @@
+.head {
+  position: fixed;
+  z-index: 101;
+  top: 0;
+}
+
+.body {
+  margin: 70px 10px 0 10px;
+}
+
+.head-tile {
+  background-color: #f5f5f5;
+  box-shadow: 0 2px 1px -1px rgb(0 0 0 / 20%), 0 1px 1px 0 rgb(0 0 0 / 14%), 0 1px 3px 0 rgb(0 0 0 / 12%);
+  border-radius: 4px;
+  font: 500 20px/32px Roboto, "Helvetica Neue", sans-serif;
+  text-align: center;
+}
+
+.tile-main {
+  background-color: #f5f5f5;
+  box-shadow: 0 2px 1px -1px rgb(0 0 0 / 20%), 0 1px 1px 0 rgb(0 0 0 / 14%), 0 1px 3px 0 rgb(0 0 0 / 12%);
+  border-radius: 4px;
+  margin: 5px auto;
+}
+
+.tile {
+  background-color: #f5f5f5;
+  box-shadow: 0 2px 1px -1px rgb(0 0 0 / 20%), 0 1px 1px 0 rgb(0 0 0 / 14%), 0 1px 3px 0 rgb(0 0 0 / 12%);
+  border-radius: 4px;
+  max-width: 100%;
+  margin-bottom: 5px;
+}
+
+.button-container {
+  margin-left: auto;
+}
+
+.head-table {
+  border-radius: 4px 4px 0 0;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  border: 0 solid red;
+}
+
+.column {
+  vertical-align: top;
+}

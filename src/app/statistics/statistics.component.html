@@ -1,0 +1,221 @@
+<mat-toolbar class="head" color="primary">
+  Статистика
+  <div class="button-container">
+    <button (click)="dialogClose(this.year)" mat-icon-button title="Закрыть">
+      <mat-icon>cancel</mat-icon>
+    </button>
+  </div>
+</mat-toolbar>
+<div class="body">
+  <div class="head-tile">
+    Всего пройдено {{totalDistance}}км.
+    В пути {{totalTime}}ч.
+    Зарегистрировано {{successfulBrevets + unsuccessfulBrevets}} бревет{{endingBrevets}}.
+    Из них {{successfulBrevets}} удачные и {{unsuccessfulBrevets}} неудачные.
+    Приняло участие {{totalParticipants}} человек. Звание "Суперрандоннер" получили {{totalSR}} человек.
+  </div>
+  <div class="tile-main">
+    <mat-toolbar class="head-table">
+      Общий ретинг
+      <div class="button-container">
+        <button (click)="dialogShowStatistics(this.statisticsData)" mat-icon-button title="Весь список">
+          <mat-icon>speaker_notes</mat-icon>
+        </button>
+      </div>
+    </mat-toolbar>
+    <table [dataSource]="statisticsDataShort" mat-table>
+      <ng-container matColumnDef="num">
+        <th *matHeaderCellDef mat-header-cell>№</th>
+        <td *matCellDef="let element" mat-cell>{{element.number}}</td>
+      </ng-container>
+      <ng-container matColumnDef="name">
+        <th *matHeaderCellDef mat-header-cell>Имя</th>
+        <td *matCellDef="let element" mat-cell>{{element.name}}</td>
+      </ng-container>
+      <ng-container matColumnDef="brevet200">
+        <th *matHeaderCellDef mat-header-cell>200</th>
+        <td *matCellDef="let element" mat-cell>{{element.brevet200.resultTime}}<br>{{element.brevet200.title}}
+          <br>{{element.brevet200.startDate}}</td>
+      </ng-container>
+      <ng-container matColumnDef="brevet300">
+        <th *matHeaderCellDef mat-header-cell>300</th>
+        <td *matCellDef="let element" mat-cell>{{element.brevet300.resultTime}}<br>{{element.brevet300.title}}
+          <br>{{element.brevet300.startDate}}</td>
+      </ng-container>
+      <ng-container matColumnDef="brevet400">
+        <th *matHeaderCellDef mat-header-cell>400</th>
+        <td *matCellDef="let element" mat-cell>{{element.brevet400.resultTime}}<br>{{element.brevet400.title}}
+          <br>{{element.brevet400.startDate}}</td>
+      </ng-container>
+      <ng-container matColumnDef="brevet600">
+        <th *matHeaderCellDef mat-header-cell>600</th>
+        <td *matCellDef="let element" mat-cell>{{element.brevet600.resultTime}}<br>{{element.brevet600.title}}
+          <br>{{element.brevet600.startDate}}</td>
+      </ng-container>
+      <ng-container matColumnDef="brevet1000">
+        <th *matHeaderCellDef mat-header-cell>1000</th>
+        <td *matCellDef="let element" mat-cell>{{element.brevet1000.resultTime}}</td>
+      </ng-container>
+      <ng-container matColumnDef="successfulBrevets">
+        <th *matHeaderCellDef mat-header-cell>Удачные</th>
+        <td *matCellDef="let element" mat-cell>{{element.successfulBrevets}}</td>
+      </ng-container>
+      <ng-container matColumnDef="unsuccessfulBrevets">
+        <th *matHeaderCellDef mat-header-cell>Неудачные</th>
+        <td *matCellDef="let element" mat-cell>{{element.unsuccessfulBrevets}}</td>
+      </ng-container>
+      <ng-container matColumnDef="totalDistance">
+        <th *matHeaderCellDef mat-header-cell>Всего км</th>
+        <td *matCellDef="let element" mat-cell>{{element.totalDistance}}</td>
+      </ng-container>
+      <ng-container matColumnDef="totalTime">
+        <th *matHeaderCellDef mat-header-cell>Всего время</th>
+        <td *matCellDef="let element" mat-cell>{{element.totalTime | number:'1.2-2'}}</td>
+      </ng-container>
+      <ng-container matColumnDef="SR">
+        <th *matHeaderCellDef mat-header-cell>СР</th>
+        <td *matCellDef="let element" mat-cell>{{element.SR}}</td>
+      </ng-container>
+      <ng-container matColumnDef="rating">
+        <th *matHeaderCellDef mat-header-cell>Рейтинг</th>
+        <td *matCellDef="let element" mat-cell>{{element.rating}}</td>
+      </ng-container>
+      <tr *matHeaderRowDef="displayedColumnsStatistics;" mat-header-row></tr>
+      <tr *matRowDef="let row; columns: displayedColumnsStatistics;" mat-row></tr>
+    </table>
+  </div>
+  <table>
+    <tr>
+      <td class="column">
+        <div class="tile">
+          <mat-toolbar [style.background-color]='colors["200"]' class="head-table" color="primary">
+            200км
+            <div class="button-container">
+              <button (click)="dialogShowBrevets(this.brevet200, 200)" mat-icon-button title="Весь список">
+                <mat-icon>speaker_notes</mat-icon>
+              </button>
+            </div>
+          </mat-toolbar>
+          <table [dataSource]="brevet200Short" mat-table>
+            <ng-container matColumnDef="num">
+              <th *matHeaderCellDef mat-header-cell>№</th>
+              <td *matCellDef="let element" mat-cell>{{element.number}}</td>
+            </ng-container>
+            <ng-container matColumnDef="name">
+              <th *matHeaderCellDef mat-header-cell>Имя</th>
+              <td *matCellDef="let element" mat-cell>{{element.name}}</td>
+            </ng-container>
+            <ng-container matColumnDef="resultTime">
+              <th *matHeaderCellDef mat-header-cell>Время</th>
+              <td *matCellDef="let element" mat-cell>{{element.resultTime}}</td>
+            </ng-container>
+            <ng-container matColumnDef="route">
+              <th *matHeaderCellDef mat-header-cell>Бревет</th>
+              <td *matCellDef="let element" mat-cell>{{element.route}}<br>{{element.startDate}}</td>
+            </ng-container>
+            <tr *matHeaderRowDef="displayedColumns;" mat-header-row></tr>
+            <tr *matRowDef="let row; columns: displayedColumns;" mat-row></tr>
+          </table>
+        </div>
+      </td>
+      <td class="column">
+        <div class="tile">
+          <mat-toolbar [style.background-color]='colors["300"]' class="head-table" color="primary">
+            300км
+            <div class="button-container">
+              <button (click)="dialogShowBrevets(this.brevet300, 300)" mat-icon-button title="Весь список">
+                <mat-icon>speaker_notes</mat-icon>
+              </button>
+            </div>
+          </mat-toolbar>
+          <table [dataSource]="brevet300Short" mat-table>
+            <ng-container matColumnDef="num">
+              <th *matHeaderCellDef mat-header-cell>№</th>
+              <td *matCellDef="let element" mat-cell>{{element.number}}</td>
+            </ng-container>
+            <ng-container matColumnDef="name">
+              <th *matHeaderCellDef mat-header-cell>Имя</th>
+              <td *matCellDef="let element" mat-cell>{{element.name}}</td>
+            </ng-container>
+            <ng-container matColumnDef="resultTime">
+              <th *matHeaderCellDef mat-header-cell>Время</th>
+              <td *matCellDef="let element" mat-cell>{{element.resultTime}}</td>
+            </ng-container>
+            <ng-container matColumnDef="route">
+              <th *matHeaderCellDef mat-header-cell>Бревет</th>
+              <td *matCellDef="let element" mat-cell>{{element.route}}<br>{{element.startDate}}</td>
+            </ng-container>
+            <tr *matHeaderRowDef="displayedColumns;" mat-header-row></tr>
+            <tr *matRowDef="let row; columns: displayedColumns;" mat-row></tr>
+          </table>
+        </div>
+      </td>
+    </tr>
+    <tr>
+      <td class="column">
+        <div class="tile">
+          <mat-toolbar [style.background-color]='colors["400"]' class="head-table" color="primary">
+            400км
+            <div class="button-container">
+              <button (click)="dialogShowBrevets(this.brevet400, 400)" mat-icon-button title="Весь список">
+                <mat-icon>speaker_notes</mat-icon>
+              </button>
+            </div>
+          </mat-toolbar>
+          <table [dataSource]="brevet400Short" mat-table>
+            <ng-container matColumnDef="num">
+              <th *matHeaderCellDef mat-header-cell>№</th>
+              <td *matCellDef="let element" mat-cell>{{element.number}}</td>
+            </ng-container>
+            <ng-container matColumnDef="name">
+              <th *matHeaderCellDef mat-header-cell>Имя</th>
+              <td *matCellDef="let element" mat-cell>{{element.name}}</td>
+            </ng-container>
+            <ng-container matColumnDef="resultTime">
+              <th *matHeaderCellDef mat-header-cell>Время</th>
+              <td *matCellDef="let element" mat-cell>{{element.resultTime}}</td>
+            </ng-container>
+            <ng-container matColumnDef="route">
+              <th *matHeaderCellDef mat-header-cell>Бревет</th>
+              <td *matCellDef="let element" mat-cell>{{element.route}}<br>{{element.startDate}}</td>
+            </ng-container>
+            <tr *matHeaderRowDef="displayedColumns;" mat-header-row></tr>
+            <tr *matRowDef="let row; columns: displayedColumns;" mat-row></tr>
+          </table>
+        </div>
+      </td>
+      <td class="column">
+        <div class="tile">
+          <mat-toolbar [style.background-color]='colors["600"]' class="head-table" color="primary">
+            600км
+            <div class="button-container">
+              <button (click)="dialogShowBrevets(this.brevet600, 600)" mat-icon-button title="Весь список">
+                <mat-icon>speaker_notes</mat-icon>
+              </button>
+            </div>
+          </mat-toolbar>
+          <table [dataSource]="brevet600Short" mat-table>
+            <ng-container matColumnDef="num">
+              <th *matHeaderCellDef mat-header-cell>№</th>
+              <td *matCellDef="let element" mat-cell>{{element.number}}</td>
+            </ng-container>
+            <ng-container matColumnDef="name">
+              <th *matHeaderCellDef mat-header-cell>Имя</th>
+              <td *matCellDef="let element" mat-cell>{{element.name}}</td>
+            </ng-container>
+            <ng-container matColumnDef="resultTime">
+              <th *matHeaderCellDef mat-header-cell>Время</th>
+              <td *matCellDef="let element" mat-cell>{{element.resultTime}}</td>
+            </ng-container>
+            <ng-container matColumnDef="route">
+              <th *matHeaderCellDef mat-header-cell>Бревет</th>
+              <td *matCellDef="let element" mat-cell>{{element.route}}<br>{{element.startDate}}</td>
+            </ng-container>
+            <tr *matHeaderRowDef="displayedColumns;" mat-header-row></tr>
+            <tr *matRowDef="let row; columns: displayedColumns;" mat-row></tr>
+          </table>
+        </div>
+      </td>
+    </tr>
+  </table>
+</div>
