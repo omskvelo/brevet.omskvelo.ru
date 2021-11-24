@@ -280,7 +280,7 @@ export class StatisticsComponent implements OnInit {
   multiplierLeaderboard(brevet, name): number {
     let result = 0;
     if (brevet.find(x => x.name === name)) {
-      result = 1 / brevet.find(x => x.name === name).number;
+      result = 0.5 / brevet.find(x => x.name === name).number;
     }
     return result;
   }
