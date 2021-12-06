@@ -58,6 +58,7 @@ class Event(models.Model):
     responsible = models.CharField(max_length=50, blank=True)
     omskvelo_xref = models.URLField(blank=True)
     external_xref = models.URLField(blank=True)
+    vk_xref = models.URLField(blank=True)
 
     def __str__(self):
         date = datetime.strftime(self.date, "%Y.%m.%d")
