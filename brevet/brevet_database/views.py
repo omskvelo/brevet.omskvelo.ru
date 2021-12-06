@@ -110,7 +110,8 @@ def personal_stats(request, username):
                 'route' : r.event.route.name,
                 'club' : r.event.club,
                 'time' : "{:02d}:{:02d}".format(r.time.days*24 + r.time.seconds//3600, r.time.seconds%3600//60),
-                'time_': r.time
+                'time_': r.time,
+                'brm'  : r.event.route.brm
         })    
 
     # results = sorted(results, key=lambda row: (row['distance'], row['date_']))
@@ -126,10 +127,11 @@ def personal_stats(request, username):
         # Count total distance
         total_distance += result['distance']
         # Prepare data to calculate sr years and years active
-        if result['date_'].year not in by_year:
-            by_year[result['date_'].year] = [result['distance']]
-        else:
-            by_year[result['date_'].year].append(result['distance'])
+        if result['brm']:
+            if result['date_'].year not in by_year:
+                by_year[result['date_'].year] = [result['distance']]
+            else:
+                by_year[result['date_'].year].append(result['distance'])
         # Select best results
         if result['distance'] == 200:
             if best_200 is None:
