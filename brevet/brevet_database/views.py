@@ -32,6 +32,19 @@ def event(request, brevet_distance, brevet_date):
 
     # return render(request, "brevet_database/result.html", context)   
 
+def route(request, slug=None, route_id=None):
+    # Render any active route. 
+    if slug:
+        route = get_object_or_404(Route, slug=slug)
+    if route_id:
+        route = get_object_or_404(Route, pk=route_id)
+    context = {
+        'route' : route,
+        'controls' : route.controls.split("\n"),
+        'text' : route.text.split("\n"),
+        }  
+    return render(request, "brevet_database/route.html", context)       
+
 def results(request, brevet_distance, brevet_date):
     try:
         date = datetime.strptime(brevet_date, "%Y%m%d")

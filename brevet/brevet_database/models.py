@@ -1,7 +1,6 @@
 from datetime import datetime, time
 
 from django.db import models
-from django.db.models.fields.related import ForeignKey
 
 DEFAULT_CLUB_ID = 1
 
@@ -17,7 +16,7 @@ class Randonneur(models.Model):
     surname = models.CharField(max_length=50, blank=False)
     russian_name = models.CharField(max_length=50, blank=False)
     russian_surname = models.CharField(max_length=50, blank=False)
-    image = models.ImageField(upload_to="uploads/img/users/", blank=True)
+    image = models.ImageField(upload_to="img/users/", blank=True)
     club = models.ForeignKey(Club, on_delete=models.PROTECT, default=DEFAULT_CLUB_ID)
     female = models.BooleanField(default=False)
 
@@ -26,6 +25,7 @@ class Randonneur(models.Model):
 
 class Route(models.Model):
     name = models.CharField(max_length=200, blank=True) 
+    slug = models.SlugField(blank=True)
     distance = models.IntegerField(blank=False)
     controls = models.TextField(blank=True)
     text = models.TextField(blank=True)
@@ -35,10 +35,11 @@ class Route(models.Model):
     sr600 = models.BooleanField(default=False)
     club = models.ForeignKey(Club, on_delete=models.PROTECT, blank=True, default=DEFAULT_CLUB_ID)
     external_xref = models.URLField(blank=True)
-    image = models.ImageField(upload_to="uploads/img/", blank=True)
-    gpx = models.FileField(upload_to="uploads/gpx/", blank=True)
-    pdf = models.FileField(upload_to="uploads/pdf/", blank=True)
-    orvm = models.FileField(upload_to="uploads/orvm/", blank=True)
+    map_embed_src = models.CharField(max_length=500, blank=True) 
+    image = models.ImageField(upload_to="img/", blank=True)
+    gpx = models.FileField(upload_to="gpx/", blank=True)
+    pdf = models.FileField(upload_to="pdf/", blank=True)
+    orvm = models.FileField(upload_to="orvm/", blank=True)
 
     def __str__(self):
         distance = str(self.distance)
@@ -48,7 +49,7 @@ class Route(models.Model):
 
 class Event(models.Model):
     name = models.CharField(max_length=50, blank=True) 
-    route = ForeignKey(Route, on_delete=models.PROTECT, blank = False)
+    route = models.ForeignKey(Route, on_delete=models.PROTECT, blank = False)
     date = models.DateField(auto_now=False, auto_now_add=False, blank=False)
     time = models.TimeField(auto_now=False, auto_now_add=False, blank=False, default=time(hour = 7))
     text = models.TextField(blank=True)

@@ -15,6 +15,8 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
+from django.conf import settings
+from django.conf.urls.static import static
 
 from . import views
 
@@ -23,4 +25,7 @@ urlpatterns = [
     path("event/<int:brevet_distance>/<str:brevet_date>/", views.event, name = "event"),
     path ("results/<int:brevet_distance>/<str:brevet_date>/", views.results, name = "results"),
     path ("user/<str:username>/", views.personal_stats, name = "personal_stats"),
+    path ("route/<str:slug>/", views.route, name = "route"),
+    path ("route/id/<int:route_id>/", views.route, name = "route_id"),
+    # static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT),
 ]
