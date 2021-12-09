@@ -1,4 +1,4 @@
-{% extends "brevet_database/base.html" %}
+{% extends "base.html" %}
 
 {% block title %}
 {{ route.name }} {{ route.distance }} км | 
@@ -6,9 +6,9 @@
 
 {% block content %}
     <h2 class="m-3">{{ route.name }} {{ route.distance }} км</h2>
-    <h4 class="text-muted m-3">Описание маршрута</h4>
 
     {% if controls %}
+        <h4 class="text-muted m-3">Описание маршрута</h4>
         <ul class = "my-3">
             {% for line in controls %}
                 <li>{{ line }}</li>
@@ -17,9 +17,9 @@
     {% endif %}
 
     {% if route.map_embed_src %}
-    <div class="ratio ratio-4x3">
-        <iframe src="{{ route.map_embed_src }}"></iframe>
-    </div>
+        <div  >
+            <iframe src="{{ route.map_embed_src }}" width="50%" height = "400"></iframe>
+        </div>
     {% endif %}
     
     {% if route.image %}

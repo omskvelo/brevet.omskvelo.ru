@@ -1,4 +1,4 @@
-{% extends "brevet_database/base.html" %}
+{% extends "base.html" %}
 
 {% block title %}
 Рандоннёр {{ randonneur.russian_surname }} {{ randonneur.russian_name }} |
@@ -19,8 +19,8 @@
                 <tr>
                     <th>Дистанция</th>
                     <th>Дата</th>
-                    <th>Маршрут</th>
-                    <th>Клуб</th>
+                    <th>Бревет</th>
+                    <th>Клуб-организатор</th>
                     <th>Время</th>
                     <th>Омологация</th>
                 </tr>
@@ -28,41 +28,57 @@
             <tbody>
                 {% if best_200 %}
                     <tr>
-                        <td>{{ best_200.distance }} км</td>
-                        <td>{{ best_200.date }}</td>
-                        <td>{{ best_200.route }}</td>
-                        <td>{{ best_200.club }}</td>
-                        <td>{{ best_200.time }}</td>     
+                        <td>{{ best_200.event.route.distance }} км</td>
+                        <td>{{ best_200.date_ }}</td>
+                        <td>
+                            <a href = "{{ best_200.event.get_absolute_url }}">
+                                {{ best_200.event.route.name }}
+                            </a>
+                        </td>
+                        <td>{{ best_200.event.club }}</td>
+                        <td>{{ best_200.time_ }}</td>     
                         <td>{{ best_200.homologation }}</td>           
                     </tr>
                 {% endif %}
                 {% if best_300 %}
                     <tr>
-                        <td>{{ best_300.distance }} км </td>
-                        <td>{{ best_300.date }}</td>
-                        <td>{{ best_300.route }}</td>
-                        <td>{{ best_300.club }}</td>
-                        <td>{{ best_300.time }}</td>  
+                        <td>{{ best_300.event.route.distance }} км </td>
+                        <td>{{ best_300.date_ }}</td>
+                        <td>
+                            <a href = "{{ best_300.event.get_absolute_url }}">
+                                {{ best_300.event.route.name }}
+                            </a>
+                        </td>
+                        <td>{{ best_300.event.club }}</td>
+                        <td>{{ best_300.time_ }}</td>  
                         <td>{{ best_300.homologation }}</td>              
                     </tr>
                 {% endif %}
                 {% if best_400 %}
                     <tr>
-                        <td>{{ best_400.distance }} км </td>
-                        <td>{{ best_400.date }}</td>
-                        <td>{{ best_400.route }}</td>
-                        <td>{{ best_400.club }}</td>
-                        <td>{{ best_400.time }}</td>    
+                        <td>{{ best_400.event.route.distance }} км </td>
+                        <td>{{ best_400.date_ }}</td>
+                        <td>
+                            <a href = "{{ best_400.event.get_absolute_url }}">
+                                {{ best_400.event.route.name }}
+                            </a>
+                        </td>
+                        <td>{{ best_400.event.club }}</td>
+                        <td>{{ best_400.time_ }}</td>    
                         <td>{{ best_400.homologation }}</td>            
                     </tr>
                 {% endif %}
                 {% if best_600 %}
                     <tr>
-                        <td>{{ best_600.distance }} км </td>
-                        <td>{{ best_600.date }}</td>
-                        <td>{{ best_600.route }}</td>
-                        <td>{{ best_600.club }}</td>
-                        <td>{{ best_600.time }}</td>   
+                        <td>{{ best_600.event.route.distance }} км </td>
+                        <td>{{ best_600.date_ }}</td>
+                        <td>
+                            <a href = "{{ best_600.event.get_absolute_url }}">
+                                {{ best_600.event.route.name }}
+                            </a>
+                        </td>
+                        <td>{{ best_600.event.club }}</td>
+                        <td>{{ best_600.time_ }}</td>   
                         <td>{{ best_600.homologation }}</td>             
                     </tr>
                 {% endif %}
@@ -75,8 +91,8 @@
                     <tr>
                         <th>Дистанция</th>
                         <th>Дата</th>
-                        <th>Маршрут</th>
-                        <th>Клуб</th>
+                        <th>Бревет</th>
+                        <th>Клуб-организатор</th>
                         <th>Время</th>
                         <th>Омологация</th>
                     </tr>
@@ -84,12 +100,16 @@
                 <tbody>
                     {% for result in results %}
                         <tr>
-                            <td>{{ result.distance }} км </td>
-                            <td>{{ result.date }}</td>
-                            <td>{{ result.route }}</td>
-                            <td>{{ result.club }}</td>
-                            <td>{{ result.time }}</td>   
-                            <td>{{ result.homologation }}</td>    
+                            <td>{{ result.event.route.distance }} км </td>
+                            <td>{{ result.date_ }}</td>
+                            <td>
+                                <a href = "{{ result.event.get_absolute_url }}">
+                                    {{ result.event.route.name }}
+                                </a>
+                            </td>
+                            <td>{{ result.event.club }}</td>
+                            <td>{{ result.time_ }}</td>   
+                            <td>{{ result.homologation }}</td>     
                         </tr>
                     {% endfor %}
                 </tbody>

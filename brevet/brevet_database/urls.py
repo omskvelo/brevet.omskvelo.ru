@@ -21,11 +21,12 @@ from django.conf.urls.static import static
 from . import views
 
 urlpatterns = [
-    # path("", views.database, name = "database"),
-    path("event/<int:brevet_distance>/<str:brevet_date>/", views.event, name = "event"),
-    path ("results/<int:brevet_distance>/<str:brevet_date>/", views.results, name = "results"),
-    path ("user/<str:username>/", views.personal_stats, name = "personal_stats"),
-    path ("route/<str:slug>/", views.route, name = "route"),
-    path ("route/id/<int:route_id>/", views.route, name = "route_id"),
+    path("", views.index, name="result_root"),
+    path("year/<int:year>", views.index, name="result_root_pages"),
+    path("event/<int:distance>/<str:date>/", views.event, name="event"),
+    path ("protocol/<int:distance>/<str:date>/", views.protocol, name="protocol"),
+    path ("user/<str:surname>_<str:name>/", views.personal_stats, name="personal_stats"),
+    path ("route/<str:slug>/", views.route, name="route"),
+    path ("route/id/<int:route_id>/", views.route, name="route_id"),
     # static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT),
 ]

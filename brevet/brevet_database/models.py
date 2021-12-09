@@ -1,6 +1,8 @@
 from datetime import datetime, time
 
 from django.db import models
+from django.urls import reverse
+from django.utils import timezone
 
 DEFAULT_CLUB_ID = 1
 
@@ -20,6 +22,9 @@ class Randonneur(models.Model):
     club = models.ForeignKey(Club, on_delete=models.PROTECT, default=DEFAULT_CLUB_ID)
     female = models.BooleanField(default=False)
 
+    def get_absolute_url(self):
+        return reverse('personal_stats', kwargs={'surname' : self.surname, 'name' : self.name})
+
     def __str__(self):
         return " ".join((self.russian_surname,self.russian_name))
 
@@ -29,6 +34,7 @@ class Route(models.Model):
     distance = models.IntegerField(blank=False)
     controls = models.TextField(blank=True)
     text = models.TextField(blank=True)
+    bad_roads = models.BooleanField(default=False)
     brm = models.BooleanField(default=True)
     lrm = models.BooleanField(default=False)
     fleche = models.BooleanField(default=False)
@@ -41,6 +47,12 @@ class Route(models.Model):
     pdf = models.FileField(upload_to="pdf/", blank=True)
     orvm = models.FileField(upload_to="orvm/", blank=True)
 
+    def get_absolute_url(self):
+        if self.slug:
+            return reverse('route', kwargs={'slug' : self.slug})
+        else:
+            return reverse('route_id', kwargs={'route_id' : self.pk})
+
     def __str__(self):
         distance = str(self.distance)
         name = str(self.name)
@@ -52,14 +64,25 @@ class Event(models.Model):
     route = models.ForeignKey(Route, on_delete=models.PROTECT, blank = False)
     date = models.DateField(auto_now=False, auto_now_add=False, blank=False)
     time = models.TimeField(auto_now=False, auto_now_add=False, blank=False, default=time(hour = 7))
+    text_intro = models.TextField(blank=True)
     text = models.TextField(blank=True)
     warning_text = models.TextField(blank=True)
     lights_required = models.BooleanField(default=False)
     club = models.ForeignKey(Club, on_delete=models.PROTECT, default=DEFAULT_CLUB_ID)
     responsible = models.CharField(max_length=50, blank=True)
+    finished = models.BooleanField(default=False)
     omskvelo_xref = models.URLField(blank=True)
     external_xref = models.URLField(blank=True)
     vk_xref = models.URLField(blank=True)
+
+    def get_absolute_url(self):
+        date = datetime.strftime(self.date, "%Y%m%d")
+        return reverse('event', kwargs={'distance' : self.route.distance, 'date' : date})
+
+    def get_protocol_url(self):
+        date = datetime.strftime(self.date, "%Y%m%d")
+        return reverse('protocol', kwargs={'distance' : self.route.distance, 'date' : date})
+
 
     def __str__(self):
         date = datetime.strftime(self.date, "%Y.%m.%d")
@@ -99,6 +122,3 @@ class Application(models.Model):
     def __str__(self):
         datestring = datetime.strftime(self.date, "%H:%M %d.%m.%Y")
         return f"Заявка №{self.id} от {datestring} на бревет {self.event}"
-
-
-
