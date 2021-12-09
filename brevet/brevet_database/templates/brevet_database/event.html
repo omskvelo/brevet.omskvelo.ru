@@ -1,0 +1,107 @@
+{% extends "base.html" %}
+
+{% block title %}
+    Бревет 
+    {{ route.distance }} км | 
+    {% if event.name %}
+        {{ event.name }} |
+    {% else %}
+        {{ route.name }} |
+    {% endif %}
+    {{ date }}
+{% endblock %}
+
+{% block content %}
+    <h4 class="text-muted my-3">Бревет {{ route.distance }} км</h4>    
+    {% if event.name %}
+        <h2 class="my-3">
+            {{ event.name }}
+        </h2>
+    {% endif %}
+    <h2 class="my-3">
+        {{ route.name }}
+    </h2>
+
+    {% if event.text_intro %}
+    <p class = "my-3">{{ event.text_intro }}</p>
+    {% endif %}
+    
+    <p class = "my-3">
+    {% if event.finished %}
+        Старт состоялся {{ date }} в {{ time }}. Протокол доступен по <a href="{{ event.get_protocol_url }}">ссылке</a>. 
+    {% else %}
+        Старт {{ date }} в {{ time }}.
+    {% endif %}
+    </p>
+
+    {% if controls %}
+        <ul class = "my-3">
+            {% for line in controls %}
+                <li>{{ line }}</li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+
+    {% if route.map_embed_src %}
+        <div  >
+            <iframe src="{{ route.map_embed_src }}" width="50%" height = "400"></iframe>
+        </div>
+    {% endif %}
+    
+    {% if route.image %}
+        <img src="{{ route.image.url }}" class = "m-3"/>
+    {% endif %}
+
+    {% if text %}
+        {% for line in text %}
+        <p class = "my-3">{{ line }}</p>
+        {% endfor %}
+    {% endif %}
+
+    {% if event.warning_text %}
+        <p class = "my-3 bold">{{ event.warning_text }}</p>
+    {% endif %}
+
+    {% if event.lights_required %}
+        <p class = "my-3"><b>
+            Маршрут предполагает движение по дорогам общего пользования в тёмное время суток.
+            Передний и задний свет обязателен. 
+            Желательно иметь светоотражающий жилет.
+            Участники без переднего и заднего света к старту не допускаются.
+        </b></p>
+    {% endif %}
+
+
+    {% if event.omskvelo_xref %}
+        <div class="my-3">
+            <a href="{{ event.omskvelo_xref }}" class = "m-3">Обсудить бревет на форуме omskvelo.ru</a>
+        </div>
+    {% endif %}
+
+    {% if route.gpx %}
+        <div class = "my-3">
+            <a href="{{ route.gpx.url }}" class = "m-3">Скачать трек *.gpx</a>
+        </div>
+    {% endif %}
+
+    {% if route.pdf %}
+        <div class = "my-3">
+            <a href="{{ route.gpx.pdf }}" class = "m-3">Скачать легенду *.pdf</a>
+        </div>
+    {% endif %}
+
+    {% if route.external_xref %}
+        <div class="my-3">
+            <a href="{{ route.external_xref }}" class = "m-3">Ссылка на внешний ресурс</a>
+        </div>
+    {% endif %}
+
+    {% if event.vk_xref %}
+    <div class="my-3">
+        <a href="{{ event.vk_xref }}" class = "m-3">Альбом с фотографиями в нашей группе vk</a>
+    </div>
+    {% endif %}
+
+    
+
+{% endblock %}
