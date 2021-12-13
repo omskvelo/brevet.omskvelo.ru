@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+
+{% block title %}
+Календарь | 
+{% endblock %}
+
+{% block content %}
+
+
+    {% for year, months in years.items %}
+      <h2 class="m-5">Календарь {{ year }}</h2>
+      {% for month, events in months.items %}
+        <h3 class="mx-5">{{ month }}</h3>
+        <hr>
+        <div class="row row-cols-auto">
+          {% for event in events %}
+            <div class="col my-3">
+              <div class="card" style="width: 18rem;">
+                <div class="card-body">
+                  <h5 class="card-title">{{ event.route.name }}</h5>
+                  <h5><small class="text-muted">{{ event.route.distance }} км</small></h5>
+                  {% if event.name %}
+                    <p class="card-text">{{ event.name }}</p>
+                  {% endif %}
+                  <p class="card-text">Старт {{ event.date_ }} в {{ event.time_ }}.</p>
+                  <a href="{{ event.get_absolute_url }}" class="btn btn-dark" style = "background-color: #1D3652;">Подробнее...</a>
+                </div>
+              </div>
+            </div>
+          {% endfor %}
+        </div>
+      {% endfor %}
+    {% endfor %}
+
+
+    
+{% endblock %}

@@ -5,10 +5,10 @@
 {% endblock %}
 
 {% block content %}
-    <h2 class="m-3">{{ route.name }} {{ route.distance }} км</h2>
+    <h2 class="my-5 mx-3">{{ route.name }}</h2>
+    <h4 class="text-muted my-3 mx-3">{{ route.distance }} км </h4>
 
     {% if controls %}
-        <h4 class="text-muted m-3">Описание маршрута</h4>
         <ul class = "my-3">
             {% for line in controls %}
                 <li>{{ line }}</li>
@@ -33,20 +33,20 @@
     {% endif %}
 
     {% if route.gpx %}
-        <div class = "my-3">
-            <a href="{{ route.gpx.url }}" class = "m-3">Скачать трек *.gpx</a>
-        </div>
+    <a class="btn btn btn-dark" style = "background-color: #1D3652;" href="{{ route.gpx.url }}">
+        *.gpx
+    </a>
     {% endif %}
 
     {% if route.pdf %}
-        <div class = "my-3">
-            <a href="{{ route.gpx.pdf }}" class = "m-3">Скачать легенду *.pdf</a>
-        </div>
+    <a class="btn btn btn-dark" style = "background-color: #1D3652;" href="{{ route.pdf.url }}">
+        *.pdf
+    </a>
     {% endif %}
 
     {% if route.external_xref %}
-        <div class="my-3">
-            <a href="{{ route.external_xref }}" class = "m-3">Ссылка на внешний ресурс</a>
-        </div>
+    <a class="btn btn btn-dark" style = "background-color: #1D3652;" href="{{ route.external_xref }}">
+        Внешний ресурс
+    </a>
     {% endif %}
 {% endblock %}

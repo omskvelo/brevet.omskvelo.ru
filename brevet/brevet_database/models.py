@@ -34,6 +34,7 @@ class Route(models.Model):
     distance = models.IntegerField(blank=False)
     controls = models.TextField(blank=True)
     text = models.TextField(blank=True)
+    text_brief = models.TextField(max_length=120, blank=True)
     bad_roads = models.BooleanField(default=False)
     brm = models.BooleanField(default=True)
     lrm = models.BooleanField(default=False)
@@ -83,13 +84,11 @@ class Event(models.Model):
         date = datetime.strftime(self.date, "%Y%m%d")
         return reverse('protocol', kwargs={'distance' : self.route.distance, 'date' : date})
 
-
     def __str__(self):
         date = datetime.strftime(self.date, "%Y.%m.%d")
         distance = str(self.route.distance)
-        name = str(self.name)
         club = str(self.club) if self.club.id != DEFAULT_CLUB_ID else ""
-        return "{} {} км {: <20} {} ".format(date, distance, name, club)     
+        return f"{date} {distance} км {self.route.name} {club}"     
 
 class Result(models.Model):
     event = models.ForeignKey(Event, on_delete=models.CASCADE)

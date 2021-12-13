@@ -6,18 +6,24 @@
 
 {% block content %}
     <h3 class="text-center my-5">
-        Протокол 
-        <a href="{{ event.get_absolute_url }}"> бревета </a>
-        {{ route.distance }} км от {{ date }} г.
+        Протокол бревета {{ route.distance }} км от {{ date }} г.
     </h3>
 
-    <h2 class="text-center my-3">
+    <h2 class="text-center my-4">
     {% if event.name %}
-        {{ event.name }} - 
+        {{ event.name }}
     {% endif %}
-    <a href="{{ route.get_absolute_url }}"> {{ route.name }} </a>
     </h2>
 
+
+    <p class="my-1">
+        Старт состоялся <a href="{{ event.get_absolute_url }}"> {{ date }} г. в {{ time }}</a>.
+    </p>
+    {% if route.name %}
+    <p class="my-1">
+        Маршрут: <a href="{{ route.get_absolute_url }}"> "{{ route.name }}" </a>
+    </p>
+    {% endif %}
     {% if results %}
         <table class="table table-striped table-hover">
             <thead>

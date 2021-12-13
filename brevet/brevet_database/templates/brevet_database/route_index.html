@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+
+{% block title %}
+Маршруты | 
+{% endblock %}
+
+{% block content %}
+
+<h2 class="m-5">Маршруты</h2>
+
+<div class="my-4">
+    {% for d in distances %}
+        {% if distance == d %}
+        <a class="btn btn-dark" style = "background-color: #1D3652;" href="{% url 'route_index_distance' d %}">
+            {{ d }}
+        </a>
+        {% else %}
+        <a class="btn btn-light" href="{% url 'route_index_distance' d %}">
+            {{ d }}
+        </a>
+        {% endif %}
+    {% endfor %}
+</div>
+
+<div class="row row-cols-auto">
+    {% for route in routes %}
+        <div class="col my-3">
+            <div class="card" style="width: 18rem;">
+                <!-- <img src="" class="card-img-top" alt="Image"> -->
+                <div class="card-body">
+                    <h5 class="card-title">{{ route.name }}</h5>
+                    <h5><small class="text-muted">{{ route.distance }} км</small></h5>
+                    {% if route.text_brief %}
+                        <p class="card-text">{{ route.text_brief }}</p>
+                    {% endif %}
+                    <a href="{{ route.get_absolute_url }}" class="btn btn-dark" style = "background-color: #1D3652;">Описание маршрута</a>
+                </div>
+            </div>
+        </div>
+    {% endfor %}
+</div>
+{% endblock %}

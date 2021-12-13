@@ -1,32 +1,40 @@
 <nav class="navbar navbar-expand-xl navbar-dark " style = "background-color: #1D3652;">
   <div class="container-xl">
     <a class="navbar-brand" href="https://omskvelo.ru"><img src="https://omskvelo.ru/uploads/themes/monthly_2018_04/top_9red.png.f44ce3662485a4c01679489943182799.png"></a>
-    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
+
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
       <a class="navbar-brand" href="/"><small>Веломарафонский клуб</small></a>
       <ul class="navbar-nav me-auto mb-2 mb-lg-0">
         <li class="nav-item">
-          <a class="nav-link" href="/news">Новости</a>
+          <a class="nav-link" href="{% url 'news' %}">Новости</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="/calendar">Календарь</a>
+          <a class="nav-link" href="{% url 'event_index' %}">Календарь</a>
+        </li>
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            Результаты
+          </a>
+          <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+            <a class="dropdown-item" href="{% url 'protocol_index' %}">Протоколы</a>
+            <a class="dropdown-item" href="{% url 'stats_club_pages' %}">Статистика клуба по годам</a>
+            <a class="dropdown-item" href="{% url 'stats_club_total' %}">Статистика клуба общая</a>
+          </div>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="/database">Результаты</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="/routes">Маршруты</a>
+          <a class="nav-link" href="{% url 'route_index' %}">Маршруты</a>
         </li>
         <li class="nav-item">
           <a class="nav-link" href="http://www.russianrandonneur.ru/pravila-brm/">Правила</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="/faq">FAQ</a>
+          <a class="nav-link" href="{% url 'faq' %}">FAQ</a>
         </li>
       </ul>
-      <form class="d-flex" action="/search/">
+      <form class="form-inline d-flex" action="/search/">
         <input class="form-control me-2" type="search" name="q" placeholder="Поиск..." aria-label="Search">
       </form>
     </div>

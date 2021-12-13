@@ -1,0 +1,264 @@
+{% extends "base.html" %}
+
+{% block title %}
+Результаты | 
+{% endblock %}
+
+{% block content %}
+    <h2 class="m-5">Статистика клуба</h2>
+    {% if years %}
+        <div class="my-4">
+            {% for y in years %}
+                {% if year == y %}
+                <a class="btn btn btn-dark" style = "background-color: #1D3652;" href="{% url 'stats_club_pages' y %}">
+                    {{ y }}
+                </a>
+                {% else %}
+                <a class="btn btn-light" href="{% url 'stats_club_pages' y %}">
+                    {{ y }}
+                </a>
+                {% endif %}
+            {% endfor %}
+        </div>
+
+        <h4 class="my-4">
+            Показатели за {{ year }} год
+        </h4>
+    {% endif %}
+
+    <p class="my-2">
+       Общая дистанция:  <strong>{{ total_distance }} км</strong>
+    </p>
+    <p class="my-2">
+        Всего участников:  <strong>{{ total_randonneurs }}</strong>
+    </p>   
+    {% if total_sr %}
+        <h5 class="my-4">
+            Суперрандоннёры
+        </h5>
+        {% for randonneur in sr %}
+            <p class="mx-4 my-1" >
+                <a href = "{{ randonneur.get_absolute_url }}">
+                    {{ randonneur }}{{ randonneur.sr_string }}
+                </a>
+            </p>
+        {% endfor %}
+    </p>
+    {% endif %}
+
+    {% if elite_dist %}
+        <h5 class="my-4"> 
+            Результаты бреветов LRM, SR600, 1000 км  
+        </h5>
+        <table class="table table-striped table-hover">
+            <thead>
+                <tr>
+                    <th>Дата</th>
+                    <th>Маршрут</th>
+                    <th>Дистанция</th>
+                    <th>Рандоннёр</th>
+                    <th>Результат</th>
+                </tr>
+            </thead>
+            <tbody> 
+                {% for result in elite_dist %}
+                    <tr>
+                        <td>{{ result.date_ }}</td>
+                        <td>{{ result.event.route.name }}</td>
+                        <td>{{ result.event.route.distance }} км</td>
+                        <td>
+                            <a href = "{{ result.randonneur.get_absolute_url }}">
+                                {{ result.randonneur }}
+                            </a>
+                        </td>
+                        <td>{{ result.time_ }}</td>    
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% endif %}
+
+    <h5 class="my-4">
+        Рейтинг рандоннёров по общей дистанции
+    </h5>
+    <table class="table table-striped table-hover">
+        <thead>
+            <tr>
+                <th>Рандоннёр</th>
+                <th>Общая дистанция</th>
+                <th>Бреветов</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for randonneur in distance_rating%}
+            <tr>
+                <td>
+                    <a href = "{{ randonneur.0.get_absolute_url }}">
+                        {{ randonneur.0 }}
+                    </a>
+                </td>
+                <td>{{ randonneur.1 }} км</td>
+                <td>{{ randonneur.2 }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    {% if best_200 %}
+        <h5 class="my-4">
+            Лучшие результаты на дистанции 200 км
+        </h5>    
+        <table class="table table-striped table-hover">
+            <thead>
+                <tr>
+                    <th>Рандоннёр</th>
+                    <th>Дата</th>
+                    <th>Бревет</th>
+                    <th>Клуб-организатор</th>
+                    <th>Время</th>
+                    <th>Омологация</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for result in best_200 %}
+                    <tr>
+                        <td>
+                            <a href = "{{ result.randonneur.get_absolute_url }}">
+                                {{ result.randonneur }}
+                            </a>
+                        </td>
+                        <td>{{ result.date_ }}</td>
+                        <td>
+                            <a href = "{{ result.event.get_absolute_url }}">
+                                {{ result.event.route.name }}
+                            </a>
+                        </td>
+                        <td>{{ result.event.club }}</td>
+                        <td>{{ result.time_ }}</td>   
+                        <td>{{ result.homologation }}</td>     
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table> 
+    {% endif %}
+
+
+    {% if best_300 %}
+        <h5 class="my-4">
+            Лучшие результаты на дистанции 300 км
+        </h5>    
+        <table class="table table-striped table-hover">
+            <thead>
+                <tr>
+                    <th>Рандоннёр</th>
+                    <th>Дата</th>
+                    <th>Бревет</th>
+                    <th>Клуб-организатор</th>
+                    <th>Время</th>
+                    <th>Омологация</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for result in best_300 %}
+                    <tr>
+                        <td>
+                            <a href = "{{ result.randonneur.get_absolute_url }}">
+                                {{ result.randonneur }}
+                            </a>
+                        </td>
+                        <td>{{ result.date_ }}</td>
+                        <td>
+                            <a href = "{{ result.event.get_absolute_url }}">
+                                {{ result.event.route.name }}
+                            </a>
+                        </td>
+                        <td>{{ result.event.club }}</td>
+                        <td>{{ result.time_ }}</td>   
+                        <td>{{ result.homologation }}</td>     
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table> 
+    {% endif %}
+
+
+    {% if best_400 %}
+        <h5 class="my-4">
+            Лучшие результаты на дистанции 400 км
+        </h5>    
+        <table class="table table-striped table-hover">
+            <thead>
+                <tr>
+                    <th>Рандоннёр</th>
+                    <th>Дата</th>
+                    <th>Бревет</th>
+                    <th>Клуб-организатор</th>
+                    <th>Время</th>
+                    <th>Омологация</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for result in best_400 %}
+                    <tr>
+                        <td>
+                            <a href = "{{ result.randonneur.get_absolute_url }}">
+                                {{ result.randonneur }}
+                            </a>
+                        </td>
+                        <td>{{ result.date_ }}</td>
+                        <td>
+                            <a href = "{{ result.event.get_absolute_url }}">
+                                {{ result.event.route.name }}
+                            </a>
+                        </td>
+                        <td>{{ result.event.club }}</td>
+                        <td>{{ result.time_ }}</td>   
+                        <td>{{ result.homologation }}</td>     
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table> 
+    {% endif %}
+
+    {% if best_600 %}
+    <h5 class="my-4">
+            Лучшие результаты на дистанции 600 км
+        </h5>    
+        <table class="table table-striped table-hover">
+            <thead>
+                <tr>
+                    <th>Рандоннёр</th>
+                    <th>Дата</th>
+                    <th>Бревет</th>
+                    <th>Клуб-организатор</th>
+                    <th>Время</th>
+                    <th>Омологация</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for result in best_600 %}
+                    <tr>
+                        <td>
+                            <a href = "{{ result.randonneur.get_absolute_url }}">
+                                {{ result.randonneur }}
+                            </a>
+                        </td>
+                        <td>{{ result.date_ }}</td>
+                        <td>
+                            <a href = "{{ result.event.get_absolute_url }}">
+                                {{ result.event.route.name }}
+                            </a>
+                        </td>
+                        <td>{{ result.event.club }}</td>
+                        <td>{{ result.time_ }}</td>   
+                        <td>{{ result.homologation }}</td>     
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table> 
+    {% endif %}
+
+
+
+
+{% endblock %}

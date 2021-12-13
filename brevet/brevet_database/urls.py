@@ -21,12 +21,20 @@ from django.conf.urls.static import static
 from . import views
 
 urlpatterns = [
-    path("", views.index, name="result_root"),
-    path("year/<int:year>", views.index, name="result_root_pages"),
+    path("events/", views.event_index, name="event_index"),
     path("event/<int:distance>/<str:date>/", views.event, name="event"),
-    path ("protocol/<int:distance>/<str:date>/", views.protocol, name="protocol"),
-    path ("user/<str:surname>_<str:name>/", views.personal_stats, name="personal_stats"),
-    path ("route/<str:slug>/", views.route, name="route"),
-    path ("route/id/<int:route_id>/", views.route, name="route_id"),
-    # static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT),
+
+    path("protocols/", views.protocol_index, name="protocol_index"),
+    path("protocols/<int:year>", views.protocol_index, name="protocol_index_pages"),
+    path("protocol/<int:distance>/<str:date>/", views.protocol, name="protocol"),
+    path("stats/club/total", views.stats_club_total, name="stats_club_total"),    
+    path("stats/club/", views.stats_club, name="stats_club_pages"),
+    path("stats/club/<int:year>", views.stats_club, name="stats_club_pages"),
+
+    path("routes/", views.route_index, name="route_index"),
+    path("routes/<int:distance>/", views.route_index, name="route_index_distance"),
+    path("route/<str:slug>/", views.route, name="route"),
+    path("route/id/<int:route_id>/", views.route, name="route_id"),
+
+    path("user/<str:surname>_<str:name>/", views.personal_stats, name="personal_stats"),
 ]
