@@ -8,9 +8,9 @@
     <h2 class="my-5 mx-3">{{ route.name }}</h2>
     <h4 class="text-muted my-3 mx-3">{{ route.distance }} км </h4>
 
-    {% if controls %}
+    {% if route.get_controls %}
         <ul class = "my-3">
-            {% for line in controls %}
+            {% for line in route.get_controls %}
                 <li>{{ line }}</li>
             {% endfor %}
         </ul>
@@ -26,8 +26,8 @@
         <img src="{{ route.image.url }}" class = "m-3"/>
     {% endif %}
 
-    {% if text %}
-        {% for line in text %}
+    {% if route.get_text %}
+        {% for line in route.get_text %}
         <p class = "my-3">{{ line }}</p>
         {% endfor %}
     {% endif %}

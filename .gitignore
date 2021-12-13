@@ -145,4 +145,7 @@ cython_debug/
 #.idea/
 
 # Collected static
+backup/
 staticfiles/
+uploads/
+.vscode/

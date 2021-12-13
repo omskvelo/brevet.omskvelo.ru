@@ -22,7 +22,7 @@
                   {% if event.name %}
                     <p class="card-text">{{ event.name }}</p>
                   {% endif %}
-                  <p class="card-text">Старт {{ event.date_ }} в {{ event.time_ }}.</p>
+                  <p class="card-text">Старт {{ event.get_date }} в {{ event.get_time }}.</p>
                   <a href="{{ event.get_absolute_url }}" class="btn btn-dark" style = "background-color: #1D3652;">Подробнее...</a>
                 </div>
               </div>

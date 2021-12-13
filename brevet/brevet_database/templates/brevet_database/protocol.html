@@ -1,12 +1,12 @@
 {% extends "base.html" %}
 
 {% block title %}
-Протокол бревета {{ route.distance }} км от {{ date }} г. | 
+Протокол бревета {{ route.distance }} км от {{ event.get_date }} г. | 
 {% endblock %}
 
 {% block content %}
     <h3 class="text-center my-5">
-        Протокол бревета {{ route.distance }} км от {{ date }} г.
+        Протокол бревета {{ route.distance }} км от {{ event.get_date }} г.
     </h3>
 
     <h2 class="text-center my-4">
@@ -17,7 +17,7 @@
 
 
     <p class="my-1">
-        Старт состоялся <a href="{{ event.get_absolute_url }}"> {{ date }} г. в {{ time }}</a>.
+        Старт состоялся <a href="{{ event.get_absolute_url }}"> {{ event.get_date }} г. в {{ event.get_time }}</a>.
     </p>
     {% if route.name %}
     <p class="my-1">
@@ -43,7 +43,7 @@
                                 {{ result.randonneur }}
                             </a>
                         </td>
-                        <td>{{ result.time_ }}</td>
+                        <td>{{ result.get_time }}</td>
                         <td>{% if result.medal %} М {% endif %}</td>
                     </tr>
                 {% endfor %}

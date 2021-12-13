@@ -8,7 +8,7 @@
     {% else %}
         {{ route.name }} |
     {% endif %}
-    {{ date }}
+    {{ event.get_date }}
 {% endblock %}
 
 {% block content %}
@@ -28,15 +28,15 @@
     
     <p class = "my-3">
     {% if event.finished %}
-        Старт состоялся {{ date }} в {{ time }}. Протокол доступен по <a href="{{ event.get_protocol_url }}">ссылке</a>. 
+        Старт состоялся {{ event.get_date }} в {{ event.get_time }}. Протокол доступен по <a href="{{ event.get_protocol_url }}">ссылке</a>. 
     {% else %}
-        Старт {{ date }} в {{ time }}.
+        Старт {{ event.get_date }} в {{ event.get_time }}.
     {% endif %}
     </p>
 
-    {% if controls %}
+    {% if event.route.get_controls %}
         <ul class = "my-3">
-            {% for line in controls %}
+            {% for line in event.route.get_controls %}
                 <li>{{ line }}</li>
             {% endfor %}
         </ul>
@@ -52,8 +52,8 @@
         <img src="{{ route.image.url }}" class = "m-3"/>
     {% endif %}
 
-    {% if text %}
-        {% for line in text %}
+    {% if event.get_text %}
+        {% for line in event.get_text %}
         <p class = "my-3">{{ line }}</p>
         {% endfor %}
     {% endif %}

@@ -7,11 +7,27 @@ from django.shortcuts import get_object_or_404, get_list_or_404, render
 
 from .models import Club, Randonneur, Route, Event, Result, Application, DEFAULT_CLUB_ID
 
+def protocol(request, distance, date):
+    try:
+        date = datetime.strptime(date, "%Y%m%d")
+    except Exception:
+        raise Http404
+
+    event = get_object_or_404(Event, route__distance=distance, date=date, )
+    route = event.route
+    results = get_list_or_404(Result, event=event)
+    results = sorted(results, key=lambda x: x.randonneur.russian_surname)
+
+    context = {
+        'event' : event,
+        'route' : route,
+        'results' : results,
+        }      
+    return render(request, "brevet_database/protocol.html", context)    
+
 def protocol_index(request, year=datetime.now().year):
     events = get_list_or_404(Event, finished=True, club=DEFAULT_CLUB_ID, date__year=year)
     events = sorted(events, key=lambda x: (x.date))
-    for event in events:
-        event.date_ = datetime.strftime(event.date, "%d.%m.%Y")
 
     #Check available years
     years = set()
@@ -29,7 +45,6 @@ def protocol_index(request, year=datetime.now().year):
 def stats_club_total(request):
     return stats_club(request, year=None)
 
-
 def stats_club(request, year=datetime.now().year):
     if year is not None:
         # Check available years
@@ -44,11 +59,6 @@ def stats_club(request, year=datetime.now().year):
         results = get_list_or_404(Result, event__finished=True, event__date__year=year)
     else:
         results = get_list_or_404(Result, event__finished=True)
-
-    # Add date and time foramtting
-    for result in results:
-        result.date_ = result.event.date.strftime("%d.%m.%Y")
-        result.time_ = "{:02d}:{:02d}".format(result.time.days*24 + result.time.seconds//3600, result.time.seconds%3600//60)
 
     # Calculate total stats
     total_distance = 0
@@ -147,30 +157,16 @@ def event(request, distance, date):
     event = get_object_or_404(Event, route__distance=distance, date=date, )
     route = event.route
 
-    controls = route.controls.split("\n")
-    if controls == [""]:
-        controls = None
-
     context = {
         'event' : event,
-        'date' : datetime.strftime(event.date, "%d.%m.%Y"),
-        'time' : event.time.strftime("%H:%M"),
         'route' : route,
-        'controls' : controls,
-        'text' : event.text.split("\n"),
         }  
-
     return render(request, "brevet_database/event.html", context)  
 
 def event_index(request):
     events = get_list_or_404(Event, club=DEFAULT_CLUB_ID, finished=False)
-    for event in events:
-        event.time_ = event.time.strftime("%H:%M")
-        event.date_ = datetime.strftime(event.date, "%d.%m.%Y")
-        event.controls_ = event.route.controls.split("\n")
-        if event.controls_ == [""]:
-            event.controls_ = None
 
+    # Get dict with localized month names as keys
     years = {}
     for event in events:
         if event.date.year not in years:
@@ -189,17 +185,13 @@ def event_index(request):
 def route(request, slug=None, route_id=None):
     if slug:
         route = get_object_or_404(Route, slug=slug)
-    if route_id:
+    elif route_id:
         route = get_object_or_404(Route, pk=route_id)
-
-    controls = route.controls.split("\n")
-    if controls == [""]:
-        controls = None
+    else:
+        raise Http404
 
     context = {
         'route' : route,
-        'controls' : controls,
-        'text' : route.text.split("\n"),
         }  
     return render(request, "brevet_database/route.html", context)       
 
@@ -216,29 +208,6 @@ def route_index(request, distance=200):
         'distances' : [200,300,400,600,1000],
     } 
     return render(request, "brevet_database/route_index.html", context)         
-
-
-def protocol(request, distance, date):
-    try:
-        date = datetime.strptime(date, "%Y%m%d")
-    except Exception:
-        raise Http404
-
-    event = get_object_or_404(Event, route__distance=distance, date=date, )
-    route = event.route
-    results = get_list_or_404(Result, event=event)
-    for r in results:
-        r.time_ = "{:02d}:{:02d}".format(r.time.days*24 + r.time.seconds//3600, r.time.seconds%3600//60)
-    results = sorted(results, key=lambda x: x.randonneur.russian_surname)
-
-    context = {
-        'event' : event,
-        'route' : route,
-        'results' : results,
-        'date' : datetime.strftime(date, "%d.%m.%Y"),
-        'time' : event.time.strftime("%H:%M"),
-        }      
-    return render(request, "brevet_database/protocol.html", context)    
 
 def get_sr(results):
     sr = 0
@@ -285,10 +254,6 @@ def personal_stats(request, surname, name):
     name = name.lower().capitalize()
     randonneur = get_object_or_404(Randonneur, name=name, surname=surname)
     results = get_list_or_404(Result, randonneur=randonneur)
-    for r in results:
-        r.date_ = datetime.strftime(r.event.date, "%d.%m.%Y")
-        r.time_ = "{:02d}:{:02d}".format(r.time.days*24 + r.time.seconds//3600, r.time.seconds%3600//60) 
-
     results = sorted(results, key=lambda x: x.event.date, reverse=True)
 
     best_200 = None
@@ -300,11 +265,13 @@ def personal_stats(request, surname, name):
     for result in results:
         # Count total distance
         total_distance += result.event.route.distance
+        
         # Prepare data to calculate sr years and years active
         if result.event.route.brm:
             if result.event.date.year not in by_year:
                 by_year[result.event.date.year] = []
             by_year[result.event.date.year].append(result)
+
         # Select best results
         if result.event.route.distance == 200:
             if best_200 is None:

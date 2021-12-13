@@ -63,7 +63,7 @@
             <tbody> 
                 {% for result in elite_dist %}
                     <tr>
-                        <td>{{ result.date_ }}</td>
+                        <td>{{ result.get_date }}</td>
                         <td>{{ result.event.route.name }}</td>
                         <td>{{ result.event.route.distance }} км</td>
                         <td>
@@ -71,7 +71,7 @@
                                 {{ result.randonneur }}
                             </a>
                         </td>
-                        <td>{{ result.time_ }}</td>    
+                        <td>{{ result.get_time }}</td>    
                     </tr>
                 {% endfor %}
             </tbody>
@@ -127,14 +127,14 @@
                                 {{ result.randonneur }}
                             </a>
                         </td>
-                        <td>{{ result.date_ }}</td>
+                        <td>{{ result.get_date }}</td>
                         <td>
                             <a href = "{{ result.event.get_absolute_url }}">
                                 {{ result.event.route.name }}
                             </a>
                         </td>
                         <td>{{ result.event.club }}</td>
-                        <td>{{ result.time_ }}</td>   
+                        <td>{{ result.get_time }}</td>   
                         <td>{{ result.homologation }}</td>     
                     </tr>
                 {% endfor %}
@@ -166,14 +166,14 @@
                                 {{ result.randonneur }}
                             </a>
                         </td>
-                        <td>{{ result.date_ }}</td>
+                        <td>{{ result.get_date }}</td>
                         <td>
                             <a href = "{{ result.event.get_absolute_url }}">
                                 {{ result.event.route.name }}
                             </a>
                         </td>
                         <td>{{ result.event.club }}</td>
-                        <td>{{ result.time_ }}</td>   
+                        <td>{{ result.get_time }}</td>   
                         <td>{{ result.homologation }}</td>     
                     </tr>
                 {% endfor %}
@@ -205,14 +205,14 @@
                                 {{ result.randonneur }}
                             </a>
                         </td>
-                        <td>{{ result.date_ }}</td>
+                        <td>{{ result.get_date }}</td>
                         <td>
                             <a href = "{{ result.event.get_absolute_url }}">
                                 {{ result.event.route.name }}
                             </a>
                         </td>
                         <td>{{ result.event.club }}</td>
-                        <td>{{ result.time_ }}</td>   
+                        <td>{{ result.get_time }}</td>   
                         <td>{{ result.homologation }}</td>     
                     </tr>
                 {% endfor %}
@@ -243,14 +243,14 @@
                                 {{ result.randonneur }}
                             </a>
                         </td>
-                        <td>{{ result.date_ }}</td>
+                        <td>{{ result.get_date }}</td>
                         <td>
                             <a href = "{{ result.event.get_absolute_url }}">
                                 {{ result.event.route.name }}
                             </a>
                         </td>
                         <td>{{ result.event.club }}</td>
-                        <td>{{ result.time_ }}</td>   
+                        <td>{{ result.get_time }}</td>   
                         <td>{{ result.homologation }}</td>     
                     </tr>
                 {% endfor %}

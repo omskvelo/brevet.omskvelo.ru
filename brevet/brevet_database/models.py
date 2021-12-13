@@ -48,6 +48,15 @@ class Route(models.Model):
     pdf = models.FileField(upload_to="pdf/", blank=True)
     orvm = models.FileField(upload_to="orvm/", blank=True)
 
+    def get_controls(self):        
+        if self.controls == "":
+            return None
+        else:
+            return self.controls.split("\n")
+
+    def get_text(self):
+        return self.text.split("\n")
+
     def get_absolute_url(self):
         if self.slug:
             return reverse('route', kwargs={'slug' : self.slug})
@@ -84,6 +93,18 @@ class Event(models.Model):
         date = datetime.strftime(self.date, "%Y%m%d")
         return reverse('protocol', kwargs={'distance' : self.route.distance, 'date' : date})
 
+    def get_date(self):
+        return self.date.strftime("%d.%m.%Y")
+
+    def get_time(self):
+        return self.time.strftime("%H:%M")
+
+    def get_controls(self):        
+        return self.route.get_controls
+    
+    def get_text(self):
+        return self.text.split("\n")
+
     def __str__(self):
         date = datetime.strftime(self.date, "%Y.%m.%d")
         distance = str(self.route.distance)
@@ -99,13 +120,19 @@ class Result(models.Model):
     medal = models.BooleanField(default=False)
     comment = models.CharField(max_length=200,blank=True) 
 
+    def get_date(self):
+        return self.event.get_date()
+
+    def get_time(self):
+        return "{:02d}:{:02d}".format(self.time.days*24 + self.time.seconds//3600, self.time.seconds%3600//60)
+
     def __str__(self):
         date = datetime.strftime(self.event.date, "%Y.%m.%d")
         randonneur = str(self.randonneur)
         distance = str(self.event.route.distance)
-        result = "{:02d}:{:02d}".format(self.time.days*24 + self.time.seconds//3600, self.time.seconds%3600//60)
+        result = self.get_time()
         success = "" if self.success else str(self.comment)
-        return "{} {} км {: <20} {} {}".format(date,  distance, randonneur, result, success)
+        return "{} {} км {} {} {}".format(date,  distance, randonneur, result, success)
 
 class Application(models.Model):
     randonneur = models.ForeignKey(Randonneur, on_delete=models.CASCADE, blank=True) 
