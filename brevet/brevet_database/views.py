@@ -1,9 +1,10 @@
 from datetime import datetime
-import babel.dates
 
+import babel.dates
 from django.http import HttpResponse, Http404
 from django.http.request import RAISE_ERROR
 from django.shortcuts import get_object_or_404, get_list_or_404, render
+from django.views.decorators.cache import cache_page
 
 from .models import Club, Randonneur, Route, Event, Result, Application, DEFAULT_CLUB_ID
 
@@ -45,6 +46,7 @@ def protocol_index(request, year=datetime.now().year):
 def stats_club_total(request):
     return stats_club(request, year=None)
 
+@cache_page(60*60)
 def stats_club(request, year=datetime.now().year):
     if year is not None:
         # Check available years
