@@ -24,6 +24,11 @@
         Маршрут: <a href="{{ route.get_absolute_url }}"> "{{ route.name }}" </a>
     </p>
     {% endif %}
+    {% if event.club %}
+    <p class="my-1">
+        Клуб-организатор: {{ event.club }}
+    </p>
+    {% endif %}
     {% if results %}
         <table class="table table-striped table-hover">
             <thead>

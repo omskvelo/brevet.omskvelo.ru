@@ -209,52 +209,29 @@ def route_index(request, distance=200):
     } 
     return render(request, "brevet_database/route_index.html", context)         
 
-def get_sr(results):
-    sr = 0
-    brevets = [result.event.route.distance for result in results if result.event.route.brm]
-    while True:
-        if 600 in brevets:
-            del brevets[brevets.index(600)]
-        else:
-            return sr
-        if 400 in brevets:
-            del brevets[brevets.index(400)]
-        else:
-            if 600 in brevets:
-                del brevets[brevets.index(600)]
-            else:
-                return sr
-        if 300 in brevets:
-            del brevets[brevets.index(300)]
-        else:
-            if 400 in brevets:
-                del brevets[brevets.index(400)]
-            else:
-                if 600 in brevets:
-                    del brevets[brevets.index(600)]
-                else:        
-                    return sr
-        if 200 in brevets:
-            del brevets[brevets.index(200)]
-        else:
-            if 300 in brevets:
-                del brevets[brevets.index(300)]
-            else:
-                if 400 in brevets:
-                    del brevets[brevets.index(400)]
-                else:
-                    if 600 in brevets:
-                        del brevets[brevets.index(600)]
-                    else:        
-                        return sr
-        sr += 1   
+def personal_stats(request, surname=None, name=None, uid=None):
+    if uid:
+        randonneur = get_object_or_404(Randonneur, pk=uid)
+    elif surname and name:
+        surname = surname.lower().capitalize()
+        name = name.lower().capitalize()
+        randonneur = get_object_or_404(Randonneur, name=name, surname=surname)
+    else:
+        raise Http404
 
-def personal_stats(request, surname, name):
-    surname = surname.lower().capitalize()
-    name = name.lower().capitalize()
-    randonneur = get_object_or_404(Randonneur, name=name, surname=surname)
     results = get_list_or_404(Result, randonneur=randonneur)
     results = sorted(results, key=lambda x: x.event.date, reverse=True)
+
+    # LRM, SR600
+    elite_dist = []
+    for result in results:
+        if result.event.route.lrm:
+            elite_dist.append(result)
+        if result.event.route.sr600:
+            elite_dist.append(result)
+        if result.event.route.distance == 1000:
+            elite_dist.append(result)
+    elite_dist = sorted(elite_dist, key=lambda x: x.event.date)
 
     best_200 = None
     best_300 = None
@@ -307,6 +284,7 @@ def personal_stats(request, surname, name):
     context = {
         'randonneur' : randonneur,
         'results' : results,
+        'elite_dist' : elite_dist,
         'best_200' : best_200,
         'best_300' : best_300,
         'best_400' : best_400,
@@ -317,4 +295,42 @@ def personal_stats(request, surname, name):
         }  
     return render(request, "brevet_database/personal.html", context)   
 
-
+def get_sr(results):
+    sr = 0
+    brevets = [result.event.route.distance for result in results if result.event.route.brm]
+    while True:
+        if 600 in brevets:
+            del brevets[brevets.index(600)]
+        else:
+            return sr
+        if 400 in brevets:
+            del brevets[brevets.index(400)]
+        else:
+            if 600 in brevets:
+                del brevets[brevets.index(600)]
+            else:
+                return sr
+        if 300 in brevets:
+            del brevets[brevets.index(300)]
+        else:
+            if 400 in brevets:
+                del brevets[brevets.index(400)]
+            else:
+                if 600 in brevets:
+                    del brevets[brevets.index(600)]
+                else:        
+                    return sr
+        if 200 in brevets:
+            del brevets[brevets.index(200)]
+        else:
+            if 300 in brevets:
+                del brevets[brevets.index(300)]
+            else:
+                if 400 in brevets:
+                    del brevets[brevets.index(400)]
+                else:
+                    if 600 in brevets:
+                        del brevets[brevets.index(600)]
+                    else:        
+                        return sr
+        sr += 1   

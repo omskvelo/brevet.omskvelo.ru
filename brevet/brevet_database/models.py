@@ -23,7 +23,7 @@ class Randonneur(models.Model):
     female = models.BooleanField(default=False)
 
     def get_absolute_url(self):
-        return reverse('personal_stats', kwargs={'surname' : self.surname, 'name' : self.name})
+        return reverse('personal_stats', kwargs={'uid' : self.pk})
 
     def __str__(self):
         return " ".join((self.russian_surname,self.russian_name))
