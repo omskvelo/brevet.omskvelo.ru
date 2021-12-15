@@ -1,13 +1,16 @@
 from datetime import datetime
 
-import babel.dates
-from django.http import HttpResponse, Http404
+from django.http import HttpResponse, Http404, response
 from django.http.request import RAISE_ERROR
 from django.shortcuts import get_object_or_404, get_list_or_404, render
-from django.views.decorators.cache import cache_page
+from django.views.decorators.cache import cache_page, never_cache
+
+import babel.dates
 
 from .models import Club, Randonneur, Route, Event, Result, Application, DEFAULT_CLUB_ID
+from .toolbox import brevet_tools
 
+@never_cache
 def protocol(request, distance, date):
     try:
         date = datetime.strptime(date, "%Y%m%d")
@@ -24,7 +27,26 @@ def protocol(request, distance, date):
         'route' : route,
         'results' : results,
         }      
-    return render(request, "brevet_database/protocol.html", context)    
+    return render(request, "brevet_database/protocol.html", context)   
+
+@never_cache
+def serve_xlsx(request,distance, date):
+    try:
+        date = datetime.strptime(date, "%Y%m%d")
+    except Exception:
+        raise Http404
+
+    event = get_object_or_404(Event, route__distance=distance, date=date, )
+    results = get_list_or_404(Result, event=event)
+
+    file = brevet_tools.get_xlsx_protocol(event,results)
+
+    response = HttpResponse(file.read(), content_type="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")
+    response['Content-Disposition'] = f"attachment; filename={date.year}-{date.month}-{date.day}_{distance}.xlsx"
+
+    file.close()
+
+    return response
 
 def protocol_index(request, year=datetime.now().year):
     events = get_list_or_404(Event, finished=True, club=DEFAULT_CLUB_ID, date__year=year)
@@ -43,29 +65,23 @@ def protocol_index(request, year=datetime.now().year):
     }
     return render(request, "brevet_database/protocol_index.html", context)
 
-def stats_club_total(request):
-    return stats_club(request, year=None)
+@never_cache
+def statistics_total(request):
+    return statistics(request, year=None)
 
 @cache_page(60*60)
-def stats_club(request, year=datetime.now().year):
+def statistics(request, year=datetime.now().year):
     if year is not None:
         # Check available years
         years = set()
         for event in get_list_or_404(Event, finished=True, club=DEFAULT_CLUB_ID):
             years.add(event.date.year)
         years = sorted(list(years), reverse=True)
-        # Add total stats
-        # years.append(" - ".join([str(years[-1]),str(years[0])]))
 
         # Collect results
         results = get_list_or_404(Result, event__finished=True, event__date__year=year)
     else:
         results = get_list_or_404(Result, event__finished=True)
-
-    # Calculate total stats
-    total_distance = 0
-    for result in results:
-        total_distance += result.event.route.distance
 
     # Prepare data to calculate personal stats 
     randonneurs = {}
@@ -74,7 +90,6 @@ def stats_club(request, year=datetime.now().year):
         if r not in randonneurs:
             randonneurs[r] = {"randonneur":result.randonneur, "results":[]}
         randonneurs[r]["results"].append(result)
-    total_randonneurs = len(randonneurs)
 
     # LRM, SR600
     elite_dist = []
@@ -92,7 +107,7 @@ def stats_club(request, year=datetime.now().year):
     for _,randonneur in randonneurs.items():
         randonneur["total_brevets"] = len(randonneur["results"])
         randonneur["total_distance"] = sum([result.event.route.distance for result in randonneur["results"]])
-        r_sr = get_sr(randonneur["results"])
+        r_sr = brevet_tools.get_sr(randonneur["results"])
         if (r_sr):
             if r_sr > 1:
                 sr_string = f"(x{r_sr})"
@@ -109,9 +124,7 @@ def stats_club(request, year=datetime.now().year):
         for randonneur in randonneurs.items()]
     distance_rating = sorted(distance_rating, key=lambda x: x[1], reverse=True)
 
-    total_sr = len(sr)
-
-    # Best results
+    # Find best results
     best_200 = []
     best_300 = []
     best_400 = []
@@ -130,6 +143,14 @@ def stats_club(request, year=datetime.now().year):
     best_400 = sorted(best_400, key=lambda x: x.time)[:10]
     best_600 = sorted(best_600, key=lambda x: x.time)[:10]
 
+    # Calculate total stats
+    total_sr = len(sr)
+    total_randonneurs = len(randonneurs)
+    total_distance = 0
+    for result in results:
+        total_distance += result.event.route.distance
+
+
     context = {
         "total_distance" : total_distance,
         "total_randonneurs" : total_randonneurs,
@@ -147,9 +168,9 @@ def stats_club(request, year=datetime.now().year):
             "year" : year,
             "years" : years,
         })
-    return render(request, "brevet_database/stats_club.html", context)        
+    return render(request, "brevet_database/statistics.html", context)        
 
-
+@never_cache
 def event(request, distance, date):
     try:
         date = datetime.strptime(date, "%Y%m%d")
@@ -164,6 +185,7 @@ def event(request, distance, date):
         'route' : route,
         }  
     return render(request, "brevet_database/event.html", context)  
+
 
 def event_index(request):
     events = get_list_or_404(Event, club=DEFAULT_CLUB_ID, finished=False)
@@ -184,6 +206,7 @@ def event_index(request):
     } 
     return render(request, "brevet_database/event_index.html", context)      
 
+@never_cache
 def route(request, slug=None, route_id=None):
     if slug:
         route = get_object_or_404(Route, slug=slug)
@@ -276,7 +299,7 @@ def personal_stats(request, surname=None, name=None, uid=None):
     # Count SR qualifications
     sr = []
     for key in by_year:
-        for _ in range (get_sr(by_year[key])):
+        for _ in range (brevet_tools.get_sr(by_year[key])):
             sr.append(str(key))  
     sr.sort()
 
@@ -296,43 +319,3 @@ def personal_stats(request, surname=None, name=None, uid=None):
         'total_distance' : total_distance,
         }  
     return render(request, "brevet_database/personal.html", context)   
-
-def get_sr(results):
-    sr = 0
-    brevets = [result.event.route.distance for result in results if result.event.route.brm]
-    while True:
-        if 600 in brevets:
-            del brevets[brevets.index(600)]
-        else:
-            return sr
-        if 400 in brevets:
-            del brevets[brevets.index(400)]
-        else:
-            if 600 in brevets:
-                del brevets[brevets.index(600)]
-            else:
-                return sr
-        if 300 in brevets:
-            del brevets[brevets.index(300)]
-        else:
-            if 400 in brevets:
-                del brevets[brevets.index(400)]
-            else:
-                if 600 in brevets:
-                    del brevets[brevets.index(600)]
-                else:        
-                    return sr
-        if 200 in brevets:
-            del brevets[brevets.index(200)]
-        else:
-            if 300 in brevets:
-                del brevets[brevets.index(300)]
-            else:
-                if 400 in brevets:
-                    del brevets[brevets.index(400)]
-                else:
-                    if 600 in brevets:
-                        del brevets[brevets.index(600)]
-                    else:        
-                        return sr
-        sr += 1   

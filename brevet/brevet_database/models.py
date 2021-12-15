@@ -7,8 +7,9 @@ from django.utils import timezone
 DEFAULT_CLUB_ID = 1
 
 class Club(models.Model):
-    name = models.CharField(max_length=50, blank=False)
-    ACP_code = models.IntegerField(blank=False)
+    name = models.CharField(max_length=50, blank=False, unique=True)
+    ACP_code = models.IntegerField(blank=False, unique=True)
+    french_name = models.CharField(max_length=50, blank=False, unique=True)
     
     def __str__(self):
         return " ".join((self.name, str(self.ACP_code)))
@@ -92,6 +93,10 @@ class Event(models.Model):
     def get_protocol_url(self):
         date = datetime.strftime(self.date, "%Y%m%d")
         return reverse('protocol', kwargs={'distance' : self.route.distance, 'date' : date})
+
+    def get_protocol_xlsx_url(self):
+        date = datetime.strftime(self.date, "%Y%m%d")
+        return reverse('protocol_xlsx', kwargs={'distance' : self.route.distance, 'date' : date})       
 
     def get_date(self):
         return self.date.strftime("%d.%m.%Y")

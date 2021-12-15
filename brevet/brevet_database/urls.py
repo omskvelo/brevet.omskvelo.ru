@@ -27,10 +27,11 @@ urlpatterns = [
     path("protocols/", views.protocol_index, name="protocol_index"),
     path("protocols/<int:year>", views.protocol_index, name="protocol_index_pages"),
     path("protocol/<int:distance>/<str:date>/", views.protocol, name="protocol"),
+    path("protocol/xlsx/<int:distance>/<str:date>/", views.serve_xlsx, name="protocol_xlsx"),
     
-    path("stats/club/total", views.stats_club_total, name="stats_club_total"),    
-    path("stats/club/", views.stats_club, name="stats_club_pages"),
-    path("stats/club/<int:year>", views.stats_club, name="stats_club_pages"),
+    path("stats/club/total", views.statistics_total, name="statistics_total"),    
+    path("stats/club/", views.statistics, name="statistics"),
+    path("stats/club/<int:year>", views.statistics, name="statistics"),
 
     path("routes/", views.route_index, name="route_index"), 
     path("routes/<int:distance>/", views.route_index, name="route_index_distance"),

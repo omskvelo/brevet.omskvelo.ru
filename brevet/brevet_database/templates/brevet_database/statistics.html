@@ -10,11 +10,11 @@
         <div class="my-4">
             {% for y in years %}
                 {% if year == y %}
-                <a class="btn btn btn-dark" style = "background-color: #1D3652;" href="{% url 'stats_club_pages' y %}">
+                <a class="btn btn btn-dark" style = "background-color: #1D3652;" href="{% url 'statistics' y %}">
                     {{ y }}
                 </a>
                 {% else %}
-                <a class="btn btn-light" href="{% url 'stats_club_pages' y %}">
+                <a class="btn btn-light" href="{% url 'statistics' y %}">
                     {{ y }}
                 </a>
                 {% endif %}
