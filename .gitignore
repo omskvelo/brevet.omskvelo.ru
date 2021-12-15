@@ -149,3 +149,5 @@ backup/
 staticfiles/
 uploads/
 .vscode/
+Scripts/
+activate/

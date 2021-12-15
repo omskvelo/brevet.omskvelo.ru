@@ -66,7 +66,7 @@ def protocol_index(request, year=datetime.now().year):
 def statistics_total(request):
     return statistics(request, year=None)
 
-@cache_page(60*1)
+@cache_page(60*60)
 def statistics(request, year=datetime.now().year):
     if year is not None:
         # Check available years
