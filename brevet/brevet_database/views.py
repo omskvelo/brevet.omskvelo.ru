@@ -1,7 +1,6 @@
 from datetime import datetime
 
-from django.http import HttpResponse, Http404, response
-from django.http.request import RAISE_ERROR
+from django.http import HttpResponse, Http404
 from django.shortcuts import get_object_or_404, get_list_or_404, render
 from django.views.decorators.cache import cache_page, never_cache
 
@@ -17,10 +16,9 @@ def protocol(request, distance, date):
     except Exception:
         raise Http404
 
-    event = get_object_or_404(Event, route__distance=distance, date=date, )
+    event = get_object_or_404(Event, route__distance=distance, date=date)
     route = event.route
-    results = get_list_or_404(Result, event=event)
-    results = sorted(results, key=lambda x: x.randonneur.russian_surname)
+    results = get_list_or_404(Result.objects.order_by("randonneur__russian_surname","randonneur__russian_name"), event=event)
 
     context = {
         'event' : event,
@@ -49,8 +47,7 @@ def serve_xlsx(request,distance, date):
     return response
 
 def protocol_index(request, year=datetime.now().year):
-    events = get_list_or_404(Event, finished=True, club=DEFAULT_CLUB_ID, date__year=year)
-    events = sorted(events, key=lambda x: (x.date))
+    events = get_list_or_404(Event.objects.order_by("date"), finished=True, club=DEFAULT_CLUB_ID, date__year=year)
 
     #Check available years
     years = set()
@@ -69,7 +66,7 @@ def protocol_index(request, year=datetime.now().year):
 def statistics_total(request):
     return statistics(request, year=None)
 
-@cache_page(60*60)
+@cache_page(60*1)
 def statistics(request, year=datetime.now().year):
     if year is not None:
         # Check available years
@@ -91,15 +88,8 @@ def statistics(request, year=datetime.now().year):
             randonneurs[r] = {"randonneur":result.randonneur, "results":[]}
         randonneurs[r]["results"].append(result)
 
-    # LRM, SR600
-    elite_dist = []
-    for result in results:
-        if result.event.route.lrm:
-            elite_dist.append(result)
-        if result.event.route.sr600:
-            elite_dist.append(result)
-        if result.event.route.distance == 1000:
-            elite_dist.append(result)
+    # LRM, SR600, 1000
+    elite_dist = [x for x in results if x.event.route.lrm or x.event.route.sr600 or x.event.route.distance == 1000] 
     elite_dist = sorted(elite_dist, key=lambda x: x.event.date)
 
     # Calculate personal stats
@@ -125,19 +115,10 @@ def statistics(request, year=datetime.now().year):
     distance_rating = sorted(distance_rating, key=lambda x: x[1], reverse=True)
 
     # Find best results
-    best_200 = []
-    best_300 = []
-    best_400 = []
-    best_600 = []
-    for result in results:
-        if result.event.route.distance == 200:
-            best_200.append(result)
-        if result.event.route.distance == 300:
-            best_300.append(result)
-        if result.event.route.distance == 400:
-            best_400.append(result)
-        if result.event.route.distance == 600:
-            best_600.append(result)
+    best_200 = [x for x in results if x.event.route.distance == 200]
+    best_300 = [x for x in results if x.event.route.distance == 300]
+    best_400 = [x for x in results if x.event.route.distance == 400]
+    best_600 = [x for x in results if x.event.route.distance == 600]
     best_200 = sorted(best_200, key=lambda x: x.time)[:10]
     best_300 = sorted(best_300, key=lambda x: x.time)[:10]
     best_400 = sorted(best_400, key=lambda x: x.time)[:10]
@@ -234,6 +215,7 @@ def route_index(request, distance=200):
     } 
     return render(request, "brevet_database/route_index.html", context)         
 
+
 def personal_stats(request, surname=None, name=None, uid=None):
     if uid:
         randonneur = get_object_or_404(Randonneur, pk=uid)
@@ -244,59 +226,32 @@ def personal_stats(request, surname=None, name=None, uid=None):
     else:
         raise Http404
 
-    results = get_list_or_404(Result, randonneur=randonneur)
-    results = sorted(results, key=lambda x: x.event.date, reverse=True)
+    results = get_list_or_404(Result.objects.order_by("-event__date"), randonneur=randonneur)
 
-    # LRM, SR600
-    elite_dist = []
-    for result in results:
-        if result.event.route.lrm:
-            elite_dist.append(result)
-        if result.event.route.sr600:
-            elite_dist.append(result)
-        if result.event.route.distance == 1000:
-            elite_dist.append(result)
-    elite_dist = sorted(elite_dist, key=lambda x: x.event.date)
+    # Total distance
+    total_distance = sum([x.event.route.distance for x in results])
 
-    best_200 = None
-    best_300 = None
-    best_400 = None
-    best_600 = None
+    # LRM, SR600, 1000
+    elite_dist = [x for x in results if x.event.route.lrm or x.event.route.sr600 or x.event.route.distance == 1000] 
+
+    # Best BRM results
+    best_200 = [x for x in results if x.event.route.distance == 200]
+    best_300 = [x for x in results if x.event.route.distance == 300]
+    best_400 = [x for x in results if x.event.route.distance == 400]
+    best_600 = [x for x in results if x.event.route.distance == 600]
+    best_200 = sorted(best_200, key=lambda x: x.time)[0]
+    best_300 = sorted(best_300, key=lambda x: x.time)[0]
+    best_400 = sorted(best_400, key=lambda x: x.time)[0]
+    best_600 = sorted(best_600, key=lambda x: x.time)[0]
+
+    # Count years active and SR qualifications
     by_year = {}
-    total_distance = 0
     for result in results:
-        # Count total distance
-        total_distance += result.event.route.distance
-        
-        # Prepare data to calculate sr years and years active
         if result.event.route.brm:
             if result.event.date.year not in by_year:
                 by_year[result.event.date.year] = []
             by_year[result.event.date.year].append(result)
 
-        # Select best results
-        if result.event.route.distance == 200:
-            if best_200 is None:
-                best_200 = result
-            if best_200.time > result.time:
-                best_200 = result
-        if result.event.route.distance == 300:
-            if best_300 is None:
-                best_300 = result
-            if best_300.time > result.time:
-                best_300 = result
-        if result.event.route.distance == 400:
-            if best_400 is None:
-                best_400 = result
-            if best_400.time > result.time:
-                best_400 = result
-        if result.event.route.distance == 600:
-            if best_600 is None:
-                best_600 = result
-            if best_600.time > result.time:
-                best_600 = result  
-
-    # Count SR qualifications
     sr = []
     for key in by_year:
         for _ in range (brevet_tools.get_sr(by_year[key])):
