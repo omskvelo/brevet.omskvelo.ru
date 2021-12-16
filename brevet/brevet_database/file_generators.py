@@ -2,8 +2,6 @@ from io import BytesIO
 
 import xlsxwriter
 
-# Assortment of tools that did not fit neatly into views.py
-
 def get_xlsx_protocol(event, results):
     """Generates a protocol file that can be submitted to ACP"""
     results = sorted(results, key=lambda x: x.randonneur.surname)   
@@ -268,44 +266,3 @@ def write_results_sheet(worksheet, results, time_format, text_format, date_forma
         worksheet.write(row, 5, result.get_time(), time_format)
         worksheet.write(row, 6, result.homologation, text_format)
         row += 1
-
-def get_sr(results):
-    """Returns the number of SR qualifications over a list of results for the season."""
-    sr = 0
-    brevets = [result.event.route.distance for result in results if result.event.route.brm]
-    while True:
-        if 600 in brevets:
-            del brevets[brevets.index(600)]
-        else:
-            return sr
-        if 400 in brevets:
-            del brevets[brevets.index(400)]
-        else:
-            if 600 in brevets:
-                del brevets[brevets.index(600)]
-            else:
-                return sr
-        if 300 in brevets:
-            del brevets[brevets.index(300)]
-        else:
-            if 400 in brevets:
-                del brevets[brevets.index(400)]
-            else:
-                if 600 in brevets:
-                    del brevets[brevets.index(600)]
-                else:        
-                    return sr
-        if 200 in brevets:
-            del brevets[brevets.index(200)]
-        else:
-            if 300 in brevets:
-                del brevets[brevets.index(300)]
-            else:
-                if 400 in brevets:
-                    del brevets[brevets.index(400)]
-                else:
-                    if 600 in brevets:
-                        del brevets[brevets.index(600)]
-                    else:        
-                        return sr
-        sr += 1   

@@ -30,6 +30,68 @@ class Randonneur(models.Model):
     def get_xlsx_url(self):
         return reverse('personal_stats_f', kwargs={'uid' : self.pk, 'form' : 'xlsx'})
 
+    def get_active_years(self):
+        years = set()
+        q = list(Result.objects.filter(event__finished=True, randonneur=self))
+        for result in q:
+            years.add(str(result.event.date.year))
+        return sorted(list(years), reverse=True)
+
+    def get_sr(self, year):
+        sr = 0
+        results = list(Result.objects.filter( event__route__brm=True, randonneur=self, event__date__year=year))
+        brevets = [result.event.route.distance for result in results]
+        while True:
+            if 600 in brevets:
+                del brevets[brevets.index(600)]
+            else:
+                return sr
+            if 400 in brevets:
+                del brevets[brevets.index(400)]
+            else:
+                if 600 in brevets:
+                    del brevets[brevets.index(600)]
+                else:
+                    return sr
+            if 300 in brevets:
+                del brevets[brevets.index(300)]
+            else:
+                if 400 in brevets:
+                    del brevets[brevets.index(400)]
+                else:
+                    if 600 in brevets:
+                        del brevets[brevets.index(600)]
+                    else:        
+                        return sr
+            if 200 in brevets:
+                del brevets[brevets.index(200)]
+            else:
+                if 300 in brevets:
+                    del brevets[brevets.index(300)]
+                else:
+                    if 400 in brevets:
+                        del brevets[brevets.index(400)]
+                    else:
+                        if 600 in brevets:
+                            del brevets[brevets.index(600)]
+                        else:        
+                            return sr
+            sr += 1  
+
+    def get_results(self, year=None):
+        q = Result.objects.filter(randonneur=self)
+        if year:
+            q = q.filter(event__date__year=year)
+        return list(q)
+
+    def get_total_distance(self, year=None):
+        results = self.get_results(year)
+        return sum([result.event.route.distance for result in results])
+
+    def get_total_brevets(self, year=None):
+        results = self.get_results(year)
+        return len(results)        
+
     def __str__(self):
         return " ".join((self.russian_surname,self.russian_name))
 
@@ -72,7 +134,7 @@ class Route(models.Model):
         distance = str(self.distance)
         name = str(self.name)
         club = str(self.club) if self.club.id != DEFAULT_CLUB_ID else ""
-        return "{} км {: <20} {} ".format(distance, name, club)     
+        return "{} км {} {} ".format(distance, name, club)     
 
 class Event(models.Model):
     name = models.CharField(max_length=50, blank=True) 
@@ -157,3 +219,31 @@ class Application(models.Model):
     def __str__(self):
         datestring = datetime.strftime(self.date, "%H:%M %d.%m.%Y")
         return f"Заявка №{self.id} от {datestring} на бревет {self.event}"
+
+def get_event_years(reverse):
+    years = set()
+    for event in list(Event.objects.filter(finished=True, club=DEFAULT_CLUB_ID)):
+        years.add(event.date.year)
+    return sorted(list(years), reverse=reverse)
+
+def get_best(distance, randonneur=None, year=None):
+    q = Result.objects.filter(event__route__distance=distance, event__route__brm=True)
+    if randonneur:
+        q = q.filter(randonneur=randonneur)
+    if year:
+        q = q.filter(event__date__year=year)
+    q=q.order_by("time")
+    return list(q)
+
+def get_randonneurs(year=None):
+    randonneurs = set()
+    results = Result.objects.filter(event__finished=True)
+    if year:
+        results = results.filter(event__date__year=year)
+    for result in list(results):
+        randonneurs.add(result.randonneur)
+    return list(randonneurs)
+
+
+    
+ 
