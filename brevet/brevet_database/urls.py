@@ -27,19 +27,22 @@ urlpatterns = [
     path("protocols/", views.protocol_index, name="protocol_index"),
     path("protocols/<int:year>", views.protocol_index, name="protocol_index_pages"),
     path("protocol/<int:distance>/<str:date>/", views.protocol, name="protocol"),
-    path("protocol/xlsx/<int:distance>/<str:date>/", views.serve_xlsx, name="protocol_xlsx"),
+    path("protocol/xlsx/<int:distance>/<str:date>/", views.protocol_xlsx, name="protocol_xlsx"),
     
-    path("stats/club/total", views.statistics_total, name="statistics_total"),    
-    path("stats/club/", views.statistics, name="statistics"),
-    path("stats/club/<int:year>", views.statistics, name="statistics"),
-
     path("routes/", views.route_index, name="route_index"), 
     path("routes/<int:distance>/", views.route_index, name="route_index_distance"),
 
     path("route/<int:route_id>/", views.route, name="route_id"), 
     path("route/<str:slug>/", views.route, name="route"), # Alternative route url
 
+    path("stats/club/total/", views.statistics_total, name="statistics_total"),    
+    path("stats/club/total/<str:form>/", views.statistics_total, name="statistics_total_f"), 
+    path("stats/club/", views.statistics, name="statistics_default"),
+    path("stats/club/<int:year>/", views.statistics, name="statistics"),
+    path("stats/club/<str:form>/", views.statistics, name="statistics_default_f"),    
+    path("stats/club/<int:year>/<str:form>/", views.statistics, name="statistics_f"),
 
-    path("user/<int:uid>/", views.personal_stats, name="personal_stats"), # Primary user url returned by randonneur.get_absolute_url() method
-    path("user/<str:surname>_<str:name>/", views.personal_stats, name="person_by_name"), # Alternative user url
+    path("stats/user/<int:uid>/", views.personal_stats, name="personal_stats"), 
+    path("stats/user/<int:uid>/<str:form>/", views.personal_stats, name="personal_stats_f"), 
+    path("stats/user/<str:surname>_<str:name>/", views.personal_stats, name="person_by_name"), 
 ]

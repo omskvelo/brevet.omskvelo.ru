@@ -27,6 +27,9 @@ class Randonneur(models.Model):
     def get_absolute_url(self):
         return reverse('personal_stats', kwargs={'uid' : self.pk})
 
+    def get_xlsx_url(self):
+        return reverse('personal_stats_f', kwargs={'uid' : self.pk, 'form' : 'xlsx'})
+
     def __str__(self):
         return " ".join((self.russian_surname,self.russian_name))
 

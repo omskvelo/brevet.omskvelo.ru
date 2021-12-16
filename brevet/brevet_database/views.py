@@ -28,7 +28,7 @@ def protocol(request, distance, date):
     return render(request, "brevet_database/protocol.html", context)   
 
 @never_cache
-def serve_xlsx(request,distance, date):
+def protocol_xlsx(request,distance, date):
     try:
         date = datetime.strptime(date, "%Y%m%d")
     except Exception:
@@ -63,22 +63,22 @@ def protocol_index(request, year=datetime.now().year):
     return render(request, "brevet_database/protocol_index.html", context)
 
 @never_cache
-def statistics_total(request):
-    return statistics(request, year=None)
+def statistics_total(request, form="html"):
+    return statistics(request, year=None, form=form)
 
-@cache_page(60*60)
-def statistics(request, year=datetime.now().year):
+# @cache_page(60*60)
+@never_cache
+def statistics(request, year=datetime.now().year, form="html"):
     if year is not None:
-        # Check available years
-        years = set()
-        for event in get_list_or_404(Event, finished=True, club=DEFAULT_CLUB_ID):
-            years.add(event.date.year)
-        years = sorted(list(years), reverse=True)
-
-        # Collect results
         results = get_list_or_404(Result, event__finished=True, event__date__year=year)
     else:
         results = get_list_or_404(Result, event__finished=True)
+
+    # Check available years
+    years = set()
+    for event in get_list_or_404(Event, finished=True, club=DEFAULT_CLUB_ID):
+        years.add(event.date.year)
+    years = sorted(list(years), reverse=True)
 
     # Prepare data to calculate personal stats 
     randonneurs = {}
@@ -131,25 +131,48 @@ def statistics(request, year=datetime.now().year):
     for result in results:
         total_distance += result.event.route.distance
 
+    if form=="html":
+        context = {
+            "total_distance" : total_distance,
+            "total_randonneurs" : total_randonneurs,
+            "total_sr" : total_sr,
+            "sr" : sr,
+            "distance_rating" : distance_rating,
+            "best_200" : best_200,
+            "best_300" : best_300,
+            "best_400" : best_400,
+            "best_600" : best_600,
+            "elite_dist" : elite_dist,
+        }
+        if year is not None:
+            context.update({
+                "year" : year,
+                "years" : years,
+            })
+        return render(request, "brevet_database/statistics.html", context) 
+    if form=="xlsx":
+        file = brevet_tools.get_xlsx_club_stats(
+        total_distance,
+        total_randonneurs,
+        total_sr,
+        sr,
+        distance_rating,
+        best_200,
+        best_300,
+        best_400,
+        best_600,
+        elite_dist,
+        year,
+        years)
 
-    context = {
-        "total_distance" : total_distance,
-        "total_randonneurs" : total_randonneurs,
-        "total_sr" : total_sr,
-        "sr" : sr,
-        "distance_rating" : distance_rating,
-        "best_200" : best_200,
-        "best_300" : best_300,
-        "best_400" : best_400,
-        "best_600" : best_600,
-        "elite_dist" : elite_dist,
-    }
-    if year is not None:
-        context.update({
-            "year" : year,
-            "years" : years,
-        })
-    return render(request, "brevet_database/statistics.html", context)        
+        response = HttpResponse(file.read(), content_type="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")
+        response['Content-Disposition'] = f"attachment; filename={year if year else 'total'}.xlsx"
+
+        file.close()
+
+        return response
+    else:
+        raise Http404       
 
 @never_cache
 def event(request, distance, date):
@@ -216,7 +239,7 @@ def route_index(request, distance=200):
     return render(request, "brevet_database/route_index.html", context)         
 
 
-def personal_stats(request, surname=None, name=None, uid=None):
+def personal_stats(request, surname=None, name=None, uid=None, form="html"):
     if uid:
         randonneur = get_object_or_404(Randonneur, pk=uid)
     elif surname and name:
@@ -228,8 +251,9 @@ def personal_stats(request, surname=None, name=None, uid=None):
 
     results = get_list_or_404(Result.objects.order_by("-event__date"), randonneur=randonneur)
 
-    # Total distance
+    # Total stats
     total_distance = sum([x.event.route.distance for x in results])
+    total_brevets = len(results)
 
     # LRM, SR600, 1000
     elite_dist = [x for x in results if x.event.route.lrm or x.event.route.sr600 or x.event.route.distance == 1000] 
@@ -238,11 +262,11 @@ def personal_stats(request, surname=None, name=None, uid=None):
     best_200 = [x for x in results if x.event.route.distance == 200]
     best_300 = [x for x in results if x.event.route.distance == 300]
     best_400 = [x for x in results if x.event.route.distance == 400]
-    best_600 = [x for x in results if x.event.route.distance == 600]
-    best_200 = sorted(best_200, key=lambda x: x.time)[0]
-    best_300 = sorted(best_300, key=lambda x: x.time)[0]
-    best_400 = sorted(best_400, key=lambda x: x.time)[0]
-    best_600 = sorted(best_600, key=lambda x: x.time)[0]
+    best_600 = [x for x in results if x.event.route.distance == 600 and x.event.route.brm]
+    best_200 = sorted(best_200, key=lambda x: x.time)
+    best_300 = sorted(best_300, key=lambda x: x.time)
+    best_400 = sorted(best_400, key=lambda x: x.time)
+    best_600 = sorted(best_600, key=lambda x: x.time)
 
     # Count years active and SR qualifications
     by_year = {}
@@ -257,20 +281,48 @@ def personal_stats(request, surname=None, name=None, uid=None):
         for _ in range (brevet_tools.get_sr(by_year[key])):
             sr.append(str(key))  
     sr.sort()
+    sr =  ", ".join(sr)
 
     years_active = list(by_year.keys())
     years_active.sort()
+    years_active = ", ".join([str(y) for y in years_active])
 
-    context = {
-        'randonneur' : randonneur,
-        'results' : results,
-        'elite_dist' : elite_dist,
-        'best_200' : best_200,
-        'best_300' : best_300,
-        'best_400' : best_400,
-        'best_600' : best_600,
-        'years_active' : ", ".join([str(y) for y in years_active]),
-        'sr' :  ", ".join(sr),
-        'total_distance' : total_distance,
-        }  
-    return render(request, "brevet_database/personal.html", context)   
+    if form=="html":
+        context = {
+            'randonneur' : randonneur,
+            'results' : results,
+            'elite_dist' : elite_dist,
+            'best_200' : best_200[0],
+            'best_300' : best_300[0],
+            'best_400' : best_400[0],
+            'best_600' : best_600[0],
+            'years_active' : years_active,
+            'sr' : sr,
+            'total_distance' : total_distance,
+            'total_brevets' : total_brevets,
+            }  
+        return render(request, "brevet_database/personal.html", context)   
+    if form=="xlsx":
+        file = brevet_tools.get_xlsx_personal_stats(
+            randonneur, 
+            years_active, 
+            sr, 
+            total_distance, 
+            total_brevets, 
+            results, 
+            elite_dist, 
+            best_200, 
+            best_300, 
+            best_400, 
+            best_600)
+
+        response = HttpResponse(file.read(), content_type="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")
+        response['Content-Disposition'] = f"attachment; filename={randonneur.surname} {randonneur.name}.xlsx"
+
+        file.close()
+
+        return response
+    else:
+        raise Http404
+
+
