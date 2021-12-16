@@ -34,12 +34,8 @@ def protocol_xlsx(request,distance, date):
 
     event = get_object_or_404(Event, route__distance=distance, date=date, )
     results = get_list_or_404(Result, event=event)
-    
-    file = file_generators.get_xlsx_protocol(event,results)
-    response = HttpResponse(file.read(), content_type="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")
-    response['Content-Disposition'] = f"attachment; filename={date.year}-{date.month}-{date.day}_{distance}.xlsx"
-    file.close()
-    
+    response = file_generators.get_xlsx_protocol(event,results,f"{date.year}-{date.month}-{date.day}_{distance}") 
+
     return response
 
 @never_cache
@@ -125,25 +121,20 @@ def statistics(request, year=datetime.now().year, form="html"):
             })
         return render(request, "brevet_database/statistics.html", context) 
     if form=="xlsx":
-        file = file_generators.get_xlsx_club_stats(
-        total_distance,
-        total_randonneurs,
-        total_sr,
-        sr,
-        distance_rating,
-        best_200,
-        best_300,
-        best_400,
-        best_600,
-        elite_dist,
-        year,
-        years)
-
-        response = HttpResponse(file.read(), content_type="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")
-        response['Content-Disposition'] = f"attachment; filename={year if year else 'total'}.xlsx"
-
-        file.close()
-
+        response = file_generators.get_xlsx_club_stats(
+            total_distance,
+            total_randonneurs,
+            total_sr,
+            sr,
+            distance_rating,
+            best_200,
+            best_300,
+            best_400,
+            best_600,
+            elite_dist,
+            year,
+            years,
+            filename=f"{year if year else 'total'}")
         return response
     else:
         raise Http404       
@@ -261,7 +252,7 @@ def personal_stats(request, surname=None, name=None, uid=None, form="html"):
             }  
         return render(request, "brevet_database/personal.html", context)   
     if form=="xlsx":
-        file = file_generators.get_xlsx_personal_stats(
+        response =  file_generators.get_xlsx_personal_stats(
             randonneur, 
             years_active, 
             sr, 
@@ -272,13 +263,8 @@ def personal_stats(request, surname=None, name=None, uid=None, form="html"):
             best_200, 
             best_300, 
             best_400, 
-            best_600)
-
-        response = HttpResponse(file.read(), content_type="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")
-        response['Content-Disposition'] = f"attachment; filename={randonneur.surname} {randonneur.name}.xlsx"
-
-        file.close()
-
+            best_600,
+            filename=f"{randonneur.surname} {randonneur.name}")
         return response
     else:
         raise Http404

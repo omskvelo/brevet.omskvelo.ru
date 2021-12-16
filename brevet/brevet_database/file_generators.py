@@ -2,7 +2,9 @@ from io import BytesIO
 
 import xlsxwriter
 
-def get_xlsx_protocol(event, results):
+from django.http import HttpResponse
+
+def get_xlsx_protocol(event, results, filename):
     """Generates a protocol file that can be submitted to ACP"""
     results = sorted(results, key=lambda x: x.randonneur.surname)   
 
@@ -75,7 +77,11 @@ def get_xlsx_protocol(event, results):
     workbook.close()
     file.seek(0)
 
-    return file
+    response = HttpResponse(file.read(), content_type="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")
+    response['Content-Disposition'] = f"attachment; filename={filename}.xlsx"
+    file.close()
+
+    return response
 
 def get_xlsx_personal_stats(
         randonneur, 
@@ -88,7 +94,8 @@ def get_xlsx_personal_stats(
         best_200, 
         best_300, 
         best_400, 
-        best_600):
+        best_600,
+        filename):
     """Generates xlsx file with all user stats for download"""
 
     file = BytesIO()
@@ -145,7 +152,11 @@ def get_xlsx_personal_stats(
     workbook.close()
     file.seek(0)
 
-    return file
+    response = HttpResponse(file.read(), content_type="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")
+    response['Content-Disposition'] = f"attachment; filename={filename}.xlsx"
+    file.close()
+
+    return response
 
 def get_xlsx_club_stats(
         total_distance,
@@ -159,7 +170,8 @@ def get_xlsx_club_stats(
         best_600,
         elite_dist,
         year,
-        years):
+        years,
+        filename):
     """Generates xlsx file with club stats for download"""
 
     file = BytesIO()
@@ -234,7 +246,11 @@ def get_xlsx_club_stats(
     workbook.close()
     file.seek(0)
 
-    return file
+    response = HttpResponse(file.read(), content_type="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")
+    response['Content-Disposition'] = f"attachment; filename={filename}.xlsx"
+    file.close()
+
+    return response
 
 def write_results_sheet(worksheet, results, time_format, text_format, date_format, int_format):
     # Set colomn width
