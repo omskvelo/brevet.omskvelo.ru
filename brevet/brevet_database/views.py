@@ -46,6 +46,7 @@ def protocol_xlsx(request,distance, date):
 
     return response
 
+@never_cache
 def protocol_index(request, year=datetime.now().year):
     events = get_list_or_404(Event.objects.order_by("date"), finished=True, club=DEFAULT_CLUB_ID, date__year=year)
 
