@@ -191,11 +191,7 @@ def route(request, slug=None, route_id=None):
 
 @never_cache
 def route_index(request, distance=200):
-    r = get_list_or_404(Route, distance=distance, club=DEFAULT_CLUB_ID)
-    routes = []
-    for route in r:
-        if route.slug != "":
-            routes.append(route)
+    routes = get_list_or_404(Route, active=True, distance=distance, club=DEFAULT_CLUB_ID)
 
     context = {
         'routes' : routes,

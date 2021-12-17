@@ -13,7 +13,7 @@ class Club(models.Model):
     french_name = models.CharField(max_length=50, blank=False, unique=True)
     
     def __str__(self):
-        return " ".join((self.name, str(self.ACP_code)))
+        return f"{self.name} {self.ACP_code}"
 
 class Randonneur(models.Model):
     name = models.CharField(max_length=50, blank=False)
@@ -23,6 +23,9 @@ class Randonneur(models.Model):
     image = models.ImageField(upload_to="img/users/", blank=True)
     club = models.ForeignKey(Club, on_delete=models.PROTECT, default=DEFAULT_CLUB_ID)
     female = models.BooleanField(default=False)
+
+    class Meta:
+        ordering = ['russian_surname']
 
     def get_absolute_url(self):
         return reverse('personal_stats', kwargs={'uid' : self.pk})
@@ -93,12 +96,13 @@ class Randonneur(models.Model):
         return len(results)        
 
     def __str__(self):
-        return " ".join((self.russian_surname,self.russian_name))
+        return f"{self.russian_surname} {self.russian_name}"
 
 class Route(models.Model):
     name = models.CharField(max_length=200, blank=True) 
     slug = models.SlugField(blank=True)
     distance = models.IntegerField(blank=False)
+    active = models.BooleanField(default=False)
     controls = models.TextField(blank=True)
     text = models.TextField(blank=True)
     text_brief = models.TextField(max_length=120, blank=True)
@@ -114,6 +118,9 @@ class Route(models.Model):
     gpx = models.FileField(upload_to="gpx/", blank=True)
     pdf = models.FileField(upload_to="pdf/", blank=True)
     orvm = models.FileField(upload_to="orvm/", blank=True)
+
+    class Meta:
+        ordering = ['-active', 'distance']
 
     def get_controls(self):        
         if self.controls == "":
@@ -131,10 +138,8 @@ class Route(models.Model):
             return reverse('route_id', kwargs={'route_id' : self.pk})
 
     def __str__(self):
-        distance = str(self.distance)
-        name = str(self.name)
         club = str(self.club) if self.club.id != DEFAULT_CLUB_ID else ""
-        return "{} км {} {} ".format(distance, name, club)     
+        return f"{self.distance} км {self.name} {club}"     
 
 class Event(models.Model):
     name = models.CharField(max_length=50, blank=True) 
@@ -151,6 +156,9 @@ class Event(models.Model):
     omskvelo_xref = models.URLField(blank=True)
     external_xref = models.URLField(blank=True)
     vk_xref = models.URLField(blank=True)
+
+    class Meta:
+        ordering = ['-date']
 
     def get_absolute_url(self):
         date = datetime.strftime(self.date, "%Y%m%d")
@@ -177,19 +185,18 @@ class Event(models.Model):
         return self.text.split("\n")
 
     def __str__(self):
-        date = datetime.strftime(self.date, "%Y.%m.%d")
-        distance = str(self.route.distance)
         club = str(self.club) if self.club.id != DEFAULT_CLUB_ID else ""
-        return f"{date} {distance} км {self.route.name} {club}"     
+        return f"{self.get_date()} {self.route.distance} км {self.route.name} {club}"     
 
 class Result(models.Model):
     event = models.ForeignKey(Event, on_delete=models.CASCADE)
     homologation = models.CharField(max_length=50, blank=True) 
     randonneur = models.ForeignKey(Randonneur, on_delete=models.CASCADE) 
     time = models.DurationField(blank=True)
-    success = models.BooleanField(default=True)
     medal = models.BooleanField(default=False)
-    comment = models.CharField(max_length=200,blank=True) 
+
+    class Meta:
+        ordering = ['-event__date']
 
     def get_date(self):
         return self.event.get_date()
@@ -198,12 +205,7 @@ class Result(models.Model):
         return "{:02d}:{:02d}".format(self.time.days*24 + self.time.seconds//3600, self.time.seconds%3600//60)
 
     def __str__(self):
-        date = datetime.strftime(self.event.date, "%Y.%m.%d")
-        randonneur = str(self.randonneur)
-        distance = str(self.event.route.distance)
-        result = self.get_time()
-        success = "" if self.success else str(self.comment)
-        return "{} {} км {} {} {}".format(date,  distance, randonneur, result, success)
+        return f"{self.get_date()} {self.event.route.distance} км {self.randonneur} {self.get_time()}"
 
 class Application(models.Model):
     randonneur = models.ForeignKey(Randonneur, on_delete=models.CASCADE, blank=True) 
