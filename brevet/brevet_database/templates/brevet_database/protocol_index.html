@@ -23,29 +23,25 @@
         <thead>
             <tr>
                 <th>Дата</th>
-                <th>Дистанция</th>
+                <th>Протокол</th>
                 <th>Маршрут</th>
-                <th>html</th>
-                <th>xlsx</th>
+                <th></th>
             </tr>
         </thead>
         <tbody>
             {% for event in events %}
             <tr>
                 <td>
-                    <a href="{{ event.get_absolute_url }}">
-                        {{ event.get_date }}
-                    </a>
-                </td>
-                <td>{{ event.route.distance }}</td>
-                <td>
-                    <a href="{{ event.route.get_absolute_url }}">
-                        {{ event.route.name }}
-                    </a>
+                    {{ event.get_date }}
                 </td>
                 <td> 
                     <a href="{{ event.get_protocol_url }}">
-                        Просмотреть
+                        Протокол бревета {{ event.route.distance }} км от {{ event.get_date }}
+                    </a>
+                </td>
+                <td>
+                    <a href="{{ event.route.get_absolute_url }}">
+                        {{ event.route.name }}
                     </a>
                 </td>
                 <td>
@@ -61,9 +57,4 @@
             {% endfor %}
         </tbody>
     </table>
-
-
-
-
-
 {% endblock %}

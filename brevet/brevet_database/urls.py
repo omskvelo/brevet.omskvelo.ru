@@ -16,7 +16,6 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 from django.conf import settings
-from django.conf.urls.static import static
 
 from . import views
 
@@ -28,7 +27,8 @@ urlpatterns = [
     path("protocols/<int:year>", views.protocol_index, name="protocol_index_pages"),
     path("protocol/<int:distance>/<str:date>/", views.protocol, name="protocol"),
     path("protocol/xlsx/<int:distance>/<str:date>/", views.protocol_xlsx, name="protocol_xlsx"),
-    
+    # path("protocol/upload/<int:distance>/<str:date>/", views.protocol_upload, name="protocol_upload"),
+
     path("routes/", views.route_index, name="route_index"), 
     path("routes/<int:distance>/", views.route_index, name="route_index_distance"),
 

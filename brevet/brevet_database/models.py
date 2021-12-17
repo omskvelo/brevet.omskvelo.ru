@@ -1,9 +1,9 @@
 from datetime import datetime, time
 
 from django.db import models
-from django.db.models.query import QuerySet
 from django.urls import reverse
-from django.utils import timezone
+
+from . import file_processors
 
 DEFAULT_CLUB_ID = 1
 
@@ -81,6 +81,17 @@ class Randonneur(models.Model):
                             return sr
             sr += 1  
 
+    def set_sr_string(self, years):
+        sr = 0
+        for year in years:
+            sr += self.get_sr(year)
+        if sr > 1:
+            self.sr_string = f" (x{sr})"
+        else:
+            self.sr_string = ""
+        return sr
+
+
     def get_results(self, year=None):
         q = Result.objects.filter(randonneur=self)
         if year:
@@ -155,7 +166,7 @@ class Event(models.Model):
     finished = models.BooleanField(default=False)
     omskvelo_xref = models.URLField(blank=True)
     external_xref = models.URLField(blank=True)
-    vk_xref = models.URLField(blank=True)
+    vk_xref = models.URLField(blank=True) 
 
     class Meta:
         ordering = ['-date']
@@ -170,7 +181,41 @@ class Event(models.Model):
 
     def get_protocol_xlsx_url(self):
         date = datetime.strftime(self.date, "%Y%m%d")
-        return reverse('protocol_xlsx', kwargs={'distance' : self.route.distance, 'date' : date})       
+        return reverse('protocol_xlsx', kwargs={'distance' : self.route.distance, 'date' : date})  
+
+    def is_homologated(self):
+        results = list(Result.objects.filter(event=self))
+        for result in results:
+            if result.homologation == "":
+                return False
+        return True
+
+    def update_protocol_from_xls(self,file):
+        results = list(Result.objects.filter(event=self))
+        content, exception = file_processors.read_xls_protocol(file)
+        
+        if not exception:
+            if (content["date"] == self.date 
+                and content["distance"] == self.route.distance 
+                and content["code"] == self.club.ACP_code
+                ):
+                for result in results:
+                    surname = result.randonneur.surname
+                    name = result.randonneur.name
+
+                    for entry in content["results"]:
+                        if (entry['name'] == name
+                            and entry['surname'] == surname):
+                            if entry['homologation']:
+                                result.homologation = entry['homologation']
+                                result.save()
+                            else:
+                                exception = "Homologation is empty"
+                return True, exception
+            else:
+                exception = "Date, distance or ACP code do not match"
+        return False, exception
+
 
     def get_date(self):
         return self.date.strftime("%d.%m.%Y")
@@ -222,13 +267,16 @@ class Application(models.Model):
         datestring = datetime.strftime(self.date, "%H:%M %d.%m.%Y")
         return f"Заявка №{self.id} от {datestring} на бревет {self.event}"
 
-def get_event_years(reverse):
+def get_event_years(reverse=True, finished=True):
+    """Returns a list of event years for use in selectors"""
     years = set()
-    for event in list(Event.objects.filter(finished=True, club=DEFAULT_CLUB_ID)):
+    for event in list(Event.objects.filter(finished=finished, club=DEFAULT_CLUB_ID)):
         years.add(event.date.year)
     return sorted(list(years), reverse=reverse)
 
 def get_best(distance, randonneur=None, year=None):
+    """Returns best results on brm distance for randonneur 
+    (or all randonneurs if None) for a given year (or all years if None)"""
     q = Result.objects.filter(event__route__distance=distance, event__route__brm=True)
     if randonneur:
         q = q.filter(randonneur=randonneur)
@@ -238,6 +286,8 @@ def get_best(distance, randonneur=None, year=None):
     return list(q)
 
 def get_randonneurs(year=None):
+    """Returns a list of randonneurs for a given year (or all randonneurs if None). 
+    NOTE: randonneurs with no results are omitted on purpose."""
     randonneurs = set()
     results = Result.objects.filter(event__finished=True)
     if year:

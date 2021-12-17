@@ -15,6 +15,21 @@
     {% endif %}
     </h2>
 
+    {% if user.is_superuser %}
+        {% if not event.is_homologated %}
+            <div class="alert alert-primary" role="alert">
+                <strong>Загрузка результатов омологации</strong>
+                <form class = "my-2" method = "post" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    {{ form }}
+                    <input type="submit" value="OK">
+                </form>
+                {% if upload_exception %}
+                    <p class="my-1">Ошибка при загрузке: {{ upload_exception }}</p>
+                {% endif %}
+            </div>
+        {% endif %}
+    {% endif %}
 
     <p class="my-1">
         Старт состоялся <a href="{{ event.get_absolute_url }}"> {{ event.get_date }} г. в {{ event.get_time }}</a>.

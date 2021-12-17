@@ -1,13 +1,15 @@
 from datetime import datetime
 
-from django.http import HttpResponse, Http404
-from django.shortcuts import get_object_or_404, get_list_or_404, render
+from django.http import Http404
+from django.shortcuts import get_object_or_404, get_list_or_404, redirect, render
 from django.views.decorators.cache import cache_page, never_cache
 
 import babel.dates
 
 from .models import *
+from .forms import *
 from . import file_generators
+
 
 @never_cache
 def protocol(request, distance, date):
@@ -18,10 +20,23 @@ def protocol(request, distance, date):
 
     event = get_object_or_404(Event, route__distance=distance, date=date)
     results = get_list_or_404(Result.objects.order_by("randonneur__russian_surname","randonneur__russian_name"), event=event)
+    upload_status=None
+    upload_exception=None
+    
+    if request.method == 'POST':
+        form = ProtocolUploadForm(request.POST, request.FILES)
+        if form.is_valid():
+            upload_status, upload_exception = event.update_protocol_from_xls(request.FILES['xls'])
+            if upload_status:
+                return redirect(".")
+    else:
+        form = ProtocolUploadForm()
 
     context = {
         'event' : event,
         'results' : results,
+        'form' : form,
+        'upload_exception' : upload_exception,
         }      
     return render(request, "brevet_database/protocol.html", context)   
 
@@ -41,7 +56,7 @@ def protocol_xlsx(request,distance, date):
 @never_cache
 def protocol_index(request, year=datetime.now().year):
     events = get_list_or_404(Event.objects.order_by("date"), finished=True, club=DEFAULT_CLUB_ID, date__year=year)
-    years = get_event_years(reverse=True)
+    years = get_event_years()
 
     context = {
         "events" : events,
@@ -61,7 +76,7 @@ def statistics(request, year=datetime.now().year, form="html"):
         results = get_list_or_404(Result, event__finished=True, event__date__year=year)
     else:
         results = get_list_or_404(Result, event__finished=True)
-    years = get_event_years(reverse=True)
+    years = get_event_years()
 
     # LRM, SR600, 1000
     elite_dist = [x for x in results if x.event.route.lrm or x.event.route.sr600 or x.event.route.distance == 1000] 
@@ -78,16 +93,11 @@ def statistics(request, year=datetime.now().year, form="html"):
     sr = []
     for randonneur in randonneurs:
         if year:
-            s = randonneur.get_sr(year)
-            if s:
-                randonneur.sr_string = f"(x{s})" if s > 1 else ""
-                sr.append(randonneur)
+            r = randonneur.set_sr_string([year])
         else:
-            for year in years:
-                s = randonneur.get_sr(year)
-                if s:
-                    randonneur.sr_string = f"(x{s})"
-                    sr.append(randonneur)               
+            r = randonneur.set_sr_string(years)
+        if r:
+            sr.append(randonneur)            
     sr = sorted(sr, key=lambda x: x.sr_string, reverse=True)
 
     # Find best results
@@ -159,7 +169,7 @@ def event(request, distance, date):
 def event_index(request):
     events = get_list_or_404(Event, club=DEFAULT_CLUB_ID, finished=False)
 
-    # Get dict with localized month names as keys
+    # Allocate events into a dict {year : {month: [events]}}
     years = {}
     for event in events:
         if event.date.year not in years:
