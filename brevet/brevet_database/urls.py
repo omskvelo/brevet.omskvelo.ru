@@ -25,9 +25,9 @@ urlpatterns = [
 
     path("protocols/", views.protocol_index, name="protocol_index"),
     path("protocols/<int:year>", views.protocol_index, name="protocol_index_pages"),
+    path("protocol/<int:distance>/<str:date>/success/", views.protocol, kwargs={'upload_success' : True}, name="protocol_upload_success"),
     path("protocol/<int:distance>/<str:date>/", views.protocol, name="protocol"),
-    path("protocol/xlsx/<int:distance>/<str:date>/", views.protocol_xlsx, name="protocol_xlsx"),
-    # path("protocol/upload/<int:distance>/<str:date>/", views.protocol_upload, name="protocol_upload"),
+    path("protocol/<int:distance>/<str:date>/<str:form>", views.protocol, name="protocol_f"),
 
     path("routes/", views.route_index, name="route_index"), 
     path("routes/<int:distance>/", views.route_index, name="route_index_distance"),

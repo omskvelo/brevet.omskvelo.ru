@@ -12,7 +12,7 @@ from . import file_generators
 
 
 @never_cache
-def protocol(request, distance, date):
+def protocol(request, distance, date, upload_success=None, form="html"):
     try:
         date = datetime.strptime(date, "%Y%m%d")
     except Exception:
@@ -20,36 +20,29 @@ def protocol(request, distance, date):
 
     event = get_object_or_404(Event, route__distance=distance, date=date)
     results = get_list_or_404(Result.objects.order_by("randonneur__russian_surname","randonneur__russian_name"), event=event)
-    upload_status=None
-    upload_exception=None
-    
-    if request.method == 'POST':
-        form = ProtocolUploadForm(request.POST, request.FILES)
-        if form.is_valid():
-            upload_status, upload_exception = event.update_protocol_from_xls(request.FILES['xls'])
-            if upload_status:
-                return redirect(".")
-    else:
-        form = ProtocolUploadForm()
 
-    context = {
-        'event' : event,
-        'results' : results,
-        'form' : form,
-        'upload_exception' : upload_exception,
-        }      
-    return render(request, "brevet_database/protocol.html", context)   
+    if form == "html":
+        upload_exception = None
+        if request.method == 'POST':
+            form = ProtocolUploadForm(request.POST, request.FILES)
+            if form.is_valid():
+                upload_status, upload_exception = event.update_protocol_from_xls(request.FILES['xls'])
+                if upload_status:
+                    return redirect(event.get_protocol_upload_success_url())
+        else:
+            form = ProtocolUploadForm()
 
-@never_cache
-def protocol_xlsx(request,distance, date):
-    try:
-        date = datetime.strptime(date, "%Y%m%d")
-    except Exception:
-        raise Http404
+        context = {
+            'event' : event,
+            'results' : results,
+            'form' : form,
+            'upload_exception' : upload_exception,
+            'upload_success' : upload_success,
+            }      
+        response = render(request, "brevet_database/protocol.html", context)   
 
-    event = get_object_or_404(Event, route__distance=distance, date=date, )
-    results = get_list_or_404(Result, event=event)
-    response = file_generators.get_xlsx_protocol(event,results,f"{date.year}-{date.month}-{date.day}_{distance}") 
+    if form == "xlsx":
+        response = file_generators.get_xlsx_protocol(event,results,f"{event.date.year}-{event.date.month}-{event.date.day}_{distance}") 
 
     return response
 

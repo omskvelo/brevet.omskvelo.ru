@@ -63,7 +63,7 @@ def get_xlsx_protocol(event, results, filename):
     for result in results:
         worksheet.merge_range(row, 3, row, 4, "", text_format)
 
-        worksheet.write(row, 0, "", text_format)
+        worksheet.write(row, 0, result.homologation, text_format)
         worksheet.write(row, 1, result.randonneur.surname, name_format)
         worksheet.write(row, 2, result.randonneur.name, name_format)
         worksheet.write(row, 3, result.randonneur.club.french_name, text_format)

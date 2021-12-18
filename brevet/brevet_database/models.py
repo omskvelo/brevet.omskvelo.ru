@@ -181,7 +181,11 @@ class Event(models.Model):
 
     def get_protocol_xlsx_url(self):
         date = datetime.strftime(self.date, "%Y%m%d")
-        return reverse('protocol_xlsx', kwargs={'distance' : self.route.distance, 'date' : date})  
+        return reverse('protocol_f', kwargs={'distance' : self.route.distance, 'date' : date, "form" : "xlsx"})  
+
+    def get_protocol_upload_success_url(self):
+        date = datetime.strftime(self.date, "%Y%m%d")
+        return reverse("protocol_upload_success", kwargs={'distance' : self.route.distance, 'date' : date})
 
     def is_homologated(self):
         results = list(Result.objects.filter(event=self))

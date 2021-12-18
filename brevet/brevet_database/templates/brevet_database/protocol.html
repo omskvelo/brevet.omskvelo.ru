@@ -27,6 +27,9 @@
                 {% if upload_exception %}
                     <p class="my-1">Ошибка при загрузке: {{ upload_exception }}</p>
                 {% endif %}
+                {% if upload_success %}
+                <p class="my-1">Протокол успешно загружен.</p>
+                {% endif %}
             </div>
         {% endif %}
     {% endif %}
