@@ -30,6 +30,9 @@ class Randonneur(models.Model):
     def get_absolute_url(self):
         return reverse('personal_stats', kwargs={'uid' : self.pk})
 
+    def get_admin_url(self):
+        return (f"/admin/brevet_database/randonneur/{self.pk}/change/")
+
     def get_xlsx_url(self):
         return reverse('personal_stats_f', kwargs={'uid' : self.pk, 'form' : 'xlsx'})
 
@@ -148,6 +151,9 @@ class Route(models.Model):
         else:
             return reverse('route_id', kwargs={'route_id' : self.pk})
 
+    def get_admin_url(self):
+        return (f"/admin/brevet_database/route/{self.pk}/change/")
+
     def __str__(self):
         club = str(self.club) if self.club.id != DEFAULT_CLUB_ID else ""
         return f"{self.distance} км {self.name} {club}"     
@@ -174,6 +180,9 @@ class Event(models.Model):
     def get_absolute_url(self):
         date = datetime.strftime(self.date, "%Y%m%d")
         return reverse('event', kwargs={'distance' : self.route.distance, 'date' : date})
+
+    def get_admin_url(self):
+        return (f"/admin/brevet_database/event/{self.pk}/change/")
 
     def get_protocol_url(self):
         date = datetime.strftime(self.date, "%Y%m%d")
