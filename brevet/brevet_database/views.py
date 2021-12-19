@@ -48,7 +48,7 @@ def protocol(request, distance, date, upload_success=None, form="html"):
 
 @never_cache
 def protocol_index(request, year=datetime.now().year):
-    events = get_list_or_404(Event.objects.order_by("date"), finished=True, club=DEFAULT_CLUB_ID, date__year=year)
+    events = get_list_or_404(Event, finished=True, club=DEFAULT_CLUB_ID, date__year=year)
     years = get_event_years()
 
     context = {
@@ -162,7 +162,7 @@ def event(request, distance, date):
 
 @never_cache
 def event_index(request):
-    events = get_list_or_404(Event, club=DEFAULT_CLUB_ID, finished=False)
+    events = get_list_or_404(Event.objects.order_by("date"), club=DEFAULT_CLUB_ID, finished=False)
 
     # Allocate events into a dict {year : {month: [events]}}
     years = {}
