@@ -42,6 +42,7 @@ urlpatterns = [
     path("stats/club/<str:form>/", views.statistics, name="statistics_default_f"),    
     path("stats/club/<int:year>/<str:form>/", views.statistics, name="statistics_f"),
 
+    path("stats/user/", views.personal_stats_index, name = "personal_stats_index"),
     path("stats/user/<int:uid>/", views.personal_stats, name="personal_stats"), 
     path("stats/user/<int:uid>/<str:form>/", views.personal_stats, name="personal_stats_f"), 
     path("stats/user/<str:surname>_<str:name>/", views.personal_stats, name="person_by_name"), 

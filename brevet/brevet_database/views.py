@@ -110,7 +110,7 @@ def statistics(request, year=datetime.now().year, form="html"):
             "total_randonneurs" : total_randonneurs,
             "total_sr" : total_sr,
             "sr" : sr,
-            "distance_rating" : distance_rating,
+            "distance_rating" : distance_rating[:10],
             "best_200" : best_200,
             "best_300" : best_300,
             "best_400" : best_400,
@@ -119,11 +119,12 @@ def statistics(request, year=datetime.now().year, form="html"):
         }
         if year is not None:
             context.update({
+                "distance_rating" : distance_rating,
                 "year" : year,
                 "years" : years,
             })
         return render(request, "brevet_database/statistics.html", context) 
-    if form=="xlsx":
+    elif form=="xlsx":
         response = file_generators.get_xlsx_club_stats(
             total_distance,
             total_randonneurs,
@@ -138,9 +139,10 @@ def statistics(request, year=datetime.now().year, form="html"):
             year,
             years,
             filename=f"{year if year else 'total'}")
-        return response
+        return response     
     else:
-        raise Http404       
+        raise Http404     
+      
 
 @never_cache
 def event(request, distance, date):
@@ -204,6 +206,21 @@ def route_index(request, distance=200):
     return render(request, "brevet_database/route_index.html", context)         
 
 @never_cache
+def personal_stats_index(request):
+    randonneurs = get_randonneurs()
+
+    distance_rating = []
+    for randonneur in randonneurs:
+        distance_rating.append([randonneur, randonneur.get_total_distance(), randonneur.get_total_brevets()])
+    distance_rating = sorted(distance_rating, key=lambda x: x[1], reverse=True)
+
+    context = {
+        "distance_rating" : distance_rating,
+    }
+    return render(request, "brevet_database/personal_index.html", context)    
+
+
+@never_cache
 def personal_stats(request, surname=None, name=None, uid=None, form="html"):
     if uid:
         randonneur = get_object_or_404(Randonneur, pk=uid)
@@ -240,10 +257,10 @@ def personal_stats(request, surname=None, name=None, uid=None, form="html"):
             'randonneur' : randonneur,
             'results' : results,
             'elite_dist' : elite_dist,
-            'best_200' : best_200[0],
-            'best_300' : best_300[0],
-            'best_400' : best_400[0],
-            'best_600' : best_600[0],
+            'best_200' : best_200[0] if best_200 else "",
+            'best_300' : best_300[0] if best_300 else "",
+            'best_400' : best_400[0] if best_400 else "",
+            'best_600' : best_600[0] if best_600 else "",
             'years_active' : years_active,
             'sr' : sr,
             'total_distance' : total_distance,
