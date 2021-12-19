@@ -145,9 +145,20 @@ cython_debug/
 #.idea/
 
 # Collected static
-backup/
 staticfiles/
+
+# Media files
 uploads/
+
+# Database backups
+backup/
+
+# VScode configuration
 .vscode/
+
+# Virtual environment folders
 Scripts/
 activate/
+
+# Dumps
+*.json
