@@ -38,7 +38,8 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'whitenoise.runserver_nostatic',
     'django.contrib.staticfiles',
-    'brevet_database'
+    'brevet_database',
+    'search'
 ]
 
 CACHES = {

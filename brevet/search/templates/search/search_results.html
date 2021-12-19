@@ -1,0 +1,58 @@
+{% extends "base.html" %}
+
+{% block title %}
+    Результаты поиска "{{ query }}" |
+{% endblock %}
+
+
+{% block content %}
+    <h2 class="my-5"> Результаты поиска по запросу "{{ query }}"</h2>
+    {% if news %}
+    <h4 class="my-3 text-muted"> Новости </h4>
+    <hr>
+        {% for n in news %}
+            <p class="my-1">
+                <a href="{{ n.get_absolute_url }}">
+                    {{ n }}
+                </a>
+            </p>
+        {% endfor %}
+    {% endif %}
+
+    {% if routes %}
+    <h4 class="my-3 text-muted"> Маршруты </h4>
+    <hr>
+        {% for route in routes %}
+            <p class="my-1">
+                <a href="{{ route.get_absolute_url }}">
+                    {{ route }}
+                </a>
+            </p>
+        {% endfor %}
+    {% endif %}
+
+    {% if events %}
+    <h4 class="my-3 text-muted"> События </h4>
+    <hr>
+        {% for event in events %}
+            <p class="my-1">
+                <a href="{{ event.get_absolute_url }}">
+                    {{ event }}
+                </a>
+            </p>
+        {% endfor %}
+    {% endif %}
+
+    {% if randonneurs %}
+    <h4 class="my-3 text-muted"> Рандоннёры </h4>
+    <hr>
+        {% for randonneur in randonneurs %}
+            <p class="my-1">
+                <a href="{{ randonneur.get_absolute_url }}">
+                    {{ randonneur }}
+                </a>
+            </p>
+        {% endfor %}
+    {% endif %}
+
+{% endblock %}

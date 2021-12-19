@@ -300,6 +300,27 @@ def get_randonneurs(year=None):
         randonneurs.add(result.randonneur)
     return list(randonneurs)
 
-
     
- 
+def search(object_class, query):
+    if object_class is Randonneur:
+        results = (object_class.objects.filter(russian_surname=query.capitalize()) |
+        object_class.objects.filter(russian_name=query.capitalize()) |
+        object_class.objects.filter(name__icontains=query) |
+        object_class.objects.filter(surname__icontains=query))
+    elif object_class is Event:
+        results = (object_class.objects.filter(name=query.capitalize()) |
+        object_class.objects.filter(route__name=query.title()))
+        try: 
+            q = object_class.objects.filter(route__distance=int(query), route__active=True)
+            q = q.exclude(route__name="")
+            results |= q
+        except ValueError:
+            pass  
+    elif object_class is Route:
+        results = (object_class.objects.filter(name=query.title()))
+        try: 
+            q = object_class.objects.filter(distance=int(query), active=True)
+            results |= q
+        except ValueError:
+            pass    
+    return list(results)

@@ -24,4 +24,5 @@ urlpatterns = [
     path('faq/', views.faq, name = "faq"),
     path('news/', views.faq, name = 'news'), # temporary fix
     path('database/', include ("brevet_database.urls")),
+    path('search/', include ("search.urls")),
 ]
