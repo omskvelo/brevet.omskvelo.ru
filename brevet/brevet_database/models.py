@@ -7,7 +7,20 @@ from . import file_processors
 
 DEFAULT_CLUB_ID = 1
 
-class Club(models.Model):
+class AbstractModel(models.Model):
+    def get_admin_url_change(self):
+        return f"/admin/{self._meta.app_label}/{self._meta.object_name.lower()}/{self.pk}/change/"
+
+    def get_admin_url_add(self):
+        return f"/admin/{self._meta.app_label}/{self._meta.object_name.lower()}/add/"
+
+    def get_admin_url_delete(self):
+        return f"/admin/{self._meta.app_label}/{self._meta.object_name.lower()}/{self.pk}/delete/"
+
+    class Meta:
+        abstract = True
+
+class Club(AbstractModel):
     name = models.CharField(max_length=50, blank=False, unique=True)
     ACP_code = models.IntegerField(blank=False, unique=True)
     french_name = models.CharField(max_length=50, blank=False, unique=True)
@@ -15,7 +28,7 @@ class Club(models.Model):
     def __str__(self):
         return f"{self.name} {self.ACP_code}"
 
-class Randonneur(models.Model):
+class Randonneur(AbstractModel):
     name = models.CharField(max_length=50, blank=False)
     surname = models.CharField(max_length=50, blank=False)
     russian_name = models.CharField(max_length=50, blank=False)
@@ -29,21 +42,6 @@ class Randonneur(models.Model):
 
     def get_absolute_url(self):
         return reverse('personal_stats', kwargs={'uid' : self.pk})
-
-    def get_admin_url(self, action):
-        if action == "add":
-            return (f"/admin/brevet_database/randonneur/add/")
-        else: 
-            return (f"/admin/brevet_database/randonneur/{self.pk}/{action}/")
-
-    def get_admin_url_change(self):
-        return self.get_admin_url("change")
-
-    def get_admin_url_add(self):
-        return self.get_admin_url("add")
-
-    def get_admin_url_delete(self):
-        return self.get_admin_url("delete")
 
     def get_xlsx_url(self):
         return reverse('personal_stats_f', kwargs={'uid' : self.pk, 'form' : 'xlsx'})
@@ -124,7 +122,7 @@ class Randonneur(models.Model):
     def __str__(self):
         return f"{self.russian_surname} {self.russian_name}"
 
-class Route(models.Model):
+class Route(AbstractModel):
     name = models.CharField(max_length=200, blank=True) 
     slug = models.SlugField(blank=True)
     distance = models.IntegerField(blank=False)
@@ -163,26 +161,11 @@ class Route(models.Model):
         else:
             return reverse('route_id', kwargs={'route_id' : self.pk})
 
-    def get_admin_url(self, action):
-        if action == "add":
-            return (f"/admin/brevet_database/route/add/")
-        else: 
-            return (f"/admin/brevet_database/route/{self.pk}/{action}/")
-
-    def get_admin_url_change(self):
-        return self.get_admin_url("change")
-
-    def get_admin_url_add(self):
-        return self.get_admin_url("add")
-
-    def get_admin_url_delete(self):
-        return self.get_admin_url("delete")
-
     def __str__(self):
         club = str(self.club) if self.club.id != DEFAULT_CLUB_ID else ""
         return f"{self.distance} км {self.name} {club}"     
 
-class Event(models.Model):
+class Event(AbstractModel):
     name = models.CharField(max_length=50, blank=True) 
     route = models.ForeignKey(Route, on_delete=models.PROTECT, blank = False)
     date = models.DateField(auto_now=False, auto_now_add=False, blank=False)
@@ -204,21 +187,6 @@ class Event(models.Model):
     def get_absolute_url(self):
         date = datetime.strftime(self.date, "%Y%m%d")
         return reverse('event', kwargs={'distance' : self.route.distance, 'date' : date})
-
-    def get_admin_url(self, action):
-        if action == "add":
-            return (f"/admin/brevet_database/event/add/")
-        else: 
-            return (f"/admin/brevet_database/event/{self.pk}/{action}/")
-
-    def get_admin_url_change(self):
-        return self.get_admin_url("change")
-
-    def get_admin_url_add(self):
-        return self.get_admin_url("add")
-
-    def get_admin_url_delete(self):
-        return self.get_admin_url("delete")
 
     def get_protocol_url(self):
         date = datetime.strftime(self.date, "%Y%m%d")
@@ -282,7 +250,7 @@ class Event(models.Model):
         club = str(self.club) if self.club.id != DEFAULT_CLUB_ID else ""
         return f"{self.get_date()} {self.route.distance} км {self.route.name} {club}"     
 
-class Result(models.Model):
+class Result(AbstractModel):
     event = models.ForeignKey(Event, on_delete=models.CASCADE)
     homologation = models.CharField(max_length=50, blank=True) 
     randonneur = models.ForeignKey(Randonneur, on_delete=models.CASCADE) 
@@ -291,21 +259,6 @@ class Result(models.Model):
 
     class Meta:
         ordering = ['-event__date']
-
-    def get_admin_url(self, action):
-        if action == "add":
-            return (f"/admin/brevet_database/result/add/")
-        else: 
-            return (f"/admin/brevet_database/result/{self.pk}/{action}/")
-
-    def get_admin_url_change(self):
-        return self.get_admin_url("change")
-
-    def get_admin_url_add(self):
-        return self.get_admin_url("add")
-
-    def get_admin_url_delete(self):
-        return self.get_admin_url("delete")
 
     def get_date(self):
         return self.event.get_date()
@@ -316,7 +269,7 @@ class Result(models.Model):
     def __str__(self):
         return f"{self.get_date()} {self.event.route.distance} км {self.randonneur} {self.get_time()}"
 
-class Application(models.Model):
+class Application(AbstractModel):
     randonneur = models.ForeignKey(Randonneur, on_delete=models.CASCADE, blank=True) 
     name = models.CharField(max_length=50, blank=True)
     surname = models.CharField(max_length=50, blank=True)
@@ -326,21 +279,6 @@ class Application(models.Model):
     female = models.BooleanField(default=False, blank=True)
     event = models.ForeignKey(Event, on_delete=models.CASCADE, blank=False)
     date = models.DateTimeField(auto_now_add=True, blank=False)
-
-    def get_admin_url(self, action):
-        if action == "add":
-            return (f"/admin/brevet_database/application/add/")
-        else: 
-            return (f"/admin/brevet_database/application/{self.pk}/{action}/")
-
-    def get_admin_url_change(self):
-        return self.get_admin_url("change")
-
-    def get_admin_url_add(self):
-        return self.get_admin_url("add")
-
-    def get_admin_url_delete(self):
-        return self.get_admin_url("delete")    
     
     def __str__(self):
         datestring = datetime.strftime(self.date, "%H:%M %d.%m.%Y")
