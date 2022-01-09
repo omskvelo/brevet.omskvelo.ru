@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 
 {% block title %}
-Результаты | 
+Статистика | 
 {% endblock %}
 
 {% block content %}
@@ -11,6 +11,15 @@
 
     {% if years %}
         <div class="my-4">
+            {% if year %}
+                <a class="btn btn-light" href="{% url 'statistics_total' %}">
+                    {{ year_min_to_max }}
+                </a>     
+            {% else %}   
+                <a class="btn btn btn-dark" style = "background-color: #1D3652;" href="{% url 'statistics_total' %}">
+                    {{ year_min_to_max }}
+                </a>    
+            {% endif %} 
             {% for y in years %}
                 {% if year == y %}
                 <a class="btn btn btn-dark" style = "background-color: #1D3652;" href="{% url 'statistics' y %}">
@@ -21,12 +30,18 @@
                     {{ y }}
                 </a>
                 {% endif %}
-            {% endfor %}
+            {% endfor %}   
         </div>
+    {% endif %}
 
-        <h4 class="my-4">
-            Показатели за {{ year }} год
-        </h4>
+    {% if year %}
+    <h4 class="my-4">
+        Показатели за {{ year }} год
+    </h4>
+    {% else %}
+    <h4 class="my-4">
+        Показатели за {{ year_min_to_max }} годы
+    </h4>
     {% endif %}
 
     <p class="my-2">

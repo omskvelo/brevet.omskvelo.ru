@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 
 {% block title %}
-{{ route.name }} {{ route.distance }} км | 
+    {{ route.name }} {{ route.distance }} км | 
 {% endblock %}
 
 {% block content %}
@@ -73,4 +73,9 @@
         Внешний ресурс
     </a>
     {% endif %}
+
+    <a class="btn btn btn-dark" style = "background-color: #1D3652;" href="{{ route.get_stats_url }}">
+        Статистика
+    </a>
+
 {% endblock %}

@@ -44,7 +44,10 @@
     
     <p class = "my-3">
     {% if event.finished %}
-        Старт состоялся {{ event.get_date }} в {{ event.get_time }}. Протокол доступен по <a href="{{ event.get_protocol_url }}">ссылке</a>. 
+        Старт состоялся {{ event.get_date }} в {{ event.get_time }}. 
+        {% if default_club %}
+            Протокол доступен по <a href="{{ event.get_protocol_url }}">ссылке</a>. 
+        {% endif %}
     {% else %}
         Старт {{ event.get_date }} в {{ event.get_time }}.
     {% endif %}

@@ -161,6 +161,12 @@ class Route(AbstractModel):
         else:
             return reverse('route_id', kwargs={'route_id' : self.pk})
 
+    def get_stats_url(self):
+        if self.slug:
+            return reverse('stats_route', kwargs={'slug' : self.slug})
+        else:
+            return reverse('stats_route_id', kwargs={'route_id' : self.pk})
+
     def __str__(self):
         club = str(self.club) if self.club.id != DEFAULT_CLUB_ID else ""
         return f"{self.distance} км {self.name} {club}"     

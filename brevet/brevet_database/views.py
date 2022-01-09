@@ -128,14 +128,15 @@ def statistics(request, year=datetime.now().year, form="html"):
             "best_400" : best_400,
             "best_600" : best_600,
             "elite_dist" : elite_dist,
+            "years" : years,
+            "year_min_to_max": str(years[-1]) + " - " + str(years[0])
         }
         if year is not None:
             context.update({
                 "distance_rating" : distance_rating,
                 "year" : year,
-                "years" : years,
             })
-        return render(request, "brevet_database/statistics.html", context) 
+        return render(request, "brevet_database/stats_club.html", context) 
     elif form=="xlsx":
         response = file_generators.get_xlsx_club_stats(
             total_distance,
@@ -166,9 +167,12 @@ def event(request, distance, date):
     event = get_object_or_404(Event, route__distance=distance, date=date, )
     route = event.route
 
+    default_club = event.club.pk == DEFAULT_CLUB_ID
+
     context = {
         'event' : event,
         'route' : route,
+        'default_club' : default_club,
         }  
     return render(request, "brevet_database/event.html", context)  
 
@@ -229,7 +233,7 @@ def personal_stats_index(request):
     context = {
         "distance_rating" : distance_rating,
     }
-    return render(request, "brevet_database/personal_index.html", context)    
+    return render(request, "brevet_database/stats_personal_index.html", context)    
 
 
 @never_cache
@@ -278,7 +282,7 @@ def personal_stats(request, surname=None, name=None, uid=None, form="html"):
             'total_distance' : total_distance,
             'total_brevets' : total_brevets,
             }  
-        return render(request, "brevet_database/personal.html", context)   
+        return render(request, "brevet_database/stats_personal.html", context)   
     if form=="xlsx":
         response =  file_generators.get_xlsx_personal_stats(
             randonneur, 
@@ -296,3 +300,28 @@ def personal_stats(request, surname=None, name=None, uid=None, form="html"):
         return response
     else:
         raise Http404
+
+@never_cache
+def route_stats(request, slug=None, route_id=None):
+    if slug:
+        route = get_object_or_404(Route, slug=slug)
+    elif route_id:
+        route = get_object_or_404(Route, pk=route_id)
+    else:
+        raise Http404
+    
+    events = Event.objects.filter(route=route).order_by("date")
+    results = Result.objects.filter(event__route=route).order_by("time")
+
+    first_event = events.first
+    total_events = len(events)
+    total_results = len(results)
+
+    context = {
+        'route' : route,
+        'first_event' : first_event,
+        'results' : results,
+        'total_events' : total_events,
+        'total_results' : total_results,
+        }  
+    return render(request, "brevet_database/stats_route.html", context)  

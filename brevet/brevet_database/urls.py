@@ -20,6 +20,9 @@ urlpatterns = [
     path("route/<int:route_id>/", views.route, name="route_id"), 
     path("route/<str:slug>/", views.route, name="route"), # Alternative route url
 
+    path("stats/route/<int:route_id>/", views.route_stats, name="stats_route_id"), 
+    path("stats/route/<str:slug>/", views.route_stats, name="stats_route"), # Alternative route url
+
     path("stats/club/total/", views.statistics_total, name="statistics_total"),    
     path("stats/club/total/<str:form>/", views.statistics_total, name="statistics_total_f"), 
     path("stats/club/", views.statistics, name="statistics_default"),
