@@ -54,7 +54,11 @@
                     <th>Омологация</th>
                     <th>Рандоннёр</th>
                     <th>Время</th>
-                    <th>Медаль</th>
+                    <th>
+                        <div class="d-none d-md-block">
+                            Медаль
+                        </div>
+                    </th>
                     {% if user.is_superuser %}
                     <th></th>
                     {% endif %}
@@ -70,7 +74,11 @@
                             </a>
                         </td>
                         <td>{{ result.get_time }}</td>
-                        <td>{% if result.medal %} М {% endif %}</td>
+                        <td>
+                            <div class="d-none d-md-block">
+                                {% if result.medal %} М {% endif %}
+                            </div>
+                        </td>
                         {% if user.is_superuser %}
                             <td width="120">
                                 <a class="btn btn btn-light" href="{{ result.get_admin_url_change }}">   
