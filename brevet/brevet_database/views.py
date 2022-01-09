@@ -3,6 +3,7 @@ from datetime import datetime
 from django.http import Http404
 from django.shortcuts import get_object_or_404, get_list_or_404, redirect, render
 from django.views.decorators.cache import cache_page, never_cache
+from django.db import connection
 
 import babel.dates
 
@@ -17,6 +18,7 @@ def protocol(request, distance, date, upload_success=None, form="html"):
         date = datetime.strptime(date, "%Y%m%d")
     except Exception:
         raise Http404
+ 
 
     event = get_object_or_404(Event, route__distance=distance, date=date)
     results = get_list_or_404(Result.objects.order_by("randonneur__russian_surname","randonneur__russian_name"), event=event)
@@ -44,18 +46,24 @@ def protocol(request, distance, date, upload_success=None, form="html"):
     if form == "xlsx":
         response = file_generators.get_xlsx_protocol(event,results,f"{event.date.year}-{event.date.month}-{event.date.day}_{distance}") 
 
+
+
     return response
 
 @never_cache
 def protocol_index(request, year=datetime.now().year):
-    events = get_list_or_404(Event, finished=True, club=DEFAULT_CLUB_ID, date__year=year)
     years = get_event_years()
+    if year not in years:
+        year = max(years)
+    events = get_list_or_404(Event, finished=True, club=DEFAULT_CLUB_ID, date__year=year)
 
     context = {
         "events" : events,
         "year" : year,
         "years" : years,
     }
+
+
     return render(request, "brevet_database/protocol_index.html", context)
 
 @never_cache
@@ -65,11 +73,13 @@ def statistics_total(request, form="html"):
 # @cache_page(60*60)
 @never_cache
 def statistics(request, year=datetime.now().year, form="html"):
+    years = get_event_years()
     if year:
+        if year not in years:
+            year = max(years)
         results = get_list_or_404(Result, event__finished=True, event__date__year=year)
     else:
         results = get_list_or_404(Result, event__finished=True)
-    years = get_event_years()
 
     # LRM, SR600, 1000
     elite_dist = [x for x in results if x.event.route.lrm or x.event.route.sr600 or x.event.route.distance == 1000] 
@@ -103,6 +113,8 @@ def statistics(request, year=datetime.now().year, form="html"):
     total_sr = len(sr)
     total_randonneurs = len(randonneurs)
     total_distance = sum([result.event.route.distance for result in results])
+
+
 
     if form=="html":
         context = {
