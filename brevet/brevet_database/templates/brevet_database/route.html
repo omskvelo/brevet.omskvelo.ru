@@ -5,7 +5,7 @@
 {% endblock %}
 
 {% block content %}
-    <h2 class="my-5 mx-3">
+    <h2 class="my-5">
         {{ route.name }}
         {% if user.is_superuser %}
             <a class="btn btn btn-light" href="{{ route.get_admin_url_change }}">   
@@ -22,7 +22,7 @@
             </a>
         {% endif %}
     </h2>
-    <h4 class="text-muted my-3 mx-3">{{ route.distance }} км </h4>
+    <h4 class="text-muted my-3">{{ route.distance }} км </h4>
 
     {% if route.get_controls %}
         <ul class = "my-3">
@@ -39,7 +39,7 @@
     {% endif %}
     
     {% if route.image %}
-        <img src="{{ route.image.url }}" class = "m-3"/>
+        <img src="{{ route.image.url }}" class = "my-3"/>
     {% endif %}
 
     {% if route.get_text %}
@@ -69,12 +69,12 @@
     {% endif %}
 
     {% if route.external_xref %}
-    <a class="btn btn btn-dark" style = "background-color: #1D3652;" href="{{ route.external_xref }}">
+    <a class="btn btn-dark" style = "background-color: #1D3652;" href="{{ route.external_xref }}">
         Внешний ресурс
     </a>
     {% endif %}
 
-    <a class="btn btn btn-dark" style = "background-color: #1D3652;" href="{{ route.get_stats_url }}">
+    <a class="btn btn-dark" style = "background-color: #1D3652;" href="{{ route.get_stats_url }}">
         Статистика
     </a>
 

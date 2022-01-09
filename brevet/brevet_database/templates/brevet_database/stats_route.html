@@ -5,25 +5,25 @@
 {% endblock %}
 
 {% block content %}
-    <h2 class="my-5 mx-3">
+    <h2 class="my-5">
         {{ route.name }}
     </h2>
-    <h4 class="text-muted my-3 mx-3">
+    <h4 class="text-muted my-3">
         {{ route.distance }} км 
     </h4>
     {% if first_event %}
-        <h5 class="text-muted mx-3">
+        <h5 class="text-muted">
             Первый бревет: 
             <a href = "{{ first_event.get_absolute_url }}">
                 {{ first_event.get_date }}
             </a>
         </h5>
-        <h5 class="text-muted mx-3">
+        <h5 class="text-muted">
             Всего бреветов: {{ total_events }} 
         </h5>
 
         {% if results %}
-            <h5 class="my-4 mx-3">
+            <h5 class="my-4">
                 Результаты: {{ total_results }} 
 
             </h5>    
