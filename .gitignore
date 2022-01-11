@@ -147,6 +147,9 @@ cython_debug/
 # Collected static
 staticfiles/
 
+# Static images
+**/static/*/img/*
+
 # Media files
 uploads/
 

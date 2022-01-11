@@ -77,7 +77,7 @@ def get_xlsx_protocol(event, results, filename):
     workbook.close()
     file.seek(0)
 
-    response = HttpResponse(file.read(), content_type="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")
+    response = HttpResponse(file, content_type="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")
     response['Content-Disposition'] = f"attachment; filename={filename}.xlsx"
     file.close()
 
@@ -152,7 +152,7 @@ def get_xlsx_personal_stats(
     workbook.close()
     file.seek(0)
 
-    response = HttpResponse(file.read(), content_type="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")
+    response = HttpResponse(file, content_type="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")
     response['Content-Disposition'] = f"attachment; filename={filename}.xlsx"
     file.close()
 
@@ -246,7 +246,7 @@ def get_xlsx_club_stats(
     workbook.close()
     file.seek(0)
 
-    response = HttpResponse(file.read(), content_type="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")
+    response = HttpResponse(file, content_type="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")
     response['Content-Disposition'] = f"attachment; filename={filename}.xlsx"
     file.close()
 

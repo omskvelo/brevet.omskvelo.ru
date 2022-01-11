@@ -7,17 +7,22 @@ from brevet_database.models import search as db_search
 def search_results(request):
     query = request.GET.get('q',"")
 
-    news = []
-    # news = BlogPost.search(query)
-    events = db_search(Event,query)
-    routes = db_search(Route,query)
-    randonneurs = db_search(Randonneur,query)
+    if query:
+        news = []
+        # news = BlogPost.search(query)
+        events = db_search(Event,query)
+        routes = db_search(Route,query)
+        randonneurs = db_search(Randonneur,query)
 
-    context = {
+        context = {
         "query" : query,
         "news" : news,
         "events" : events,
         "routes" : routes,
         "randonneurs" : randonneurs,
-    }
+        }
+    else:
+        context = {}
+
+
     return render(request, "search/search_results.html", context)
