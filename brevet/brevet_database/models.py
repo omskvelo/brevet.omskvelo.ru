@@ -320,7 +320,7 @@ def get_randonneurs(year=None):
     return list(randonneurs)
 
     
-def search(object_class, query):
+def search(object_class, query:str):
     # NOTE: Since we use SqLite and mostly cyrrilic characters, __icontains does not work as expected: https://docs.djangoproject.com/en/4.0/ref/databases/#sqlite-notes
 
     if object_class is Randonneur:       
@@ -348,16 +348,17 @@ def search(object_class, query):
         results = object_class.objects.filter(name__contains=query.capitalize())
         results |= object_class.objects.filter(name__contains=query.lower())
 
-        try: 
-            # Search distance:
-            results |= object_class.objects.filter(route__distance=int(query), route__active=True)
-            results |= results.exclude(route__name="")
+        if query.isdigit():
+            try: 
+                # Search distance:
+                results |= object_class.objects.filter(route__distance=int(query), route__active=True)
+                results |= results.exclude(route__name="")
 
-            # Search year
-            if int(query) in range (2010,2100):
-               results |= object_class.objects.filter(date__year=int(query))
-        except ValueError:
-            pass 
+                # Search year
+                if int(query) in range (2010,2100):
+                    results |= object_class.objects.filter(date__year=int(query))
+            except ValueError:
+                pass 
 
 
     elif object_class is Route:
@@ -367,11 +368,12 @@ def search(object_class, query):
         results |= object_class.objects.filter(name__contains=query.lower())
         results |= object_class.objects.filter(name=query.title())
 
-        try: 
-            # Search distance:
-            results |= object_class.objects.filter(distance=int(query), active=True)
-        except ValueError:
-            pass   
+        if query.isdigit():
+            try: 
+                # Search distance:
+                results |= object_class.objects.filter(distance=int(query), active=True)
+            except ValueError:
+                pass   
 
 
     return list(results)
