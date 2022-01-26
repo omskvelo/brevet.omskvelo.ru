@@ -1,7 +1,10 @@
 from brevet_database.models import Randonneur, Event, Route
 
-def search(class_name:str, query:str):
+def search(class_name:str, query:str, recursive=False):
     # NOTE: Since we use SqLite and mostly cyrrilic characters, __icontains does not work as expected: https://docs.djangoproject.com/en/4.0/ref/databases/#sqlite-notes
+
+    if not query.isalnum():
+        return []
 
     if class_name == 'Randonneur':  
         object_class = Randonneur
@@ -58,5 +61,29 @@ def search(class_name:str, query:str):
             except ValueError:
                 pass   
 
+    results = list(results)
 
-    return list(results)
+    if not recursive:
+        results = results + search(class_name, query=convert_layout(query), recursive=True)
+
+    return results
+
+
+layout_pairs = {
+    'q' : 'й', 'w' : 'ц', 'e' : 'у', 'r' : 'к', 't' : 'е', 'y' : 'н', 'u' : 'г', 
+    'i' : 'ш', 'o' : 'щ', 'p' : 'з', '[' : 'х', ']' : 'ъ', 'a' : 'ф', 's' : 'ы', 
+    'd' : 'в', 'f' : 'а', 'g' : 'п', 'h' : 'р', 'j' : 'о', 'k' : 'л', 'l' : 'д', 
+    ';' : 'ж','\'' : 'э', 'z' : 'я', 'x' : 'ч', 'c' : 'с', 'v' : 'м', 'b' : 'и', 
+    'n' : 'т', 'm' : 'ь', ',' : 'б', '.' : 'ю',
+
+    'й' : 'q', 'ц' : 'w', 'у' : 'e', 'к' : 'r', 'е' : 't', 'н' : 'y', 'г' : 'u', 
+    'ш' : 'i', 'щ' : 'o', 'з' : 'p', 'х' : '[', 'ъ' : ']', 'ф' : 'a', 'ы' : 's', 
+    'в' : 'd', 'а' : 'f', 'п' : 'g', 'р' : 'h', 'о' : 'j', 'л' : 'k', 'д' : 'l', 
+    'ж' : ';', 'э' :'\'', 'я' : 'z', 'ч' : 'x', 'с' : 'c', 'м' : 'v', 'и' : 'b', 
+    'т' : 'n', 'ь' : 'm', 'б' : ',', 'ю' : '.', 
+}
+
+def convert_layout(s:str):
+    """ Converts between ru-RU and rn-US keyboard layouts """
+    s = s.lower()
+    return "".join([layout_pairs[letter] for letter in s if letter in layout_pairs])
