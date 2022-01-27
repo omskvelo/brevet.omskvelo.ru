@@ -10,6 +10,8 @@ xlsxwriter = "==3.0.2"
 babel = "==2.9.1"
 pillow = "==8.4.0"
 xlrd = "*"
+django-phonenumber-field = "*"
+phonenumbers = "*"
 
 [dev-packages]
 
