@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'brevet_database',
     'search',
     'users',
+    'phonenumber_field',
 ]
 
 CACHES = {
@@ -133,6 +134,8 @@ USE_L10N = True
 
 USE_TZ = True
 
+PHONENUMBER_DEFAULT_REGION = "RU"
+PHONENUMBER_DEFAULT_FORMAT = "NATIONAL"
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.2/howto/static-files/
