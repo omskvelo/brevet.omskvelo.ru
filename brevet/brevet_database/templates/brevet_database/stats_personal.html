@@ -20,6 +20,7 @@
     {% if results %}
     <h5 class="text-muted">Общая дистанция: {{ total_distance }} км</h5>
     <h5 class="text-muted">Всего бреветов: {{ total_brevets }} </h5>
+    <h5 class="text-muted">Первое участие: {{ first_brevet.get_date }} {{ first_brevet.route.distance }} км <a href = "{{ first_brevet.event.get_absolute_url }}">{{ first_brevet.event.route.name }}</a></h5>
     <h5 class="text-muted">Годы активности: {{ years_active }} </h5>
     {% if sr %}
     <h5 class="text-muted">Суперрандоннёр: {{ sr }} </h5>

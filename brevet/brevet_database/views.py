@@ -249,6 +249,8 @@ def personal_stats(request, surname=None, name=None, uid=None, form="html"):
 
     results = sorted(randonneur.get_results(), key=lambda x: x.event.date, reverse=True)
     
+    first_brevet = results[-1]
+    
     total_distance = randonneur.get_total_distance()
     total_brevets = len(results)
     
@@ -278,6 +280,7 @@ def personal_stats(request, surname=None, name=None, uid=None, form="html"):
             'best_400' : best_400[0] if best_400 else "",
             'best_600' : best_600[0] if best_600 else "",
             'years_active' : years_active,
+            'first_brevet' : first_brevet,
             'sr' : sr,
             'total_distance' : total_distance,
             'total_brevets' : total_brevets,
