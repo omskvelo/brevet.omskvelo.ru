@@ -165,3 +165,9 @@ activate/
 
 # Dumps
 *.json
+
+# Unrelated files - images, GPX tracks, etc.
+etc/
+
+# Credentials
+**/settings_secret.py

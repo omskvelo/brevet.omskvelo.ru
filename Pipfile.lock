@@ -50,11 +50,11 @@
         },
         "phonenumbers": {
             "hashes": [
-                "sha256:2b8c7a7ffac4fe2be3d8bf20dad316ea1292f27422c9e18b1f3cd16734d4a5ed",
-                "sha256:f477da623a51cba084567d6a67b1882a8aaaf3e7beadad655f8613a8f887ac62"
+                "sha256:1c8270a2e257d6c65458a42283f82d3eca7f7b9d925454a6966e2f04df75e1cf",
+                "sha256:386ea186019e8f4d646e48e9da9c3e786c254cfb1bd541cc0a8d0a2ccb85d3ca"
             ],
             "index": "pypi",
-            "version": "==8.12.41"
+            "version": "==8.12.43"
         },
         "pillow": {
             "hashes": [
