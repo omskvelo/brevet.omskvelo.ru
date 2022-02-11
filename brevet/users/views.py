@@ -11,7 +11,7 @@ from .tokens import account_activation_token
 from .forms import SignUpForm
 from .models import User
 
-# Create your views here.
+
 def signup(request):
     if request.method == 'POST':
         form = SignUpForm(request.POST)
