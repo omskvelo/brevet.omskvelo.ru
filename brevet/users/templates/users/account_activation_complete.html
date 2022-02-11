@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+
+{% block title %}
+    
+{% endblock %}
+
+{% block content %}
+    {% if validlink %}
+        <p>Ваша учетная запись успешно активирована.</p>
+    {% else %}
+        <p>Что-то пошло не так.</p>
+    {% endif %}
+{% endblock %}
