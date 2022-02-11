@@ -1,5 +1,10 @@
 {% extends "base.html" %}
 
+{% block css %}
+  {% load static %}
+  <link href="{% static '/brevet/css/brevet_colors.css' %}" rel="stylesheet">
+{% endblock %}
+
 {% block title %}
 Календарь | 
 {% endblock %}

@@ -1,6 +1,9 @@
 <nav class="navbar navbar-expand-xl navbar-dark " style = "background-color: #1D3652;">
   <div class="container-xl">
-    <a class="navbar-brand" href="https://omskvelo.ru"><img src="https://omskvelo.ru/uploads/themes/monthly_2018_04/top_9red.png.f44ce3662485a4c01679489943182799.png"></a>
+    <a class="navbar-brand" href="https://omskvelo.ru">
+      {% load static %}
+      <img src="{% static '/brevet/img/logo.png' %}">
+      </a>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>

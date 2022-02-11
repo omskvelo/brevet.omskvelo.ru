@@ -20,9 +20,9 @@ from . import views
 
 urlpatterns = [
     path('', views.index, name = 'index'),
-    path('admin/', admin.site.urls),
     path('faq/', views.faq, name = 'faq'),
     path('database/', include ('brevet_database.urls')),
     path('search/', include ('search.urls')),
     path('users/', include ('users.urls')),
+    path('admin/', admin.site.urls),
 ]
