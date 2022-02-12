@@ -22,7 +22,7 @@ def signup(request):
             user.save()
             current_site = get_current_site(request)
             subject = f'Активируйте свою учетную запись на {current_site}'
-            message = render_to_string('users/account_activation_email.html', {
+            message = render_to_string('registration/account_activation_email.html', {
                 'protocol' : request.scheme,
                 'user': user,
                 'domain': current_site.domain,
@@ -34,7 +34,7 @@ def signup(request):
             return redirect('account_activation_sent')
     else:
         form = SignUpForm()
-    return render(request, 'users/signup.html', {'form': form})
+    return render(request, 'registration/signup.html', {'form': form})
 
 
 def activate(request, uidb64, token):
@@ -49,14 +49,14 @@ def activate(request, uidb64, token):
         user.profile.email_confirmed = True
         user.save()
         login(request, user)
-        return redirect('index')
+        return render(request, 'registration/account_activation_complete.html')
     else:
-        return render(request, 'users/account_activation_invalid.html')
+        return render(request, 'registration/account_activation_invalid.html')
 
 
 def activation_sent(request):
     try:
         context = { 'email': request.session['user_email'] }
-        return render(request, 'users/account_activation_sent.html', context=context)
+        return render(request, 'registration/account_activation_sent.html', context=context)
     except KeyError:
         raise Http404
