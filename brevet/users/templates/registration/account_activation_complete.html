@@ -1,9 +1,15 @@
-{% extends "base.html" %}
+{% extends "registration/registration_base.html" %}
 
 {% block title %}
-    
+    Сброс пароля | 
 {% endblock %}
 
 {% block content %}
-        <p>Ваша учетная запись успешно активирована.</p>
+  <h4 class="fw-normal mb-3">
+    Ваша учетная запись успешно активирована
+  </h4>
+  <a class="w-100 btn btn-lg btn-primary my-2" href="{% url 'login' %}">
+    Войти
+  </a>
+
 {% endblock %}

@@ -1,9 +1,17 @@
-{% extends "base.html" %}
+{% extends "registration/registration_base.html" %}
 
 {% block title %}
-    
+    Регистрация | 
 {% endblock %}
 
 {% block content %}
-        <p>Что-то пошло не так. Активация не выполнена.</p>
+  <h4 class="mb-3 fw-normal">
+    Невозможно активировать учётную запись.
+  </h4>
+  <p>
+    Возможно, вы уже проходили по этой ссылке.
+  </p>
+  <p>
+    <a href="{% url 'login' %}">Войти?</a>
+  </p>
 {% endblock %}

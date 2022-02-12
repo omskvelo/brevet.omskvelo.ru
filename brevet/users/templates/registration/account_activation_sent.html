@@ -1,9 +1,13 @@
-{% extends "base.html" %}
+{% extends "registration/registration_base.html" %}
 
 {% block title %}
-    
+    Регистрация | 
 {% endblock %}
 
 {% block content %}
-    <p>На ваш электронный адрес {{ email }} направлено письмо для подтверждения адреса.</p>
+  <p>На электронный адрес </p>
+  <h4 class="fw-normal">
+    {{ email }}
+  </h4>
+  <p>направлено письмо для подтверждения адреса.</p>
 {% endblock %}

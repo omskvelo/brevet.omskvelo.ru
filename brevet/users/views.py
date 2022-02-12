@@ -16,7 +16,6 @@ def signup(request):
     if request.method == 'POST':
         form = SignUpForm(request.POST)
         if form.is_valid():
-            print ('Form is valid')
             user = form.save(commit=False)
             user.is_active = False
             user.save()
@@ -48,7 +47,7 @@ def activate(request, uidb64, token):
         user.is_active = True
         user.profile.email_confirmed = True
         user.save()
-        login(request, user)
+        # login(request, user)
         return render(request, 'registration/account_activation_complete.html')
     else:
         return render(request, 'registration/account_activation_invalid.html')

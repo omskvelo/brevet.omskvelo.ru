@@ -1,14 +1,42 @@
-{% extends 'base.html' %}
+{% extends "registration/registration_base.html" %}
 
 {% block title %}
     Регистрация | 
 {% endblock %}
 
 {% block content %}
-  <h2>Sign up</h2>
   <form method="post">
     {% csrf_token %}
-    {{ form.as_p }}
-    <button type="submit">Sign up</button>
+    <h3 class="mb-3 fw-normal">Регистрация</h3>
+    <div class="form-floating">
+      <input type="email" name="email"  class="form-control mb-2" id="floatingInput" placeholder="email@mail.com" autocomplete="email">
+      <label for="floatingInput">Email</label>
+    </div>
+    <p>{{ form.email.errors }}</p>
+    <div class="form-floating">
+      <input type="text" name="first_name"  class="form-control mb-2" id="floatingInput" placeholder="John" autocomplete="given-name">
+      <label for="floatingInput">Имя</label>
+    </div>
+    <div class="form-floating">
+      <input type="text" name="last_name"  class="form-control mb-2" id="floatingInput" placeholder="Smith" autocomplete="family-name">
+      <label for="floatingInput">Фамилия</label>
+    </div>
+    <div class="form-floating">
+      <input type="tel" name="phone_number"  class="form-control mb-2" id="floatingInput" placeholder="88002000600" autocomplete="tel">
+      <label for="floatingInput">Телефон</label>
+    </div>
+    <p>{{ form.phone_number.errors }}</p>
+    <div class="form-floating">
+      <input type="password" name="password1"  class="form-control joined_field_upper" id="floatingPassword" placeholder="password" autocomplete="new-password">
+      <label for="floatingInput">Пароль</label>
+    </div>
+    <div class="form-floating">
+      <input type="password" name="password2" class="form-control joined_field_lower" id ="floatingPassword" placeholder="password" autocomplete="new-password"> 
+      <label for="floatingPassword">Подтверждение</label>
+    </div>
+    <p>{{ form.password1.errors }}
+    {{ form.password2.errors }}</p>
+    <button class="w-100 btn btn-lg btn-primary" type="submit">Зарегистрироваться</button>
   </form>
-{% endblock %}
+  <a class="w-100 btn btn-lg btn-secondary my-2" href="{% url 'login' %}">Войти</a>
+{% endblock %} 
