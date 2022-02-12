@@ -9,34 +9,42 @@
     {% csrf_token %}
     <h3 class="mb-3 fw-normal">Регистрация</h3>
     <div class="form-floating">
-      <input type="email" name="email"  class="form-control mb-2" id="floatingInput" placeholder="email@mail.com" autocomplete="email">
-      <label for="floatingInput">Email</label>
+      <input type="email" name="email"  class="form-control mb-2" id="floatingEmail" placeholder="email@mail.com" autocomplete="email">
+      <label for="floatingEmail">Email</label>
     </div>
-    <p>{{ form.email.errors }}</p>
+    {{ form.email.errors }}
     <div class="form-floating">
-      <input type="text" name="first_name"  class="form-control mb-2" id="floatingInput" placeholder="John" autocomplete="given-name">
-      <label for="floatingInput">Имя</label>
+      <input type="text" name="first_name"  class="form-control mb-2" id="floatingFirstName" placeholder="John" autocomplete="given-name">
+      <label for="floatingFirstName">Имя</label>
     </div>
+    {{ form.first_name.errors }}
     <div class="form-floating">
-      <input type="text" name="last_name"  class="form-control mb-2" id="floatingInput" placeholder="Smith" autocomplete="family-name">
-      <label for="floatingInput">Фамилия</label>
+      <input type="text" name="last_name"  class="form-control mb-2" id="floatingLastName" placeholder="Smith" autocomplete="family-name">
+      <label for="floatingLastName">Фамилия</label>
     </div>
+    {{ form.last_name.errors }}
     <div class="form-floating">
-      <input type="tel" name="phone_number"  class="form-control mb-2" id="floatingInput" placeholder="88002000600" autocomplete="tel">
-      <label for="floatingInput">Телефон</label>
+      <input type="tel" name="phone_number"  class="form-control mb-2" id="floatingTel" placeholder="88002000600" autocomplete="tel">
+      <label for="floatingTel">Телефон</label>
     </div>
-    <p>{{ form.phone_number.errors }}</p>
+    {% if form.phone_number.errors %}
+    {{ form.phone_number.errors }}
+    <p>
+      Телефонный номер виден только организатору и предназначен для экстренной связи с участником.
+    </p>
+    {% endif %}
     <div class="form-floating">
-      <input type="password" name="password1"  class="form-control joined_field_upper" id="floatingPassword" placeholder="password" autocomplete="new-password">
-      <label for="floatingInput">Пароль</label>
+      <input type="password" name="password1"  class="form-control joined_field_upper" id="floatingPassword1" placeholder="password" autocomplete="new-password">
+      <label for="floatingPassword1">Пароль</label>
     </div>
+    {{ form.password1.errors }}
     <div class="form-floating">
-      <input type="password" name="password2" class="form-control joined_field_lower" id ="floatingPassword" placeholder="password" autocomplete="new-password"> 
-      <label for="floatingPassword">Подтверждение</label>
+      <input type="password" name="password2" class="form-control joined_field_lower" id ="floatingPassword2" placeholder="password" autocomplete="new-password"> 
+      <label for="floatingPassword2">Подтверждение</label>
     </div>
-    <p>{{ form.password1.errors }}
-    {{ form.password2.errors }}</p>
+    {{ form.password2.errors }}
     <button class="w-100 btn btn-lg btn-primary" type="submit">Зарегистрироваться</button>
   </form>
   <a class="w-100 btn btn-lg btn-secondary my-2" href="{% url 'login' %}">Войти</a>
-{% endblock %} 
+
+  {% endblock %} 
