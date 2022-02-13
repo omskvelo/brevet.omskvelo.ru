@@ -18,14 +18,24 @@
     <title>
       {% block title %}{% endblock %} Цепная Реакция 
     </title>
+
     <style>
+      :root {
+        --background: #1D3652;
+      }
+
       .header {
         display: flex;
         flex-direction: column;
         align-items: center;
         width: 100%;
 
-        background-color: #1D3652;
+        background-color: var(--background);
+      }
+
+      .container-nav {
+        display: block;
+        width: 100%;
       }
 
       .container {
@@ -44,13 +54,6 @@
       .container-bottom {
         padding-top: 10px;
         padding-bottom: 10px;
-      }
-
-      .container-body {
-        display: block;
-        margin: 0 auto;
-        max-width: 1920px;
-        padding: 20px 10%;
       }
 
       .header__heading {
@@ -87,13 +90,25 @@
         color: white;
       }
 
+      .navbar-toggler-icon {
+        font-size: 1.5em;
+      }
+
+      .navbar-external-user {
+        justify-content: flex-end;
+      }
+
       #events {
         padding-left: 0;
       }
 
-      #navbarSupportedContent {
-        z-index: 100;
+      .container-body {
+        display: block;
+        margin: 0 auto;
+        max-width: 1920px;
+        padding: 20px 10%;
       }
+
     </style>
   </head>
   <body>
