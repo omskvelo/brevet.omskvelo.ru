@@ -1,5 +1,7 @@
-from django.contrib.auth import login
+from django.contrib.auth import login, update_session_auth_hash
+from django.contrib.auth.forms import PasswordChangeForm
 from django.contrib.sites.shortcuts import get_current_site
+from django.contrib import messages
 from django.http import Http404
 from django.shortcuts import render, redirect
 from django.utils.encoding import force_bytes
@@ -59,3 +61,19 @@ def activation_sent(request):
         return render(request, 'registration/account_activation_sent.html', context=context)
     except KeyError:
         raise Http404
+
+def change_password(request):
+    if request.method == 'POST':
+        form = PasswordChangeForm(request.user, request.POST)
+        if form.is_valid():
+            user = form.save()
+            update_session_auth_hash(request, user)  # Important!
+            messages.success(request, 'Пароль успешно изменен.')
+            return redirect('index')
+        else:
+            messages.error(request, 'Невозможно сменить пароль.')
+    else:
+        form = PasswordChangeForm(request.user)
+    return render(request, 'registration/change_password.html', {
+        'form': form
+    })
