@@ -12,7 +12,7 @@ from .managers import CustomUserManager
 class User(AbstractUser):
     username = None
     email = models.EmailField(unique=True)
-    randonneur = models.ForeignKey(Randonneur, on_delete=models.PROTECT, default=239)
+    randonneur = models.ForeignKey(Randonneur, on_delete=models.PROTECT)
     phone_number = PhoneNumberField()
     
     USERNAME_FIELD = 'email'

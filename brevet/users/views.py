@@ -7,13 +7,14 @@ from django.shortcuts import render, redirect
 from django.utils.encoding import force_bytes
 from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 from django.template.loader import render_to_string
+from django.views.decorators.cache import never_cache
+
+
 from .forms import SignUpForm
 from .tokens import account_activation_token
-
-from .forms import SignUpForm
 from .models import User
 
-
+@never_cache
 def signup(request):
     if request.method == 'POST':
         form = SignUpForm(request.POST)
@@ -37,7 +38,7 @@ def signup(request):
         form = SignUpForm()
     return render(request, 'registration/signup.html', {'form': form})
 
-
+@never_cache
 def activate(request, uidb64, token):
     try:
         uid = urlsafe_base64_decode(uidb64)
@@ -54,14 +55,15 @@ def activate(request, uidb64, token):
     else:
         return render(request, 'registration/account_activation_invalid.html')
 
-
+@never_cache
 def activation_sent(request):
     try:
-        context = { 'email': request.session['user_email'] }
+        context = {'email': request.session['user_email']}
         return render(request, 'registration/account_activation_sent.html', context=context)
     except KeyError:
         raise Http404
-
+        
+@never_cache
 def change_password(request):
     if request.method == 'POST':
         form = PasswordChangeForm(request.user, request.POST)
@@ -74,6 +76,9 @@ def change_password(request):
             messages.error(request, 'Невозможно сменить пароль.')
     else:
         form = PasswordChangeForm(request.user)
-    return render(request, 'registration/change_password.html', {
-        'form': form
-    })
+        context = {'form': form}
+    return render(request, 'registration/change_password.html', context)
+
+@never_cache
+def profile(request):
+        return render(request, 'registration/profile.html')
