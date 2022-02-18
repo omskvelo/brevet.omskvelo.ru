@@ -12,21 +12,21 @@
     {% if years %}
         <div class="my-4">
             {% if year %}
-                <a class="btn btn-light" href="{% url 'statistics_total' %}">
+                <a class="btn btn-light me-1 mb-1" href="{% url 'statistics_total' %}">
                     {{ year_min_to_max }}
                 </a>     
             {% else %}   
-                <a class="btn btn btn-dark" style = "background-color: #1D3652;" href="{% url 'statistics_total' %}">
+                <a class="btn btn btn-dark me-1 mb-1" style = "background-color: #1D3652;" href="{% url 'statistics_total' %}">
                     {{ year_min_to_max }}
                 </a>    
             {% endif %} 
             {% for y in years %}
                 {% if year == y %}
-                <a class="btn btn btn-dark" style = "background-color: #1D3652;" href="{% url 'statistics' y %}">
+                <a class="btn btn btn-dark me-1 mb-1" style = "background-color: #1D3652;" href="{% url 'statistics' y %}">
                     {{ y }}
                 </a>
                 {% else %}
-                <a class="btn btn-light" href="{% url 'statistics' y %}">
+                <a class="btn btn-light me-1 mb-1" href="{% url 'statistics' y %}">
                     {{ y }}
                 </a>
                 {% endif %}
