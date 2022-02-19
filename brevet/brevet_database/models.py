@@ -1,4 +1,4 @@
-from datetime import datetime, time
+from datetime import datetime, time, timedelta
 
 from django.db import models
 from django.urls import reverse
@@ -198,6 +198,18 @@ class Event(AbstractModel):
         date = datetime.strftime(self.date, "%Y%m%d")
         return reverse('protocol', kwargs={'distance' : self.route.distance, 'date' : date})
 
+    def get_register_url(self):
+        date = datetime.strftime(self.date, "%Y%m%d")
+        return reverse('event_register', kwargs={'distance' : self.route.distance, 'date' : date})
+
+    def get_cancel_registration_url(self):
+        date = datetime.strftime(self.date, "%Y%m%d")
+        return reverse('event_cancel_registration', kwargs={'distance' : self.route.distance, 'date' : date})
+
+    def get_dnf_url(self):
+        date = datetime.strftime(self.date, "%Y%m%d")
+        return reverse('event_dnf', kwargs={'distance' : self.route.distance, 'date' : date})
+
     def get_protocol_xlsx_url(self):
         date = datetime.strftime(self.date, "%Y%m%d")
         return reverse('protocol_f', kwargs={'distance' : self.route.distance, 'date' : date, "form" : "xlsx"})  
@@ -205,6 +217,20 @@ class Event(AbstractModel):
     def get_protocol_upload_success_url(self):
         date = datetime.strftime(self.date, "%Y%m%d")
         return reverse("protocol_upload_success", kwargs={'distance' : self.route.distance, 'date' : date})
+
+    def get_applications(self):
+        applications = list(Application.objects.filter(event=self))
+        return applications
+
+    def get_applicants(self):
+        applications = list(Application.objects.filter(event=self))
+        applicants = [application.user for application in applications]
+        return applicants
+
+    def application_allowed(self):
+        timedelta_block = timedelta(hours = 12)
+        datetime_start = datetime.combine(self.date, self.time)
+        return datetime_start - timedelta_block > datetime.now()
 
     def is_homologated(self):
         results = list(Result.objects.filter(event=self))
@@ -276,19 +302,15 @@ class Result(AbstractModel):
         return f"{self.get_date()} {self.event.route.distance} км {self.randonneur} {self.get_time()}"
 
 class Application(AbstractModel):
-    randonneur = models.ForeignKey(Randonneur, on_delete=models.CASCADE, blank=True) 
-    name = models.CharField(max_length=50, blank=True)
-    surname = models.CharField(max_length=50, blank=True)
-    russian_name = models.CharField(max_length=50, blank=True)
-    russian_surname = models.CharField(max_length=50, blank=True) 
-    club = models.ForeignKey(Club, on_delete=models.PROTECT, blank=True, default=DEFAULT_CLUB_ID)
-    female = models.BooleanField(default=False, blank=True)
+    user = models.ForeignKey("users.User", on_delete=models.CASCADE)
     event = models.ForeignKey(Event, on_delete=models.CASCADE, blank=False)
     date = models.DateTimeField(auto_now_add=True, blank=False)
+    dnf = models.BooleanField(default=False)
+    result = models.ForeignKey(Result, null=True, default=None, on_delete=models.SET_NULL)
     
     def __str__(self):
         datestring = datetime.strftime(self.date, "%H:%M %d.%m.%Y")
-        return f"Заявка №{self.id} от {datestring} на бревет {self.event}"
+        return f"{datestring} - заявка от {self.user.get_display_name()} на бревет {self.event}"
 
 def get_event_years(reverse=True, finished=True):
     """Returns a list of event years for use in selectors"""

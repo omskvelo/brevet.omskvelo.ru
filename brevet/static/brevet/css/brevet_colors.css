@@ -1,3 +1,8 @@
+.card-brm {
+    width: 20rem; 
+    height: 10rem;
+}
+
 .brm_200 {
     background-color: #FFED93;
     border-color: #FFD800;

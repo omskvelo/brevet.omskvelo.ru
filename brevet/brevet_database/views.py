@@ -169,12 +169,70 @@ def event(request, distance, date):
 
     default_club = event.club.pk == DEFAULT_CLUB_ID
 
+    if request.method == 'POST':
+        form = AddResultForm(request.POST)
+        # if form.is_valid():
+            # upload_status, upload_exception = event.update_protocol_from_xls(request.FILES['xls'])
+            # if upload_status:
+                # return redirect(event.get_protocol_upload_success_url())
+    else:
+        form = AddResultForm()
+
     context = {
         'event' : event,
         'route' : route,
         'default_club' : default_club,
+        'form' : form,
         }  
     return render(request, "brevet_database/event.html", context)  
+
+def event_register(request, distance, date):
+    if request.user.is_authenticated:
+        try:
+            date = datetime.strptime(date, "%Y%m%d")
+        except Exception:
+            raise Http404
+        event = get_object_or_404(Event, route__distance=distance, date=date, )
+
+        application = Application()
+        application.event = event
+        application.user = request.user
+        application.save()
+
+        return redirect(event)
+    else:
+        raise Http404
+
+def event_cancel_registration(request, distance, date):
+    if request.user.is_authenticated:
+        try:
+            date = datetime.strptime(date, "%Y%m%d")
+        except Exception:
+            raise Http404
+        event = get_object_or_404(Event, route__distance=distance, date=date, )
+
+        application = get_object_or_404(Application, event=event, user=request.user )
+        application.delete()
+
+        return redirect(event)
+    else:
+        raise Http404
+
+def event_dnf(request, distance, date):
+    if request.user.is_authenticated:
+        try:
+            date = datetime.strptime(date, "%Y%m%d")
+        except Exception:
+            raise Http404
+        event = get_object_or_404(Event, route__distance=distance, date=date, )
+
+        application = get_object_or_404(Application, event=event, user=request.user )
+        application.dnf = True
+        application.save()
+
+        return redirect(event)
+    else:
+        raise Http404
 
 @never_cache
 def event_index(request):

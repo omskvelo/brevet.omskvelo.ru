@@ -1,4 +1,3 @@
-from xmlrpc.client import Boolean
 from django.db import models
 from django.contrib.auth.models import AbstractUser
 from django.db.models.signals import post_save
@@ -6,13 +5,12 @@ from django.dispatch import receiver
 
 from phonenumber_field.modelfields import PhoneNumberField
 
-from brevet_database.models import Randonneur
 from .managers import CustomUserManager
 
 class User(AbstractUser):
     username = None
     email = models.EmailField(unique=True)
-    randonneur = models.ForeignKey(Randonneur, on_delete=models.PROTECT)
+    randonneur = models.ForeignKey("brevet_database.Randonneur", on_delete=models.PROTECT, null=True, default=None)
     phone_number = PhoneNumberField()
     
     USERNAME_FIELD = 'email'
@@ -22,9 +20,12 @@ class User(AbstractUser):
     ordering = ('email',)
 
     def __str__(self):
-        return f"{self.last_name} {self.first_name} {self.phone_number} "
+        return f"{self.last_name} {self.first_name} {self.phone_number} {self.email}"
 
     def get_username(self):
+        return f"{self.email}"
+
+    def get_display_name(self):
         return f"{self.first_name} {self.last_name}"
 
     class Meta:
