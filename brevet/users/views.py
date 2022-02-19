@@ -9,7 +9,7 @@ from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 from django.template.loader import render_to_string
 from django.views.decorators.cache import never_cache
 
-
+from brevet_database.models import Application, Event
 from .forms import SignUpForm
 from .tokens import account_activation_token
 from .models import User
@@ -81,4 +81,11 @@ def change_password(request):
 
 @never_cache
 def profile(request):
-        return render(request, 'registration/profile.html')
+    events = []
+    for a in Application.objects.filter(user=request.user):
+        events.append(a.event)
+
+    context = {
+        'events':events
+    }
+    return render(request, 'registration/profile.html', context)
