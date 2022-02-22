@@ -1,4 +1,4 @@
-from brevet_database.models import Randonneur, Event, Route
+from brevet_database.models import Randonneur, Event, Route, Result
 
 def search(class_name:str, query:str, recursive=False):
     # NOTE: Since we use SqLite and mostly cyrrilic characters, __icontains does not work as expected: https://docs.djangoproject.com/en/4.0/ref/databases/#sqlite-notes
@@ -60,6 +60,13 @@ def search(class_name:str, query:str, recursive=False):
                 results |= object_class.objects.filter(distance=int(query), active=True)
             except ValueError:
                 pass   
+
+    elif class_name == 'Result':
+        object_class = Result
+        print ("I'm called")
+
+        # Search individual homologation numbers
+        results = object_class.objects.filter(homologation__contains=query)
 
     results = list(results)
 

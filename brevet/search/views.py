@@ -6,15 +6,17 @@ def search_results(request):
     query = request.GET.get('q',"")
 
     if query:
-        events = db_search('Event',query)
-        routes = db_search('Route',query)
-        randonneurs = db_search('Randonneur',query)
+        events = db_search('Event', query)
+        routes = db_search('Route', query)
+        randonneurs = db_search('Randonneur', query)
+        results = db_search('Result', query)
 
         context = {
         "query" : query,
         "events" : events,
         "routes" : routes,
         "randonneurs" : randonneurs,
+        "results" : results,
         }
     else:
         context = {}
