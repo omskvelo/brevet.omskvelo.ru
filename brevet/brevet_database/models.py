@@ -106,7 +106,7 @@ class Randonneur(AbstractModel):
 
 
     def get_results(self, year=None):
-        q = Result.objects.filter(randonneur=self)
+        q = Result.objects.filter(randonneur=self, event__finished=True)
         if year:
             q = q.filter(event__date__year=year)
         return list(q)
@@ -340,3 +340,6 @@ def get_randonneurs(year=None):
     for result in list(results):
         randonneurs.add(result.randonneur)
     return list(randonneurs)
+
+def timedelta_to_str(t:timedelta):
+    return "{:02d}:{:02d}".format(t.days*24 + t.seconds//3600, t.seconds%3600//60)

@@ -5,4 +5,5 @@ class ProtocolUploadForm(forms.Form):
 
 
 class AddResultForm(forms.Form):
-    result = forms.DurationField(label="Время")
+    result = forms.DurationField()
+    medal = forms.BooleanField(required=False)

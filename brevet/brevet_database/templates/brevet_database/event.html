@@ -21,13 +21,13 @@
     <h2 class="my-3">
         {{ route.name }}
     {% if user.is_superuser %}
-        <a class="btn btn btn-light" href="{{ event.get_admin_url_change }}">   
+        <a class="btn btn-light" href="{{ event.get_admin_url_change }}">   
             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pencil-square" viewBox="0 0 16 16">
                 <path d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z"/>
                 <path fill-rule="evenodd" d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5v11z"/>
             </svg>
         </a>
-        <a class="btn btn btn-light" href="{{ event.get_admin_url_delete }}">   
+        <a class="btn btn-light" href="{{ event.get_admin_url_delete }}">   
             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-x-circle" viewBox="0 0 16 16">
               <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
               <path d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708z"/>
@@ -97,19 +97,19 @@
 
 
     {% if event.omskvelo_xref %}
-    <a class="btn btn btn-dark"  href="{{ event.omskvelo_xref }}">
+    <a class="btn btn-dark"  href="{{ event.omskvelo_xref }}">
         Форум
     </a>
     {% endif %}
 
     {% if event.vk_xref %}
-    <a class="btn btn btn-dark"  href="{{ event.vk_xref }}">
+    <a class="btn btn-dark"  href="{{ event.vk_xref }}">
         vk
     </a>
     {% endif %}
 
     {% if route.gpx %}
-    <a class="btn btn btn-dark"  href="{{ route.gpx.url }}">
+    <a class="btn btn-dark"  href="{{ route.gpx.url }}">
         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-download" viewBox="0 0 16 16">
             <path d="M.5 9.9a.5.5 0 0 1 .5.5v2.5a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-2.5a.5.5 0 0 1 1 0v2.5a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2v-2.5a.5.5 0 0 1 .5-.5z"/>
             <path d="M7.646 11.854a.5.5 0 0 0 .708 0l3-3a.5.5 0 0 0-.708-.708L8.5 10.293V1.5a.5.5 0 0 0-1 0v8.793L5.354 8.146a.5.5 0 1 0-.708.708l3 3z"/>
@@ -119,7 +119,7 @@
     {% endif %}
 
     {% if route.pdf %}
-    <a class="btn btn btn-dark"  href="{{ route.pdf.url }}">
+    <a class="btn btn-dark"  href="{{ route.pdf.url }}">
         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-download" viewBox="0 0 16 16">
             <path d="M.5 9.9a.5.5 0 0 1 .5.5v2.5a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-2.5a.5.5 0 0 1 1 0v2.5a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2v-2.5a.5.5 0 0 1 .5-.5z"/>
             <path d="M7.646 11.854a.5.5 0 0 0 .708 0l3-3a.5.5 0 0 0-.708-.708L8.5 10.293V1.5a.5.5 0 0 0-1 0v8.793L5.354 8.146a.5.5 0 1 0-.708.708l3 3z"/>
@@ -129,7 +129,7 @@
     {% endif %}
 
     {% if route.external_xref %}
-    <a class="btn btn btn-dark"  href="{{ route.external_xref }}">
+    <a class="btn btn-dark"  href="{{ route.external_xref }}">
         Внешний ресурс
     </a>
     {% endif %}
@@ -138,48 +138,88 @@
         {% if event.get_applications %}
         <h2>Кто едет?</h2>
         <ul>
-            {% for applicant in event.get_applicants %}
+            {% for application in event.get_applications %}
                 <li>
-                    {{ applicant.get_display_name }}
+                    {% if application.user == user %}
+                        <strong> 
+                            {{ user.get_display_name }}
+                            {% if application.result %}
+                            - {{application.result.get_time}}
+                            {% endif %}
+        
+                            {% if application.dnf %}
+                                - DNF
+                            {% endif %}
+                            {% if application.result.medal %}                   	
+                                &#127941;<!--Medal emoji-->
+                            {% endif %}
+                        </strong>
+                    {% else %}
+                        {{ application.user.get_display_name }}
+                        
+                        {% if application.result %}
+                            - {{application.result.get_time}}
+                        {% endif %}
+
+                        {% if application.dnf %}
+                            - DNF
+                        {% endif %}
+                        {% if application.result.medal %}
+                            &#127941;<!--Medal emoji-->
+                        {% endif %}
+                    {% endif %}
                 </li>
             {% endfor %}
         </ul>
         {% endif %}
 
-        <div class="alert alert-primary" role="alert">
-            Введите Ваше итоговое время <strong>от старта до финиша, с учётом остановок</strong>.
-            <form class = "my-2" method = "post" enctype="multipart/form-data">
-                {% csrf_token %}
-                {{ form }}
-                <input class="btn btn btn-dark" type="submit" value="Подтвердить">
-            </form>
-            или 
-            <a class="btn btn btn-dark"  href="{{ event.get_dnf_url }}">
-                Сообщите о сходе
-            </a>
-        </div>
+        <form class = "form-send-result alert alert-primary my-2" method = "post" enctype="multipart/form-data">
+            {% csrf_token %}
+            <h3>Сообщить результат</h3>
+            <p>{{message}}</p>
+            <div class="form-floating my-1">
+                <input type="text" name="result"  class="form-control" required_id="id_result" id="floatingInput" placeholder="13:00:00">
+                <label for="floatingInput">ЧЧ:ММ</label>
+            </div>
+            <div class="checkbox mb-3">
+                <label>
+                <input type="checkbox" name="medal"> Хочу медаль!
+                </label>
+            </div>
+            <button class="btn btn-md btn-dark w-100 my-1" type="submit">Подтвердить</button>
+            <a class="btn btn-md btn-secondary w-100 my-1" href="{{ event.get_dnf_url }}">Сообщить о сходе</a>
+        </form>
 
         {% if event.application_allowed %}
             {% if user.is_authenticated %}
                 {% if user in event.get_applicants %}
-                    <a class="btn btn btn-dark"  href="{{ event.get_cancel_registration_url }}">
+                    <a class="btn btn-dark"  href="{{ event.get_cancel_registration_url }}">
                         Отменить регистрацию
                     </a>
                 {% else %}
-                    <a class="btn btn btn-dark"  href="{{ event.get_register_url }}">
+                    <a class="btn btn-dark"  href="{{ event.get_register_url }}">
                         Зарегистрироваться
                     </a>
                 {% endif %}
             {% endif %}
         {% else %}
-            {% if user in event.get_applicants %}
-                <div class="alert alert-primary" role="alert">
-                    <form class = "my-2" method = "post" enctype="multipart/form-data">
-                        {% csrf_token %}
-                        {{ form }}
-                        <input class="btn btn btn-dark" type="submit" value="Подтвердить">
-                    </form>
-                </div>
+            {% if not application.result and user.randonneur and user in event.get_applicants %}
+                <!-- Поправить: пользователь вынужден вводить "10:00:00" вместо "00:00"-->
+                <form class = "form-send-result alert alert-primary my-2" method = "post" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <h3>Сообщить результат</h3>
+                    <div class="form-floating my-1">
+                        <input type="text" name="result"  class="form-control" required_id="id_result" id="floatingInput" placeholder="13:00:00">
+                        <label for="floatingInput">ЧЧ:ММ</label>
+                    </div>
+                    <div class="checkbox mb-3">
+                        <label>
+                        <input type="checkbox" name="medal"> Хочу медаль!
+                        </label>
+                    </div>
+                    <button class="btn btn-md btn-dark w-100 my-1" type="submit">Подтвердить</button>
+                    <a class="btn btn-md btn-secondary w-100 my-1" href="{{ event.get_dnf_url }}">Сообщить о сходе</a>
+                </form>
             {% else %}
             <p>
                 Регистрация закрыта.

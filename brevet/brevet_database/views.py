@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import datetime, timedelta
 
 from django.http import Http404
 from django.shortcuts import get_object_or_404, get_list_or_404, redirect, render
@@ -11,6 +11,13 @@ from .models import *
 from .forms import *
 from . import file_generators
 
+TIME_LIMITS = {
+    200 : timedelta(hours=13, minutes=30),
+    300 : timedelta(hours=20),
+    400 : timedelta(hours=27),
+    600 : timedelta(hours=40),
+    1000 : timedelta(hours=75),
+}
 
 @never_cache
 def protocol(request, distance, date, upload_success=None, form="html"):
@@ -166,15 +173,36 @@ def event(request, distance, date):
 
     event = get_object_or_404(Event, route__distance=distance, date=date, )
     route = event.route
+    application = Application.objects.filter(event=event, user=request.user).first()
+    message = ""
 
     default_club = event.club.pk == DEFAULT_CLUB_ID
 
     if request.method == 'POST':
         form = AddResultForm(request.POST)
-        # if form.is_valid():
-            # upload_status, upload_exception = event.update_protocol_from_xls(request.FILES['xls'])
-            # if upload_status:
-                # return redirect(event.get_protocol_upload_success_url())
+        if form.is_valid():
+            randonneur = request.user.randonneur
+            if not randonneur:
+                raise Http404 
+            if not application:
+                raise Http404
+            if application.result:
+                raise Http404 
+            result_time = form.cleaned_data['result']
+
+            if result_time > TIME_LIMITS[distance]:
+                message = f"Лимит времени - {timedelta_to_str(TIME_LIMITS[distance])}."
+
+            else:
+                result = Result()
+                result.time = result_time
+                result.medal = form.cleaned_data['medal']
+                result.event = event
+                result.randonneur = randonneur
+                result.save()
+
+                application.result = result
+                application.save()
     else:
         form = AddResultForm()
 
@@ -183,6 +211,8 @@ def event(request, distance, date):
         'route' : route,
         'default_club' : default_club,
         'form' : form,
+        'application' : application,
+        'message' : message,
         }  
     return render(request, "brevet_database/event.html", context)  
 
@@ -228,7 +258,10 @@ def event_dnf(request, distance, date):
 
         application = get_object_or_404(Application, event=event, user=request.user )
         application.dnf = True
-        application.save()
+        result = application.result
+        result.delete()
+        application.result = None
+        application.save() 
 
         return redirect(event)
     else:
@@ -371,8 +404,8 @@ def route_stats(request, slug=None, route_id=None):
     else:
         raise Http404
     
-    events = Event.objects.filter(route=route).order_by("date")
-    results = Result.objects.filter(event__route=route).order_by("time")
+    events = Event.objects.filter(route=route, finished=True).order_by("date")
+    results = Result.objects.filter(event__route=route, event__finished=True).order_by("time")
 
     first_event = events.first
     total_events = len(events)
