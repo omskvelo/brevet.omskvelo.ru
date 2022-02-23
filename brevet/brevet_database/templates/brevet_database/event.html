@@ -176,7 +176,9 @@
         <form class = "form-send-result alert alert-primary my-2" method = "post" enctype="multipart/form-data">
             {% csrf_token %}
             <h3>Сообщить результат</h3>
-            <p>{{message}}</p>
+            {% for error in errors %}
+            <p>{{ error }}</p>
+            {% endfor %}
             <div class="form-floating my-1">
                 <input type="text" name="result"  class="form-control" required_id="id_result" id="floatingInput" placeholder="13:00:00">
                 <label for="floatingInput">ЧЧ:ММ</label>

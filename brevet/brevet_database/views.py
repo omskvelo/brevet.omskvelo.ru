@@ -174,7 +174,7 @@ def event(request, distance, date):
     event = get_object_or_404(Event, route__distance=distance, date=date, )
     route = event.route
     application = Application.objects.filter(event=event, user=request.user).first()
-    message = ""
+    errors = []
 
     default_club = event.club.pk == DEFAULT_CLUB_ID
 
@@ -191,7 +191,7 @@ def event(request, distance, date):
             result_time = form.cleaned_data['result']
 
             if result_time > TIME_LIMITS[distance]:
-                message = f"Лимит времени - {timedelta_to_str(TIME_LIMITS[distance])}."
+                errors.append(f"Лимит времени - {timedelta_to_str(TIME_LIMITS[distance])}.")
 
             else:
                 result = Result()
@@ -203,6 +203,8 @@ def event(request, distance, date):
 
                 application.result = result
                 application.save()
+        else:
+            errors = form.errors
     else:
         form = AddResultForm()
 
@@ -212,7 +214,7 @@ def event(request, distance, date):
         'default_club' : default_club,
         'form' : form,
         'application' : application,
-        'message' : message,
+        'errors' : errors,
         }  
     return render(request, "brevet_database/event.html", context)  
 
