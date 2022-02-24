@@ -342,7 +342,7 @@ def personal_stats(request, surname=None, name=None, uid=None, form="html"):
 
     results = sorted(randonneur.get_results(), key=lambda x: x.event.date, reverse=True)
     
-    first_brevet = results[-1]
+    first_brevet = results[-1] if results else None
     
     total_distance = randonneur.get_total_distance()
     total_brevets = len(results)

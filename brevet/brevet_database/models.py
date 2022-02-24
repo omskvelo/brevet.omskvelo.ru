@@ -3,6 +3,8 @@ from datetime import datetime, time, timedelta
 from django.db import models
 from django.urls import reverse
 
+from transliterate import translit
+
 from . import file_processors
 
 DEFAULT_CLUB_ID = 1
@@ -33,7 +35,6 @@ class Randonneur(AbstractModel):
     surname = models.CharField(max_length=50, blank=False)
     russian_name = models.CharField(max_length=50, blank=False)
     russian_surname = models.CharField(max_length=50, blank=False)
-    image = models.ImageField(upload_to="img/users/", blank=True)
     club = models.ForeignKey(Club, on_delete=models.PROTECT, default=DEFAULT_CLUB_ID)
     female = models.BooleanField(default=False)
 
@@ -118,6 +119,14 @@ class Randonneur(AbstractModel):
     def get_total_brevets(self, year=None):
         results = self.get_results(year)
         return len(results)        
+
+    def from_user(user):
+        r = Randonneur()
+        r.russian_name = user.first_name
+        r.russian_surname = user.last_name
+        r.name = translit(user.first_name, 'ru', reversed=True)
+        r.surname = translit(user.last_name, 'ru', reversed=True)
+        return r
 
     def __str__(self):
         return f"{self.russian_surname} {self.russian_name}"

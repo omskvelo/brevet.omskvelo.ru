@@ -5,12 +5,13 @@ from django.dispatch import receiver
 
 from phonenumber_field.modelfields import PhoneNumberField
 
+from brevet_database.models import Randonneur
 from .managers import CustomUserManager
 
 class User(AbstractUser):
     username = None
     email = models.EmailField(unique=True)
-    randonneur = models.ForeignKey("brevet_database.Randonneur", on_delete=models.PROTECT, null=True, default=None)
+    randonneur = models.ForeignKey("brevet_database.Randonneur", on_delete=models.SET_NULL, null=True, blank=True, default=None)
     phone_number = PhoneNumberField()
     
     USERNAME_FIELD = 'email'
@@ -27,6 +28,13 @@ class User(AbstractUser):
 
     def get_display_name(self):
         return f"{self.first_name} {self.last_name}"
+
+    def create_randonneur(self):
+        if not self.randonneur:
+            self.randonneur = Randonneur.from_user(self)
+            self.randonneur.save()
+            return True
+        return False
 
     class Meta:
         db_table = 'auth_user'

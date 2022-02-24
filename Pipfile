@@ -12,6 +12,7 @@ pillow = "==8.4.0"
 xlrd = "*"
 django-phonenumber-field = "*"
 phonenumbers = "*"
+transliterate = "*"
 
 [dev-packages]
 
