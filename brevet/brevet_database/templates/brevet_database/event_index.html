@@ -11,7 +11,7 @@
 
 {% block content %}
     {% for year, months in years.items %}
-      <h2 class="my-5 mx-1">
+      <h1 class="my-5 mx-1">
         Календарь {{ year }}
         {% if user.is_superuser %}
           <a class="btn btn-light" href="{{ events.0.get_admin_url_add }}">   
@@ -21,9 +21,9 @@
                 </svg>
           </a>
         {% endif %}
-      </h2>
+      </h1>
       {% for month, events in months.items %}
-        <h3 class="mx-1">{{ month }}</h3>
+        <h2 class="mx-1">{{ month }}</h2>
         <!-- <hr> -->
         <div class="row row-cols-auto">
           {% for event in events %}

@@ -1,0 +1,36 @@
+{% if event.get_applications %}
+<ul>
+    {% for application in event.get_applications %}
+        <li>
+            {% if application.user == user %}
+                <strong> 
+                    {{ user.get_display_name }}
+                    {% if application.result %}
+                    - {{application.result.get_time}}
+                    {% endif %}
+
+                    {% if application.dnf %}
+                        - DNF
+                    {% endif %}
+                    {% if application.result.medal %}                   	
+                        &#127941;<!--Medal emoji-->
+                    {% endif %}
+                </strong>
+            {% else %}
+                {{ application.user.get_display_name }}
+                
+                {% if application.result %}
+                    - {{application.result.get_time}}
+                {% endif %}
+
+                {% if application.dnf %}
+                    - DNF
+                {% endif %}
+                {% if application.result.medal %}
+                    &#127941;<!--Medal emoji-->
+                {% endif %}
+            {% endif %}
+        </li>
+    {% endfor %}
+</ul>
+{% endif %}

@@ -1,0 +1,35 @@
+{% if event.application_allowed %}
+    {% if user.is_authenticated %}
+        {% if user in event.get_applicants %}
+            <a class="btn btn-dark"  href="{{ event.get_cancel_registration_url }}">
+                Отменить регистрацию
+            </a>
+        {% else %}
+            <a class="btn btn-dark"  href="{{ event.get_register_url }}">
+                Зарегистрироваться
+            </a>
+        {% endif %}
+    {% endif %}
+{% else %}
+
+    {% if not application.result and user.randonneur and user in event.get_applicants %}
+        <form class = "form-send-result alert alert-primary my-2" method = "post" enctype="multipart/form-data">
+            {% csrf_token %}
+            <h3>Сообщить результат</h3>
+            {% for error in errors %}
+            <p>{{ error }}</p>
+            {% endfor %}
+            <div class="form-floating my-1">
+                <input type="text" name="result"  class="form-control" required_id="id_result" id="floatingInput" placeholder="13:00:00">
+                <label for="floatingInput">ЧЧ:ММ</label>
+            </div>
+            <div class="checkbox mb-3">
+                <label>
+                <input type="checkbox" name="medal"> Хочу медаль!
+                </label>
+            </div>
+            <button class="btn btn-md btn-dark w-100 my-1" type="submit">Подтвердить</button>
+            <a class="btn btn-md btn-secondary w-100 my-1" href="{{ event.get_dnf_url }}">Сообщить о сходе</a>
+        </form>
+    {% endif %}
+{% endif %}

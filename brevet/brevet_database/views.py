@@ -53,8 +53,6 @@ def protocol(request, distance, date, upload_success=None, form="html"):
     if form == "xlsx":
         response = file_generators.get_xlsx_protocol(event,results,f"{event.date.year}-{event.date.month}-{event.date.day}_{distance}") 
 
-
-
     return response
 
 @never_cache
@@ -69,13 +67,13 @@ def protocol_index(request, year=datetime.now().year):
         "year" : year,
         "years" : years,
     }
-
-
     return render(request, "brevet_database/protocol_index.html", context)
+
 
 @never_cache
 def statistics_total(request, form="html"):
     return statistics(request, year=None, form=form)
+
 
 # @cache_page(60*60)
 @never_cache
@@ -120,8 +118,6 @@ def statistics(request, year=datetime.now().year, form="html"):
     total_sr = len(sr)
     total_randonneurs = len(randonneurs)
     total_distance = sum([result.event.route.distance for result in results])
-
-
 
     if form=="html":
         context = {
@@ -172,41 +168,45 @@ def event(request, distance, date):
         raise Http404
 
     event = get_object_or_404(Event, route__distance=distance, date=date, )
-    route = event.route
-    application = Application.objects.filter(event=event, user=request.user).first()
-    errors = []
-
     default_club = event.club.pk == DEFAULT_CLUB_ID
+    route = event.route
 
-    if request.method == 'POST':
-        form = AddResultForm(request.POST)
-        if form.is_valid():
-            randonneur = request.user.randonneur
-            if not randonneur:
-                raise Http404 
-            if not application:
-                raise Http404
-            if application.result:
-                raise Http404 
-            result_time = form.cleaned_data['result']
+    errors = []
+    if request.user.is_authenticated:
+        application = Application.objects.filter(event=event, user=request.user).first()
 
-            if result_time > TIME_LIMITS[distance]:
-                errors.append(f"Лимит времени - {timedelta_to_str(TIME_LIMITS[distance])}.")
+        if request.method == 'POST':
+            form = AddResultForm(request.POST)
+            if form.is_valid():
+                randonneur = request.user.randonneur
+                if not randonneur:
+                    raise Http404 
+                if not application:
+                    raise Http404
+                if application.result:
+                    raise Http404 
+                result_time = form.cleaned_data['result']
 
+                if result_time > TIME_LIMITS[distance]:
+                    errors.append(f"Лимит времени - {timedelta_to_str(TIME_LIMITS[distance])}.")
+
+                else:
+                    result = Result()
+                    result.time = result_time
+                    result.medal = form.cleaned_data['medal']
+                    result.event = event
+                    result.randonneur = randonneur
+                    result.save()
+
+                    application.result = result
+                    application.save()
             else:
-                result = Result()
-                result.time = result_time
-                result.medal = form.cleaned_data['medal']
-                result.event = event
-                result.randonneur = randonneur
-                result.save()
-
-                application.result = result
-                application.save()
+                errors = form.errors
         else:
-            errors = form.errors
+            form = AddResultForm()
     else:
-        form = AddResultForm()
+        form = None
+        application = None
 
     context = {
         'event' : event,
@@ -218,6 +218,7 @@ def event(request, distance, date):
         }  
     return render(request, "brevet_database/event.html", context)  
 
+
 def event_register(request, distance, date):
     if request.user.is_authenticated:
         try:
@@ -225,15 +226,18 @@ def event_register(request, distance, date):
         except Exception:
             raise Http404
         event = get_object_or_404(Event, route__distance=distance, date=date, )
+        if not event.application_allowed():
+            return Http404
 
         application = Application()
         application.event = event
         application.user = request.user
         application.save()
 
-        return redirect(event)
+        return redirect(request.META.get('HTTP_REFERER'))
     else:
         raise Http404
+
 
 def event_cancel_registration(request, distance, date):
     if request.user.is_authenticated:
@@ -246,9 +250,10 @@ def event_cancel_registration(request, distance, date):
         application = get_object_or_404(Application, event=event, user=request.user )
         application.delete()
 
-        return redirect(event)
+        return redirect(request.META.get('HTTP_REFERER'))
     else:
         raise Http404
+
 
 def event_dnf(request, distance, date):
     if request.user.is_authenticated:
@@ -265,9 +270,10 @@ def event_dnf(request, distance, date):
         application.result = None
         application.save() 
 
-        return redirect(event)
+        return redirect(request.META.get('HTTP_REFERER'))
     else:
         raise Http404
+
 
 @never_cache
 def event_index(request):
@@ -289,6 +295,7 @@ def event_index(request):
     } 
     return render(request, "brevet_database/event_index.html", context)      
 
+
 @never_cache
 def route(request, slug=None, route_id=None):
     if slug:
@@ -303,6 +310,7 @@ def route(request, slug=None, route_id=None):
         }  
     return render(request, "brevet_database/route.html", context)       
 
+
 @never_cache
 def route_index(request, distance=200):
     routes = get_list_or_404(Route, active=True, distance=distance, club=DEFAULT_CLUB_ID)
@@ -313,6 +321,33 @@ def route_index(request, distance=200):
         'distances' : [200,300,400,600,1000],
     } 
     return render(request, "brevet_database/route_index.html", context)         
+
+
+@never_cache
+def route_stats(request, slug=None, route_id=None):
+    if slug:
+        route = get_object_or_404(Route, slug=slug)
+    elif route_id:
+        route = get_object_or_404(Route, pk=route_id)
+    else:
+        raise Http404
+    
+    events = Event.objects.filter(route=route, finished=True).order_by("date")
+    results = Result.objects.filter(event__route=route, event__finished=True).order_by("time")
+
+    first_event = events.first()
+    total_events = len(events)
+    total_results = len(results)
+
+    context = {
+        'route' : route,
+        'first_event' : first_event,
+        'results' : results,
+        'total_events' : total_events,
+        'total_results' : total_results,
+        }  
+    return render(request, "brevet_database/stats_route.html", context)  
+
 
 @never_cache
 def personal_stats_index(request):
@@ -398,26 +433,55 @@ def personal_stats(request, surname=None, name=None, uid=None, form="html"):
         raise Http404
 
 @never_cache
-def route_stats(request, slug=None, route_id=None):
-    if slug:
-        route = get_object_or_404(Route, slug=slug)
-    elif route_id:
-        route = get_object_or_404(Route, pk=route_id)
-    else:
-        raise Http404
-    
-    events = Event.objects.filter(route=route, finished=True).order_by("date")
-    results = Result.objects.filter(event__route=route, event__finished=True).order_by("time")
+def index(request):
+    prev_event = Event.objects.filter(finished = True).order_by("date").last()
+    results = get_list_or_404(Result.objects.order_by("randonneur__russian_surname","randonneur__russian_name"), event=prev_event)
 
-    first_event = events.first
-    total_events = len(events)
-    total_results = len(results)
+    event = Event.objects.filter(finished = False).order_by("date").first()
+    errors = []
+
+    if event and request.user.is_authenticated:
+        application = Application.objects.filter(event=event, user=request.user).first()
+
+        if request.method == 'POST':
+            form = AddResultForm(request.POST)
+            if form.is_valid():
+                randonneur = request.user.randonneur
+                if not randonneur:
+                    raise Http404 
+                if not application:
+                    raise Http404
+                if application.result:
+                    raise Http404 
+                result_time = form.cleaned_data['result']
+
+                if result_time > TIME_LIMITS[event.route.distance]:
+                    errors.append(f"Лимит времени - {timedelta_to_str(TIME_LIMITS[event.route.distance])}.")
+
+                else:
+                    result = Result()
+                    result.time = result_time
+                    result.medal = form.cleaned_data['medal']
+                    result.event = event
+                    result.randonneur = randonneur
+                    result.save()
+
+                    application.result = result
+                    application.save()
+            else:
+                errors = form.errors
+        else:
+            form = AddResultForm()
+    else:
+        application = None
+        form = None
 
     context = {
-        'route' : route,
-        'first_event' : first_event,
+        'event' : event,
+        'application' : application,
+        'errors' : errors,  
+        'prev_event' : prev_event,
         'results' : results,
-        'total_events' : total_events,
-        'total_results' : total_results,
-        }  
-    return render(request, "brevet_database/stats_route.html", context)  
+        'form' : form
+    }
+    return render(request, "brevet_database/index.html", context)

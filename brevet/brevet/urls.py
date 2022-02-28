@@ -17,9 +17,10 @@ from django.contrib import admin, auth
 from django.urls import include, path
 
 from . import views
+from brevet_database.views import index
 
 urlpatterns = [
-    path('', views.index, name = 'index'),
+    path('', index, name = 'index'),
     path('faq/', views.faq, name = 'faq'),
     path('database/', include ('brevet_database.urls')),
     path('search/', include ('search.urls')),
