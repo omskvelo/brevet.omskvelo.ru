@@ -140,6 +140,21 @@
         z-index: 2;
       }
 
+      .index__next__container {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+      }
+      .index__next__item {
+        min-width: 300px;
+      }
+
+      @media screen and (max-width: 1210px) {
+        .index__next__container {
+          flex-direction: column;
+        }
+      }
+
     </style>
   </head>
   <body>

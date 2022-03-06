@@ -207,14 +207,6 @@ class Event(AbstractModel):
         date = datetime.strftime(self.date, "%Y%m%d")
         return reverse('protocol', kwargs={'distance' : self.route.distance, 'date' : date})
 
-    def get_register_url(self):
-        date = datetime.strftime(self.date, "%Y%m%d")
-        return reverse('event_register', kwargs={'distance' : self.route.distance, 'date' : date})
-
-    def get_cancel_registration_url(self):
-        date = datetime.strftime(self.date, "%Y%m%d")
-        return reverse('event_cancel_registration', kwargs={'distance' : self.route.distance, 'date' : date})
-
     def get_dnf_url(self):
         date = datetime.strftime(self.date, "%Y%m%d")
         return reverse('event_dnf', kwargs={'distance' : self.route.distance, 'date' : date})
@@ -240,6 +232,14 @@ class Event(AbstractModel):
         timedelta_block = timedelta(hours = 12)
         datetime_start = datetime.combine(self.date, self.time)
         return datetime_start - timedelta_block > datetime.now()
+
+    def get_add_application_url(self):
+        date = datetime.strftime(self.date, "%Y%m%d")
+        return reverse('event_register', kwargs={'distance' : self.route.distance, 'date' : date})
+
+    def get_cancel_application_url(self):
+        date = datetime.strftime(self.date, "%Y%m%d")
+        return reverse('event_cancel_registration', kwargs={'distance' : self.route.distance, 'date' : date})
 
     def is_homologated(self):
         results = list(Result.objects.filter(event=self))
