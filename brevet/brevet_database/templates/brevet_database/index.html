@@ -6,119 +6,105 @@
 {% block content %}
 
     {% if event %}
-        <h1 class="my-3">Следующий бревет</h1>
-        <hr>
-        <h2 class="my-3">
-            {{event.route.name}} 
-            <small class="text-muted">
-                {{event.route.distance}} км
-            </small>
-        </h2>
-        <div class="index__next__container">
-            <div class="index__next__item">
-                {% if event.name %}
-                    <h3>
-                        {{ event.name }}
-                    </h3>
-                {% endif %}
-                <p>Старт {{ event.get_date }} в {{ event.get_time }}.</p>
+        <section class="next">
+            <h1 class="my-3">Следующий бревет</h1>
+            <hr>
+            <h2 class="my-3">
+                {{event.route.name}} 
+                <small class="text-muted">
+                    {{event.route.distance}} км
+                </small>
+            </h2>
+            <div class="index__next__container">
+                <div class="index__next__route index__next__item">
+                    {% if event.name %}
+                        <h3>
+                            {{ event.name }}
+                        </h3>
+                    {% endif %}
+                    <p>Старт {{ event.get_date }} в {{ event.get_time }}.</p>
 
-                {% if event.route.get_controls %}
-                    <ul class = "my-3">
-                        {% for line in event.route.get_controls %}
-                            <li>{{ line }}</li>
-                        {% endfor %}
-                    </ul>
-                {% endif %}
-                <a class="btn btn-dark" href="{{ event.get_absolute_url }}">
-                    Подробнее...
-                </a>
-                {% if event.route.gpx %}
-                    <a class="btn btn-dark" href="{{ event.route.gpx.url }}">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-download" viewBox="0 0 16 16">
-                            <path d="M.5 9.9a.5.5 0 0 1 .5.5v2.5a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-2.5a.5.5 0 0 1 1 0v2.5a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2v-2.5a.5.5 0 0 1 .5-.5z"/>
-                            <path d="M7.646 11.854a.5.5 0 0 0 .708 0l3-3a.5.5 0 0 0-.708-.708L8.5 10.293V1.5a.5.5 0 0 0-1 0v8.793L5.354 8.146a.5.5 0 1 0-.708.708l3 3z"/>
-                        </svg>
-                        gpx
+                    {% if event.route.get_controls %}
+                        <ul class = "my-3">
+                            {% for line in event.route.get_controls %}
+                                <li>{{ line }}</li>
+                            {% endfor %}
+                        </ul>
+                    {% endif %}
+                    <a class="btn btn-dark" href="{{ event.get_absolute_url }}">
+                        Подробнее...
                     </a>
-                {% endif %}
+                    {% if event.route.gpx %}
+                        <a class="btn btn-dark" href="{{ event.route.gpx.url }}">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-download" viewBox="0 0 16 16">
+                                <path d="M.5 9.9a.5.5 0 0 1 .5.5v2.5a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-2.5a.5.5 0 0 1 1 0v2.5a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2v-2.5a.5.5 0 0 1 .5-.5z"/>
+                                <path d="M7.646 11.854a.5.5 0 0 0 .708 0l3-3a.5.5 0 0 0-.708-.708L8.5 10.293V1.5a.5.5 0 0 0-1 0v8.793L5.354 8.146a.5.5 0 1 0-.708.708l3 3z"/>
+                            </svg>
+                            gpx
+                        </a>
+                    {% endif %}
+                </div>
+                <div class="index__next__participants index__next__item">
+                    <h3>Кто едет?</h3>
+                    {% include 'brevet_database/event_participants.html' %}
+                </div>
+                <div class="index__next__results index__next__item">
+                    {% include 'brevet_database/event_form.html' %}
+                </div>
             </div>
-            <div class="index__next__item">
-                <h3>Кто едет?</h3>
-                <h3>Кто едет?</h3>
-                <h3>Кто едет?</h3>
-                <h3>Кто едет?</h3>
-                <h3>Кто едет?</h3>
-                <h3>Кто едет?</h3>
-                <h3>Кто едет?</h3>
-                <h3>Кто едет?</h3>
-                <h3>Кто едет?</h3>
-                <h3>Кто едет?</h3>
-                <h3>Кто едет?</h3>
-                <h3>Кто едет?</h3>
-                <h3>Кто едет?</h3>
-                <h3>Кто едет?</h3>
-                <h3>Кто едет?</h3>
-                <h3>Кто едет?</h3>
-                <h3>Кто едет?</h3>
-                <h3>Кто едет?</h3>
-                <h3>Кто едет?</h3>
-                {% include 'brevet_database/event_participants.html' %}
-            </div>
-            <div class="index__next__item">
-                {% include 'brevet_database/event_form.html' %}
-            </div>
-        </div>
+        </section>
     {% endif %}
 
     {% if prev_event %}
-        <h1 class="my-3">Предыдущий бревет</h1>
-        <hr>
-        <h2 class="my-3">
-            {{prev_event.route.name}} 
-            <small class="text-muted">
-                {{prev_event.route.distance}} км
-            </small>
-        </h2>
-        {% if prev_event.name %}
-            <h3 class="my-3">
-                {{ prev_event.name }}
+        <section class="prev">
+            <h2 class="h1 my-3">Предыдущий бревет</h2>
+            <hr>
+            <h3 class="h2 my-3">
+                {{prev_event.route.name}} 
+                <small class="text-muted">
+                    {{prev_event.route.distance}} км
+                </small>
             </h3>
-        {% endif %}
-        <p class="my-1">
-            Старт состоялся <a href="{{ prev_event.get_absolute_url }}"> {{ prev_event.get_date }} г. в {{ prev_event.get_time }}</a>.
-        </p>
-        {% if results %}
-            <table class="table table-striped table-hover">
-                <thead>
-                    <tr>
-                        <th>Омологация</th>
-                        <th>Рандоннёр</th>
-                        <th>Время</th>
-                        <th></th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for result in results %}
+            {% if prev_event.name %}
+                <h4 class="h3 my-3">
+                    {{ prev_event.name }}
+                </h4>
+            {% endif %}
+            <p class="my-1">
+                Старт состоялся <a href="{{ prev_event.get_absolute_url }}"> {{ prev_event.get_date }} г. в {{ prev_event.get_time }}</a>.
+            </p>
+            {% if results %}
+                <table class="table table-striped table-hover">
+                    <thead>
                         <tr>
-                            <td>{{ result.homologation }}</td>
-                            <td>
-                                <a href="{{ result.randonneur.get_absolute_url }}">
-                                    {{ result.randonneur }}
-                                </a>
-                            </td>
-                            <td>{{ result.get_time }}</td>
-                            <td>
-                                <div class="d-none d-md-block">
-                                    {% if result.medal %} 
-                                        &#127941;<!--Medal emoji--> 
-                                    {% endif %}
-                                </div>
-                            </td>
+                            <th>Омологация</th>
+                            <th>Рандоннёр</th>
+                            <th>Время</th>
+                            <th></th>
                         </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
-        {% endif %}
+                    </thead>
+                    <tbody>
+                        {% for result in results %}
+                            <tr>
+                                <td>{{ result.homologation }}</td>
+                                <td>
+                                    <a href="{{ result.randonneur.get_absolute_url }}">
+                                        {{ result.randonneur }}
+                                    </a>
+                                </td>
+                                <td>{{ result.get_time }}</td>
+                                <td>
+                                    <div class="d-none d-md-block">
+                                        {% if result.medal %} 
+                                            &#127941;<!--Medal emoji--> 
+                                        {% endif %}
+                                    </div>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            {% endif %}
+        </section>
     {% endif %}
 {% endblock %}

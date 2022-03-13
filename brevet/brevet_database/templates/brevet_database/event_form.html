@@ -6,7 +6,6 @@
             </a>
         {% else %}
             <a class="btn btn-dark"  href="{{ event.get_add_application_url }}">
-                
                 Я еду!
             </a>
         {% endif %}
@@ -22,7 +21,7 @@
 
     {% if not application.result and user.randonneur and user in event.get_applicants %}
         <h3>Сообщить результат</h3>
-        <form class = "form-send-result alert alert-primary my-2" method = "post" enctype="multipart/form-data">
+        <form class = "form-send-result alert alert-primary" method = "post" enctype="multipart/form-data">
             {% csrf_token %}
             
             {% for error in errors %}
