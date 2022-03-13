@@ -1,4 +1,4 @@
-{% if event.application_allowed %}
+{% if event.application_allowed %} 
     {% if user.is_authenticated %}
         {% if user in event.get_applicants %}
             <a class="btn btn-dark"  href="{{ event.get_cancel_application_url }}">
@@ -6,6 +6,7 @@
             </a>
         {% else %}
             <a class="btn btn-dark"  href="{{ event.get_add_application_url }}">
+                
                 Я еду!
             </a>
         {% endif %}
