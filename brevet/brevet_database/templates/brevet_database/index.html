@@ -47,10 +47,13 @@
                 <div class="index__next__participants index__next__item">
                     <h3>Кто едет?</h3>
                     {% include 'brevet_database/event_participants.html' %}
+                    {% include 'brevet_database/event_application.html' %}
                 </div>
-                <div class="index__next__results index__next__item">
-                    {% include 'brevet_database/event_form.html' %}
-                </div>
+                {% if not event.application_allowed %}
+                    <div class="index__next__results index__next__item">
+                        {% include 'brevet_database/event_form.html' %}
+                    </div>
+                {% endif %}
             </div>
         </section>
     {% endif %}
@@ -104,6 +107,10 @@
                         {% endfor %}
                     </tbody>
                 </table>
+            {% else %}
+                <p> 
+                    Результаты отсутствуют.
+                </p>
             {% endif %}
         </section>
     {% endif %}

@@ -435,7 +435,7 @@ def personal_stats(request, surname=None, name=None, uid=None, form="html"):
 @never_cache
 def index(request):
     prev_event = Event.objects.filter(finished = True).order_by("date").last()
-    results = get_list_or_404(Result.objects.order_by("randonneur__russian_surname","randonneur__russian_name"), event=prev_event)
+    results = Result.objects.filter(event=prev_event).order_by("randonneur__russian_surname","randonneur__russian_name")
 
     event = Event.objects.filter(finished = False).order_by("date").first()
     errors = []

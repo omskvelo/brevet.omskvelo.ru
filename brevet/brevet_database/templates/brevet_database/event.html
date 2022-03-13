@@ -137,6 +137,7 @@
     {% if not event.finished %}
         <h3>Кто едет?</h3>
         {% include 'brevet_database/event_participants.html' %}
+        {% include 'brevet_database/event_application.html' %}
         {% include 'brevet_database/event_form.html' %}
     {% endif %}
 
