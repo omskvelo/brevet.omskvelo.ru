@@ -44,7 +44,7 @@
         align-items: center;
         margin: 0 auto;
         max-width: 1920px;
-        padding: 20px 10%;
+        padding: 20px min(10%, 192px);
       }
 
       .container-top {
@@ -171,7 +171,7 @@
         display: block;
         margin: 0 auto;
         max-width: 1920px;
-        padding: 20px 10%;
+        padding: 20px min(10%, 192px);
       }
 
       .btn-dark {
@@ -204,41 +204,72 @@
 
       .index__next__container {
         display: flex;
-        justify-content: space-between;
+        justify-content: stretch;
         align-items: flex-start;
       }
+
       .index__next__item {
-        min-width: 300px;
+        width: 100%;
+        max-width: 600px;
+        padding-right: 40px;
+        padding-bottom: 40px;
+      }
+
+      .index__next__item:last-child {
+        padding-right: 0px;
       }
 
       @media screen and (max-width: 1210px) {
         .nav-item:not(:last-child) {
         margin-right: 8px;
-      }
+        }
 
         .index__next__container {
           display: grid;
           grid-template-columns: 1fr 1fr;
           grid-template-areas: 
           'route participants'
-          'results participants'
+          'result participants'
           '. participants'
           ;
-          gap: 50px;
         }
 
-        .index__next__route {
+        .index__next__item {
+          padding-right: 40px;
+        }
+
+        #route {
           grid-area: route;
         }
 
-        .index__next__participants {
+        #participants {
           grid-area: participants;
         }
 
-        .index__next__results {
-          grid-area: results;
+        #result {
+          grid-area: result;
         }
       }
+
+      @media screen and (max-width: 992px) {
+        .index__next__container {
+          display: flex;
+          flex-flow: column;
+        }
+
+        #route{
+          order: 1;
+        }
+
+        #participants{
+          order: 3;
+        }
+
+        #result{
+          order: 2;
+        }
+      }
+
 
     </style>
   </head>

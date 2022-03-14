@@ -38,10 +38,6 @@
         </div>
     {% endif %}
     
-    {% if route.image %}
-        <img src="{{ route.image.url }}" class = "my-3"/>
-    {% endif %}
-
     {% if route.get_text %}
         {% for line in route.get_text %}
         <p class = "my-3">{{ line }}</p>

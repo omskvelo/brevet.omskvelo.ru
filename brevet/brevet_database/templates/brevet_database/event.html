@@ -67,10 +67,6 @@
         </div>
     {% endif %}
     
-    {% if route.image %}
-        <img src="{{ route.image.url }}" class = "m-3"/>
-    {% endif %}
-
     {% if event.get_text %}
         {% for line in event.get_text %}
         <p class = "my-3">{{ line }}</p>

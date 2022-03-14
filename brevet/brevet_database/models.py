@@ -1,4 +1,6 @@
 from datetime import datetime, time, timedelta
+from uuid import uuid4
+from pathlib import Path
 
 from django.db import models
 from django.urls import reverse
@@ -8,6 +10,21 @@ from transliterate import translit
 from . import file_processors
 
 DEFAULT_CLUB_ID = 1
+
+def gpx_path(instance, filename):
+    path = Path(filename)
+    id = uuid4()
+    return f"gpx/{id}{path.suffix}"
+
+def img_path(instance, filename):
+    path = Path(filename)
+    id = uuid4()
+    return f"img/{id}{path.suffix}"
+
+def pdf_path(instance, filename):
+    path = Path(filename)
+    id = uuid4()
+    return f"pdf/{id}{path.suffix}"
 
 class AbstractModel(models.Model):
     def get_admin_url_change(self):
@@ -147,10 +164,10 @@ class Route(AbstractModel):
     club = models.ForeignKey(Club, on_delete=models.PROTECT, blank=True, default=DEFAULT_CLUB_ID)
     external_xref = models.URLField(blank=True)
     map_embed_src = models.CharField(max_length=500, blank=True) 
-    image = models.ImageField(upload_to="img/", blank=True)
-    gpx = models.FileField(upload_to="gpx/", blank=True)
-    pdf = models.FileField(upload_to="pdf/", blank=True)
-    orvm = models.FileField(upload_to="orvm/", blank=True)
+    image = models.ImageField(upload_to=img_path, blank=True)
+    gpx = models.FileField(upload_to=gpx_path, blank=True)
+    pdf = models.FileField(upload_to=pdf_path, blank=True)
+    orvm = models.FileField(upload_to=pdf_path, blank=True)
 
     class Meta:
         ordering = ['-active', 'distance']

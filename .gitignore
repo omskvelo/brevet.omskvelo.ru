@@ -152,6 +152,7 @@ staticfiles/
 
 # Media files
 uploads/
+media/
 
 # Database backups
 backup/

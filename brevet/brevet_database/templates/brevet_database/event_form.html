@@ -1,5 +1,5 @@
 {% if not event.application_allowed and not application.result and user.randonneur and user in event.get_applicants %}
-    <h3>Сообщить результат</h3>
+    <h3 class="h4">Сообщить результат</h3>
     <form class = "form-send-result alert alert-primary" method = "post" enctype="multipart/form-data">
         {% csrf_token %}
         
