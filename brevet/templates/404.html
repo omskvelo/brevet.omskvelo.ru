@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+
+{% block title %}
+404 | 
+{% endblock %}
+
+{% block content %}
+{% load static %}
+<h1 class="display-1 my-3 text-center">404</h1>
+<p class="text-center">Никогда такого не было и вот опять...</p>
+<img class="error_img" src="{% static 'brevet/img/404.jpg' %}"/>
+{% endblock %}

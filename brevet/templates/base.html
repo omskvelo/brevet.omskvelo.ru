@@ -13,7 +13,7 @@
 
     <!-- Site icon -->
     {% load static %}
-    <link rel="icon" href="{% static '/brevet/img/fav.ico' %}">
+    <link rel="icon" href="{% static 'brevet/img/fav.ico' %}">
 
     <title>
       {% block title %}{% endblock %} Цепная Реакция 
@@ -67,7 +67,7 @@
         width: 100px;
         height: 100px;
         margin-right: 15px;
-        background-image: url('{% static "/brevet/svg/brand_logo.svg" %}');
+        background-image: url('{% static "brevet/svg/brand_logo.svg" %}');
       }
 
       .header__titles {
@@ -90,6 +90,17 @@
         color: white;
       }
 
+      @media screen and (max-width: 450px){
+          .header__title {
+          font-size: 24px;
+        }
+
+        .header__desc {
+          font-size: 15px;
+          line-height: 24px;
+        }
+      }
+
       .navbar-toggler-icon {
         font-size: 1.0em;
       }
@@ -101,23 +112,23 @@
       }
 
       #admin {
-        background-image: url('{% static "/brevet/svg/admin.svg" %}');
+        background-image: url('{% static "brevet/svg/admin.svg" %}');
         background-position-x: 6%;
       }
 
       #username {
-        background-image: url('{% static "/brevet/svg/username.svg" %}');
+        background-image: url('{% static "brevet/svg/username.svg" %}');
         background-position-x: 6%;
       }
 
       #logout {
         padding: 18px;
-        background-image: url('{% static "/brevet/svg/logout.svg" %}');
+        background-image: url('{% static "brevet/svg/logout.svg" %}');
         background-position-x: 50%;
       }
 
       #login {
-        background-image: url('{% static "/brevet/svg/login.svg" %}');
+        background-image: url('{% static "brevet/svg/login.svg" %}');
         background-position-x: 6%;
       }      
 
@@ -136,27 +147,27 @@
       }
 
       #calendar {
-        background-image: url('{% static "/brevet/svg/calendar.svg" %}');
+        background-image: url('{% static "brevet/svg/calendar.svg" %}');
       }
 
       #res {
-        background-image: url('{% static "/brevet/svg/results.svg" %}');
+        background-image: url('{% static "brevet/svg/results.svg" %}');
       }
 
       #routes {
-        background-image: url('{% static "/brevet/svg/routes.svg" %}');
+        background-image: url('{% static "brevet/svg/routes.svg" %}');
       }
 
       #rules {
-        background-image: url('{% static "/brevet/svg/rules.svg" %}');
+        background-image: url('{% static "brevet/svg/rules.svg" %}');
       }
 
       #faq {
-        background-image: url('{% static "/brevet/svg/faq.svg" %}');
+        background-image: url('{% static "brevet/svg/faq.svg" %}');
       }
       
       #forum {
-        background-image: url('{% static "/brevet/svg/forum.svg" %}');
+        background-image: url('{% static "brevet/svg/forum.svg" %}');
       }
 
       .nav-link {
@@ -251,6 +262,12 @@
         }
       }
 
+      .event__brief{
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 40px;
+      }
+
       @media screen and (max-width: 992px) {
         .index__next__container {
           display: flex;
@@ -268,8 +285,19 @@
         #result{
           order: 2;
         }
+
+        .event__brief {
+          display: block;
+        }
       }
 
+      .error_img {
+        display: block;
+        margin-left: auto;
+        margin-right: auto;
+        min-width: 280px;
+        width: 40%;
+      }
 
     </style>
   </head>
