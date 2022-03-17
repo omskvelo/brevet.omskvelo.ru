@@ -13,8 +13,9 @@ xlrd = "*"
 django-phonenumber-field = "*"
 phonenumbers = "*"
 transliterate = "*"
+django-cookie-consent = "*"
 
 [dev-packages]
 
 [requires]
-python_version = "3.9"
+python_version = "3"

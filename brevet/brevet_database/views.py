@@ -19,13 +19,11 @@ TIME_LIMITS = {
     1000 : timedelta(hours=75),
 }
 
-@never_cache
 def protocol(request, distance, date, upload_success=None, form="html"):
     try:
         date = datetime.strptime(date, "%Y%m%d")
     except Exception:
         raise Http404
- 
 
     event = get_object_or_404(Event, route__distance=distance, date=date)
     results = get_list_or_404(Result.objects.order_by("randonneur__russian_surname","randonneur__russian_name"), event=event)
@@ -55,7 +53,7 @@ def protocol(request, distance, date, upload_success=None, form="html"):
 
     return response
 
-@never_cache
+
 def protocol_index(request, year=datetime.now().year):
     years = get_event_years()
     if year not in years:
@@ -70,13 +68,11 @@ def protocol_index(request, year=datetime.now().year):
     return render(request, "brevet_database/protocol_index.html", context)
 
 
-@never_cache
 def statistics_total(request, form="html"):
     return statistics(request, year=None, form=form)
 
 
-# @cache_page(60*60)
-@never_cache
+@cache_page(60*60)
 def statistics(request, year=datetime.now().year, form="html"):
     years = get_event_years()
     if year:
@@ -275,7 +271,6 @@ def event_dnf(request, distance, date):
         raise Http404
 
 
-@never_cache
 def event_index(request):
     events = get_list_or_404(Event.objects.order_by("date"), club=DEFAULT_CLUB_ID, finished=False)
 
@@ -296,7 +291,6 @@ def event_index(request):
     return render(request, "brevet_database/event_index.html", context)      
 
 
-@never_cache
 def route(request, slug=None, route_id=None):
     if slug:
         route = get_object_or_404(Route, slug=slug)
@@ -311,7 +305,6 @@ def route(request, slug=None, route_id=None):
     return render(request, "brevet_database/route.html", context)       
 
 
-@never_cache
 def route_index(request, distance=200):
     routes = get_list_or_404(Route, active=True, distance=distance, club=DEFAULT_CLUB_ID)
 
@@ -323,7 +316,6 @@ def route_index(request, distance=200):
     return render(request, "brevet_database/route_index.html", context)         
 
 
-@never_cache
 def route_stats(request, slug=None, route_id=None):
     if slug:
         route = get_object_or_404(Route, slug=slug)
@@ -349,7 +341,6 @@ def route_stats(request, slug=None, route_id=None):
     return render(request, "brevet_database/stats_route.html", context)  
 
 
-@never_cache
 def personal_stats_index(request):
     randonneurs = get_randonneurs()
 
@@ -364,7 +355,6 @@ def personal_stats_index(request):
     return render(request, "brevet_database/stats_personal_index.html", context)    
 
 
-@never_cache
 def personal_stats(request, surname=None, name=None, uid=None, form="html"):
     if uid:
         randonneur = get_object_or_404(Randonneur, pk=uid)
