@@ -18,9 +18,10 @@ from .settings_secret import *
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
-ALLOWED_HOSTS = ['.omskvelo.ru']
+if not DEBUG:
+    ALLOWED_HOSTS = ['.omskvelo.ru']
 
 # Application definition
 
@@ -88,14 +89,26 @@ WSGI_APPLICATION = 'brevet.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases
 
+
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.sqlite3',
+#         'NAME': BASE_DIR / 'db.sqlite3',
+#     }
+# }  
+
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': 'brevet',
+        'USER' : POSTGRES_USER,
+        'PASSWORD' : POSTGRES_PASSWORD,
+        'HOST' : 'localhost',
+        'PORT' : '5432',
     }
 }
-DATA_UPLOAD_MAX_NUMBER_FIELDS = 2000
 
+DATA_UPLOAD_MAX_NUMBER_FIELDS = 2000
 
 # Password validation
 # https://docs.djangoproject.com/en/3.2/ref/settings/#auth-password-validators
@@ -165,10 +178,14 @@ EMAIL_HOST_USER = 'audaxomsk@gmail.com'
 EMAIL_USE_SSL = False
 
 # Security
-SESSION_COOKIE_SECURE = True
-SECURE_SSL_REDIRECT = True
-CSRF_COOKIE_SECURE = True
-
+if not DEBUG:
+    SESSION_COOKIE_SECURE = True
+    SECURE_SSL_REDIRECT = True
+    CSRF_COOKIE_SECURE = True
+else:
+    SESSION_COOKIE_SECURE = False
+    SECURE_SSL_REDIRECT = False
+    CSRF_COOKIE_SECURE = False
 
 # LOGGING = {
 #     'version': 1,
