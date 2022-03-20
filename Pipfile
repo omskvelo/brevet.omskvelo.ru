@@ -15,6 +15,7 @@ phonenumbers = "*"
 transliterate = "*"
 django-cookie-consent = "*"
 psycopg2 = "*"
+gunicorn = "*"
 
 [dev-packages]
 

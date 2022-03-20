@@ -73,7 +73,7 @@ class Randonneur(AbstractModel):
 
     def get_sr(self, year):
         sr = 0
-        results = list(Result.objects.filter( event__route__brm=True, randonneur=self, event__date__year=year))
+        results = list(Result.objects.filter(event__route__brm=True, randonneur=self, event__date__year=year))
         brevets = [result.event.route.distance for result in results]
         while True:
             if 600 in brevets:
@@ -327,6 +327,7 @@ class Result(AbstractModel):
     def __str__(self):
         return f"{self.get_date()} {self.event.route.distance} км {self.randonneur} {self.get_time()}"
 
+
 class Application(AbstractModel):
     user = models.ForeignKey("users.User", on_delete=models.CASCADE)
     event = models.ForeignKey(Event, on_delete=models.CASCADE, blank=False)
@@ -338,23 +339,27 @@ class Application(AbstractModel):
         datestring = datetime.strftime(self.date, "%H:%M %d.%m.%Y")
         return f"{datestring} - заявка от {self.user.get_display_name()} на бревет {self.event}"
 
+
 def get_event_years(reverse=True, finished=True):
     """Returns a list of event years for use in selectors"""
-    years = set()
-    for event in list(Event.objects.filter(finished=finished, club=DEFAULT_CLUB_ID)):
-        years.add(event.date.year)
+    years = {x.date.year for x in Event.objects.filter(finished=finished, club=DEFAULT_CLUB_ID)}
     return sorted(list(years), reverse=reverse)
 
-def get_best(distance, randonneur=None, year=None):
+
+def get_best(distance, randonneur=None, year=None, limit=None):
     """Returns best results on brm distance for randonneur 
-    (or all randonneurs if None) for a given year (or all years if None)"""
+    (or all randonneurs if None) for a given year (or all years if None)
+    """
     q = Result.objects.filter(event__route__distance=distance, event__route__brm=True)
     if randonneur:
         q = q.filter(randonneur=randonneur)
     if year:
         q = q.filter(event__date__year=year)
     q=q.order_by("time")
+    if limit:
+        q = q[:limit]
     return list(q)
+
 
 def get_randonneurs(year=None):
     """Returns a list of randonneurs for a given year (or all randonneurs if None). 
@@ -366,6 +371,7 @@ def get_randonneurs(year=None):
     for result in list(results):
         randonneurs.add(result.randonneur)
     return list(randonneurs)
+
 
 def timedelta_to_str(t:timedelta):
     return "{:02d}:{:02d}".format(t.days*24 + t.seconds//3600, t.seconds%3600//60)

@@ -1,4 +1,5 @@
 from datetime import datetime, timedelta
+from time import perf_counter
 
 from django.http import Http404
 from django.shortcuts import get_object_or_404, get_list_or_404, redirect, render
@@ -18,6 +19,7 @@ TIME_LIMITS = {
     600 : timedelta(hours=40),
     1000 : timedelta(hours=75),
 }
+
 
 def protocol(request, distance, date, upload_success=None, form="html"):
     try:
@@ -73,14 +75,17 @@ def statistics_total(request, form="html"):
 
 
 @cache_page(60*60)
+# @never_cache
 def statistics(request, year=datetime.now().year, form="html"):
+    t1 = perf_counter()
     years = get_event_years()
+    t2 = perf_counter()
     if year:
         if year not in years:
             year = max(years)
-        results = get_list_or_404(Result, event__finished=True, event__date__year=year)
+        results = list(Result.objects.filter(event__finished=True, event__date__year=year))
     else:
-        results = get_list_or_404(Result, event__finished=True)
+        results = list(Result.objects.filter(event__finished=True))
 
     # LRM, SR600, 1000
     elite_dist = [x for x in results if x.event.route.lrm or x.event.route.sr600 or x.event.route.distance == 1000] 
@@ -105,16 +110,17 @@ def statistics(request, year=datetime.now().year, form="html"):
     sr = sorted(sr, key=lambda x: x.sr_string, reverse=True)
 
     # Find best results
-    best_200 = get_best(200,year=year)[:10]
-    best_300 = get_best(300,year=year)[:10]
-    best_400 = get_best(400,year=year)[:10]
-    best_600 = get_best(600,year=year)[:10]
+    best_200 = get_best(200, year=year, limit=10)
+    best_300 = get_best(300, year=year, limit=10)
+    best_400 = get_best(400, year=year, limit=10)
+    best_600 = get_best(600, year=year, limit=10)
 
     # Calculate total stats
     total_sr = len(sr)
     total_randonneurs = len(randonneurs)
     total_distance = sum([result.event.route.distance for result in results])
 
+    print (t2-t1)
     if form=="html":
         context = {
             "total_distance" : total_distance,
@@ -127,13 +133,13 @@ def statistics(request, year=datetime.now().year, form="html"):
             "best_400" : best_400,
             "best_600" : best_600,
             "elite_dist" : elite_dist,
+            "year" : year,
             "years" : years,
             "year_min_to_max": str(years[-1]) + " - " + str(years[0])
         }
         if year is not None:
             context.update({
                 "distance_rating" : distance_rating,
-                "year" : year,
             })
         return render(request, "brevet_database/stats_club.html", context) 
     elif form=="xlsx":
