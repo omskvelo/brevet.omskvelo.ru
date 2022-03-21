@@ -22,6 +22,8 @@ DEBUG = True
 
 if not DEBUG:
     ALLOWED_HOSTS = ['.omskvelo.ru']
+else:
+    ALLOWED_HOSTS = ['*']
 
 # Application definition
 
@@ -90,23 +92,23 @@ WSGI_APPLICATION = 'brevet.wsgi.application'
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases
 
 
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.sqlite3',
-#         'NAME': BASE_DIR / 'db.sqlite3',
-#     }
-# }  
-
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'brevet',
-        'USER' : POSTGRES_USER,
-        'PASSWORD' : POSTGRES_PASSWORD,
-        'HOST' : 'localhost',
-        'PORT' : '5432',
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': BASE_DIR / 'db.sqlite3',
     }
-}
+}  
+
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.postgresql_psycopg2',
+#         'NAME': 'brevet',
+#         'USER' : POSTGRES_USER,
+#         'PASSWORD' : POSTGRES_PASSWORD,
+#         'HOST' : 'localhost',
+#         'PORT' : '5432',
+#     }
+# }
 
 DATA_UPLOAD_MAX_NUMBER_FIELDS = 2000
 
