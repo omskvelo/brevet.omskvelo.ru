@@ -1,0 +1,21 @@
+version: '3.7'
+
+services:
+  web:
+    build: .
+    command: python brevet/manage.py runserver 0.0.0.0:8000
+    volumes:
+      - /brevet/:/usr/src/brevet
+    ports:
+      - 8000:8000
+
+
+  db:
+    image: postgres:14.2-alpine
+    volumes:
+      - postgres_data:/var/lib/postgresql/data/
+    env_file:
+      - .env.db
+
+volumes:
+  postgres_data:
