@@ -19,6 +19,8 @@ class UserAdmin(admin.ModelAdmin):
                 self.message_user(request, "Невозможно сгенерировать рандоннёра. К учетной записи уже привязан рандоннёр.", level="ERROR")
                 return HttpResponseRedirect(".")
 
+        return super().response_change(request, obj)
+
 
 admin.site.register(User, UserAdmin)
 admin.site.register(Profile)
