@@ -25,4 +25,8 @@ RUN pip install -r requirements.txt
 # Install application
 COPY . /home/brevet/web
 
-USER guest
+# Create user and set ownership
+RUN addgroup -S  brevet 
+RUN adduser -S brevet -G brevet
+RUN chown -R brevet:brevet /home/brevet
+USER brevet

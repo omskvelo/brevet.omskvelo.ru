@@ -1,3 +1,10 @@
 FROM nginx:1.21.6-alpine
 RUN rm /etc/nginx/conf.d/default.conf
 COPY nginx.conf /etc/nginx/conf.d
+
+RUN mkdir -p /home/brevet
+
+# Create user and set ownership
+RUN addgroup -S  brevet 
+RUN adduser -S brevet -G brevet
+RUN chown -R brevet:brevet /home/brevet
