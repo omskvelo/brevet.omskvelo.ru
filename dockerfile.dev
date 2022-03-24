@@ -1,8 +1,6 @@
 FROM python:3.9-alpine
 
-RUN mkdir -p /home/brevet/web
-
-WORKDIR /home/brevet
+WORKDIR /brevet
 
 # Setup environment
 ENV LANG C.UTF-8
@@ -23,6 +21,4 @@ COPY requirements.txt .
 RUN pip install -r requirements.txt
 
 # Install application
-COPY . /home/brevet/web
-
-USER guest
+COPY . .
