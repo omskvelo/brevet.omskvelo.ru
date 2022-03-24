@@ -8,7 +8,6 @@ services:
       cd /home/brevet/web/brevet
       && sleep 10
       && python manage.py migrate
-      && python manage.py loaddata data.json
       && python manage.py createcachetable
       && gunicorn brevet.wsgi --bind 0.0.0.0:8000"
     volumes:

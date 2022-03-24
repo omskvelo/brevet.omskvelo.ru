@@ -8,7 +8,10 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
-ALLOWED_HOSTS = ['.omskvelo.ru', 'localhost']
+if DEBUG:
+    ALLOWED_HOSTS = ['*']
+else:
+    ALLOWED_HOSTS = ['.omskvelo.ru', 'localhost']
 
 # Application definition
 
@@ -24,6 +27,9 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'whitenoise.runserver_nostatic',
 ]
+
+if DEBUG:
+    INSTALLED_APPS += ['django.contrib.staticfiles']
 
 CACHES = {
     'default': {
@@ -71,24 +77,24 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'brevet.wsgi.application'
 
-# Dev database - use in case something breaks
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.sqlite3',
-#         'NAME': BASE_DIR / 'db.sqlite3',
-#     }
-# }  
-
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'brevet',
-        'USER' : POSTGRES_USER,
-        'PASSWORD' : POSTGRES_PASSWORD,
-        'HOST' : 'db',
-        'PORT' : '5432',
+if DEBUG:
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': BASE_DIR / 'db.sqlite3',
+        }
+    }  
+else:
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.postgresql_psycopg2',
+            'NAME': 'brevet',
+            'USER' : POSTGRES_USER,
+            'PASSWORD' : POSTGRES_PASSWORD,
+            'HOST' : 'db',
+            'PORT' : '5432',
+        }
     }
-}
 
 DATA_UPLOAD_MAX_NUMBER_FIELDS = 2000
 

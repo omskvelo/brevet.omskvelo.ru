@@ -1,8 +1,11 @@
+{% load static %}
 <header class="header">
   <nav class="navbar navbar-expand-lg navbar-dark container-nav">
     <div class="container container-top">
       <div class="header__heading">
-          <a class="header__brand d-none d-sm-block" href="/"></a>
+          <a class="header__brand d-none d-sm-block" href="/">
+            <img src = "{% static 'brevet/svg/brand_logo.svg' %}"/>
+          </a>
           <a class="header__titles" href="/">
               <h1 class="header__title m-0">Цепная Реакция</h1>
               <p class="header__desc m-0">Веломарафонский клуб</p>
@@ -14,17 +17,22 @@
       <div class="collapse navbar-collapse navbar-external-user multi-collapse pt-3">
       {% if user.is_authenticated %}
         {% if user.is_superuser %}
-          <a class="btn btn-light btn-vis me-2" href="\admin" id="admin">
-              Django Admin
+          <a class="btn btn-light me-2" href="\admin">
+            <img src="{% static 'brevet/svg/admin.svg' %}"/>
+            Django Admin
           </a>
         {% endif %}
-        <a class="btn btn-light btn-vis me-2" href="{% url 'user_profile' %}" id="username">
-            {{ user.get_display_name }}
+        <a class="btn btn-light  me-2" href="{% url 'user_profile' %}">
+          <img src="{% static 'brevet/svg/username.svg' %}"/>
+          {{ user.get_display_name }}
         </a>
-        <a class="btn btn-light btn-vis" href="{% url 'logout' %}" id="logout" aria-label="Выйти"></a>
+        <a class="btn btn-light" href="{% url 'logout' %}" aria-label="Выйти">
+          <img src="{% static 'brevet/svg/logout.svg' %}"/>
+        </a>
       {% else%}
-        <a class="btn btn-light btn-vis" href="{% url 'login' %}" id="login">
-            Войти
+        <a class="btn btn-light" href="{% url 'login' %}">
+          <img src="{% static 'brevet/svg/login.svg' %}"/>
+          Войти
         </a>
       {% endif %}
       </div>
@@ -34,12 +42,14 @@
       <div class="collapse navbar-collapse multi-collapse">
         <ul class="navbar-nav me-auto mb-lg-0">
           <li class="nav-item" id="calendar">
-            <a class="nav-link" id="events" href="{% url 'event_index' %}">
+            <a class="nav-link" href="{% url 'event_index' %}">
+              <img src="{% static 'brevet/svg/calendar.svg' %}"/>
               Календарь
             </a>
           </li>
-          <li class="nav-item dropdown"  id="res">
+          <li class="nav-item dropdown">
             <a class="nav-link dropdown-toggle" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+              <img src="{% static 'brevet/svg/results.svg' %}"/>
               Результаты
             </a>
             <div class="dropdown-menu" aria-labelledby="navbarDropdown">
@@ -48,22 +58,27 @@
               <a class="dropdown-item" href="{% url 'statistics_default' %}">Статистика клуба</a>
             </div>
           </li>
-          <li class="nav-item" id="routes">
+          <li class="nav-item">
             <a class="nav-link" href="{% url 'route_index' %}">
-              Маршруты</a>
+              <img src="{% static 'brevet/svg/routes.svg' %}"/>
+              Маршруты
+            </a>
           </li>
-          <li class="nav-item" id="rules">
+          <li class="nav-item">
             <a class="nav-link" href="http://www.russianrandonneur.ru/pravila-brm/">
+              <img src="{% static 'brevet/svg/rules.svg' %}"/>
               Правила
             </a>
           </li>
-          <li class="nav-item" id="faq">
+          <li class="nav-item">
             <a class="nav-link" href="{% url 'faq' %}">
+              <img src="{% static 'brevet/svg/faq.svg' %}"/>
               FAQ
             </a>
           </li>
-          <li class="nav-item" id="forum">
+          <li class="nav-item">
             <a class="nav-link" href="https://omskvelo.ru">
+              <img src="{% static 'brevet/svg/forum.svg' %}"/>
               Форум
             </a>
           </li>
