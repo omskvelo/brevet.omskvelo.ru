@@ -1,6 +1,7 @@
 from pathlib import Path
 import os
-import dotenv
+
+print ("Reading settings!")
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -9,7 +10,9 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 DEBUG = False
 
 # Load environment variables (DEBUG mode only)
-dotenv.load_dotenv(BASE_DIR.parent / '.env')
+if DEBUG:
+    import dotenv
+    dotenv.load_dotenv(BASE_DIR.parent / '.env')
 
 SECRET_KEY = os.environ['DJANGO_SECRET']
 

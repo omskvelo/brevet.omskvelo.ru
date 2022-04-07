@@ -3,24 +3,24 @@ version: '3.7'
 services:
   web:
     build: .
-    # command: sleep infinity
     command: sh -c "
       cd /home/brevet/web/brevet
-      && sleep 10
       && python manage.py migrate
       && python manage.py createcachetable
       && gunicorn brevet.wsgi --bind 0.0.0.0:8000"
     volumes:
-      - media_volume:/home/brevet/web/brevet/media/
+      - media:/home/brevet/web/brevet/media
     expose:
       - 8000
     depends_on:
       - db
+    env_file:
+      - .env
 
   db:
     image: postgres:14.2-alpine
     volumes:
-      - postgres_data:/var/lib/postgresql/data/
+      - postgres_data:/var/lib/postgresql/data
     env_file:
       - .env
 
@@ -28,7 +28,7 @@ services:
   nginx:
     build: ./nginx
     volumes:
-      - media_volume:/home/brevet/web/brevet/media/
+      - media:/home/brevet/web/brevet/media
     ports:
       - 1337:80
     depends_on:
@@ -36,4 +36,4 @@ services:
 
 volumes:
   postgres_data:
-  media_volume:
+  media:
