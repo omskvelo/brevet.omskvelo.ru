@@ -1,16 +1,17 @@
 from pathlib import Path
-import sys
-sys.path.append("../..")
-
-import settings_secret
+import os
+import dotenv
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-SECRET_KEY = settings_secret.SECRET_KEY
-
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
+
+# Load environment variables (DEBUG mode only)
+dotenv.load_dotenv(BASE_DIR.parent / '.env')
+
+SECRET_KEY = os.environ['DJANGO_SECRET']
 
 if DEBUG:
     ALLOWED_HOSTS = ['*']
@@ -93,8 +94,8 @@ else:
         'default': {
             'ENGINE': 'django.db.backends.postgresql_psycopg2',
             'NAME': 'brevet',
-            'USER' : settings_secret.POSTGRES_USER,
-            'PASSWORD' : settings_secret.POSTGRES_PASSWORD,
+            'USER' : os.environ['POSTGRES_USER'],
+            'PASSWORD' : os.environ['POSTGRES_PASSWORD'],
             'HOST' : 'db',
             'PORT' : '5432',
         }
@@ -157,7 +158,7 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 # E-mail configuration
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'
-EMAIL_HOST_PASSWORD = settings_secret.EMAIL_HOST_PASSWORD
+EMAIL_HOST_PASSWORD = os.environ['EMAIL_HOST_PASSWORD']
 EMAIL_USE_TLS = True
 EMAIL_PORT = 587
 EMAIL_HOST_USER = 'audaxomsk@gmail.com'

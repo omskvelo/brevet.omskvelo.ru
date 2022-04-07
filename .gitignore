@@ -168,5 +168,4 @@ activate/
 etc/
 
 # Credentials
-**/settings_secret.py
-*.env
+.env

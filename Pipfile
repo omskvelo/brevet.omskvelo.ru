@@ -16,6 +16,7 @@ transliterate = "*"
 django-cookie-consent = "*"
 psycopg2 = "*"
 gunicorn = "*"
+python-dotenv = "*"
 
 [dev-packages]
 
