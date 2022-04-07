@@ -13,16 +13,20 @@ services:
     expose:
       - 8000
     depends_on:
-      - db
-    env_file:
-      - .env
+      db:
+        condition: service_healthy
+    env_file: .env
 
   db:
     image: postgres:14.2-alpine
     volumes:
       - postgres_data:/var/lib/postgresql/data
-    env_file:
-      - .env
+    env_file: .env
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 1s
+      timeout: 1s
+      retries: 10
 
 
   nginx:
@@ -31,7 +35,7 @@ services:
       - media:/home/brevet/web/brevet/media
     ports:
       - 1337:80
-    depends_on:
+    depends_on: 
       - web
 
 volumes:
