@@ -23,62 +23,12 @@
 
     {% load split %}
     {% with 'brevet/img/cover1.jpg,brevet/img/cover2.jpg,brevet/img/cover3.jpg,brevet/img/cover4.jpg,brevet/img/cover5.jpg'|split:','|random as cover_image_url %}
-    <style>     
-      .h-cover {
-        font-family: 'Russo One', sans-serif;
-        font-size: 4rem;
-        padding: 20px min(10%, 192px);
-        margin-top: auto;
-      }
-
-      .header__heading {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        height:100px;
-      }
-
-      .header__title {
-        font-family: 'Russo One', sans-serif;
-        font-size: 32px;
-        line-height: 38.4px;
-        color: #FFF;
-      }
-
-      .header__desc {
-        font-family: 'Russo One', sans-serif;
-        height: 30px;
-        font-size: 20px;
-        line-height: 30px;
-        color: #FFF;
-      }
-
-      .nav-item {
-        padding: 8px 0 8px 0;
-        margin: 0;
-        white-space:nowrap;
-        color: rgba(255,255,255);
-      }
-
-      .nav-link {
-        color: rgba(255,255,255);
-      }
-
-
-      .header {
-        display: flex; 
-        flex-direction: column;
-        height: 500px;
-        width: 100%;
-        max-width: 1920px;
-        margin: 0 auto;
-        color: #FFF;
-        background-size:cover;
+    <style>       
+      .cover {
         background-image: 
           linear-gradient(to bottom, rgba(50, 50, 0, 0.3), rgba(29, 54, 83, 0.7)),
           url("{% static cover_image_url %}");
       }
-
     </style>
     {% endwith %}
 
@@ -87,7 +37,7 @@
     </title>
   </head>
   <body>
-    <header class="header">
+    <header class="cover">
     {% include 'navbar.html' %}
       <h1 class="h-cover">
         {% block cover %}
