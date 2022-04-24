@@ -4,8 +4,11 @@
 Результаты | 
 {% endblock %}
 
+{% block cover %}
+    Протоколы бреветов
+{% endblock %}
+
 {% block content %}
-    <h2 class="my-5">Протоколы бреветов</h2>
     <div class="my-4">
         {% for y in years %}
             {% if year == y %}

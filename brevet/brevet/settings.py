@@ -23,6 +23,7 @@ else:
 
 INSTALLED_APPS = [
     'users',
+    'brevet',
     'brevet_database',
     'search',
     'phonenumber_field',

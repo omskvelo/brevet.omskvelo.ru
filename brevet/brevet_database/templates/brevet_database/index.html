@@ -3,12 +3,14 @@
 {% block title %}
 {% endblock %}
 
+{% block cover %}
+    Следующий бревет
+{% endblock %}
+
 {% block content %}
 
     {% if event %}
         <section class="next">
-            <h1 class="h2 my-3">Следующий бревет</h1>
-            <hr>
             <h2 class="h3 my-3">
                 {{event.route.name}} 
                 <small class="text-muted">

@@ -4,10 +4,11 @@
     Статистика | {{ route.name }} {{ route.distance }} км | 
 {% endblock %}
 
+{% block cover %}
+    {{ route.name }}
+{% endblock %}
+
 {% block content %}
-    <h2 class="my-5">
-        {{ route.name }}
-    </h2>
     <h4 class="text-muted my-3">
         {{ route.distance }} км 
     </h4>

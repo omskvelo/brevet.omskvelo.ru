@@ -4,9 +4,8 @@
     {{ route.name }} {{ route.distance }} км | 
 {% endblock %}
 
-{% block content %}
-    <h2 class="my-5">
-        {{ route.name }}
+{% block cover %}
+    {{ route.name }}
         {% if user.is_superuser %}
             <a class="btn btn-light" href="{{ route.get_admin_url_change }}">   
                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pencil-square" viewBox="0 0 16 16">
@@ -21,7 +20,9 @@
                 </svg>
             </a>
         {% endif %}
-    </h2>
+{% endblock %}
+
+{% block content %}
     <h4 class="text-muted my-3">{{ route.distance }} км </h4>
 
     {% if route.get_controls %}

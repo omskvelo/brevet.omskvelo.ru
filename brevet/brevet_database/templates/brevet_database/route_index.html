@@ -4,9 +4,7 @@
 Маршруты | 
 {% endblock %}
 
-{% block content %}
-
-<h2 class="my-5">
+{% block cover %}
     Маршруты
     {% if user.is_superuser %}
         <a class="btn btn-light" href="{{ routes.0.get_admin_url_add }}">   
@@ -16,7 +14,10 @@
               </svg>
         </a>
     {% endif %}
-</h2>
+{% endblock %}
+
+
+{% block content %}
 
 <div class="my-4">
     {% for d in distances %}
