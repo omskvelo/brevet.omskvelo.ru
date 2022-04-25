@@ -74,10 +74,9 @@
     margin-right: 16px;
   }
 
-  .nav-link {
-    color: rgba(255,255,255);
-    padding: 0;
-  }
+  .navbar-dark .navbar-nav .nav-link {
+    color: white;
+ }
   
   .navbar-external-user {
     justify-content: flex-end;
