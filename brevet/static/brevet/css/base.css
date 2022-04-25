@@ -191,12 +191,6 @@ body {
   background-position: top 0px right 0px;
 }
 
-.card-buttons {
-  display: flex;
-  align-items: flex-end;
-  margin-top: auto;
-}
-
 @media screen and (max-width: 1210px) {
   .nav-item:not(:last-child) {
   margin-right: 8px;
