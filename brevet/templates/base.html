@@ -11,7 +11,7 @@
     <!-- Preconnect fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Russo+One&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@500&family=Russo+One&display=swap" rel="stylesheet">
 
     <!-- Site CSS -->
     {% load static %}
@@ -21,6 +21,7 @@
     <!-- Site icon -->
     <link rel="icon" href="{% static 'brevet/img/fav.ico' %}">
 
+    <!-- Dynamic styles -->
     {% load split %}
     {% with 'brevet/img/cover1.jpg,brevet/img/cover2.jpg,brevet/img/cover3.jpg,brevet/img/cover4.jpg,brevet/img/cover5.jpg'|split:','|random as cover_image_url %}
     <style>       
@@ -29,6 +30,23 @@
           linear-gradient(to bottom, rgba(50, 50, 0, 0.3), rgba(29, 54, 83, 0.7)),
           url("{% static cover_image_url %}");
       }
+
+      .brm_200 {
+        background-image: url("{% static 'brevet/svg/200.svg'%}");
+      }
+      .brm_300 {
+        background-image: url("{% static 'brevet/svg/300.svg'%}");
+      }
+      .brm_400 {
+        background-image: url("{% static 'brevet/svg/400.svg'%}");
+      }
+      .brm_600 {
+        background-image: url("{% static 'brevet/svg/600.svg'%}");
+      }
+      .brm_1000 {
+        background-image: url("{% static 'brevet/svg/1000.svg'%}");
+      }
+
     </style>
     {% endwith %}
 

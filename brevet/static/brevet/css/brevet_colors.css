@@ -1,29 +1,24 @@
-.card-brm {
-    width: 18rem; 
-    height: 10rem;
-}
-
 .brm_200 {
-    background-color: #FFED93;
-    border-color: #FFD800;
+    background-color: #fff1a8;
+    border-color: #ffe553;
 }
 
 .brm_300 {
-    background-color: #C0FF9B;
-    border-color: #59C615;
+    background-color: #deffb3;
+    border-color: #bfff6c;
 }
 
 .brm_400 {
-    background-color:  #E1ADFF;
-    border-color:  #B73DFF;
+    background-color:  #d1b6ff;
+    border-color:  #b68fff;
 }
 
 .brm_600 {
-    background-color:  #FFB68E;
-    border-color:  #FF8442;
+    background-color:  #ffc9ac;
+    border-color:  #ffaf85;
 }
 
 .brm_1000 {
-    background-color:  #BCBCBC;
-    border-color:  #808080;
+    background-color:  #cfcfcf;
+    border-color:  #adadad;
 }

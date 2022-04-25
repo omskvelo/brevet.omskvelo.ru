@@ -34,7 +34,11 @@
                         <th>Рандоннёр</th>
                         <th>Дата</th>
                         <th>Время</th>
-                        <th>Омологация</th>
+                        <th>
+                            <div class="d-none d-md-block">
+                                Омологация
+                            </div>
+                        </th>
                     </tr>
                 </thead>
                 <tbody>
@@ -51,7 +55,11 @@
                                 </a>
                             </td>
                             <td>{{ result.get_time }}</td>   
-                            <td>{{ result.homologation }}</td>     
+                            <td>
+                                <div class="d-none d-md-block">
+                                    {{ result.homologation }}
+                                </div>
+                            </td>     
                         </tr>
                     {% endfor %}
                 </tbody>

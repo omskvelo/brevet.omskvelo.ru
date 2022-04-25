@@ -276,7 +276,7 @@ def event_dnf(request, distance, date):
     else:
         raise Http404
 
-
+@never_cache
 def event_index(request):
     events = get_list_or_404(Event.objects.order_by("date"), club=DEFAULT_CLUB_ID, finished=False)
 
