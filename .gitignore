@@ -148,7 +148,8 @@ cython_debug/
 staticfiles/
 
 # Static images
-**/static/*/img/*
+brevet/static/*/img/*
+!brevet/static/*/img/load_to_server.bat
 
 # Media files
 uploads/
