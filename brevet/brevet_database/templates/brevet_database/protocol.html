@@ -4,8 +4,12 @@
 Протокол бревета {{ event.route.distance }} км от {{ event.get_date }} г. | 
 {% endblock %}
 
+{% block cover %}
+    Протокол бревета {{ event.route.distance }} км "{{ event.route.name }}"
+{% endblock %}
+
 {% block content %}
-    <h3 class="text-center my-5">
+    <h3 class="text-center my-5 only-print">
         Протокол бревета {{ event.route.distance }} км от {{ event.get_date }} г.
     </h3>
 

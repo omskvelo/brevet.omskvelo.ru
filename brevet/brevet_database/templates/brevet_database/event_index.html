@@ -22,6 +22,8 @@
 {% endblock %}
 
 {% block content %}
+    <h1 class="only-print">Календарь {{ year }}</h1>
+    <hr class="only-print">
     {% for year, months in years.items %}
       {% for month, events in months.items %}
         <h2 class="mx-1">{{ month }}</h2>

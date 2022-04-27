@@ -18,6 +18,7 @@
 
 
 {% block content %}
+<h1 class="only-print">Маршруты</h1>
 
 <div class="my-4">
     {% for d in distances %}
@@ -33,60 +34,25 @@
     {% endfor %}
 </div>
 
-<div class="row row-cols-auto">
+<ul class="row row-cols-auto route-list">
     {% for route in routes %}
-        <div class="col my-3">
-            <div class="card" style="width: 20rem; height: 35rem;">
-                <!-- <img src="" class="card-img-top" alt="Image"> -->
-                <div class="card-body">
-                    <h5 class="card-title">
-                        {{ route.name }}
-                    </h5>
-                    <h5><small class="text-muted">{{ route.distance }} км</small></h5>
-                    <!-- {% if route.map_embed_src %}
-                        <div>
-                            <iframe src="{{ route.map_embed_src }}&elevationDiagram=false&hideName=true&u=m" width="100%" height = "300" frameborder="0" scrolling="no" marginheight="0" marginwidth="0"></iframe>
-                        </div>
-                    {% endif %} -->
-
-                    {% if route.image %}
-                        <img src="{{ route.image.url }}" class = "my-3"/>
-                    {% endif %}
-                    {% if route.text_brief %}
-                        <p class="card-text">{{ route.text_brief }}</p>
-                    {% endif %}
-                    <div style="position: absolute; bottom: 0px;">
-                        <a href="{{ route.get_absolute_url }}" class="btn btn-dark my-3">
-                            Описание
-                        </a>
-                        {% if route.gpx %}
-                        <a class="btn btn-dark my-3" href="{{ route.gpx.url }}">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-download" viewBox="0 0 16 16">
-                                <path d="M.5 9.9a.5.5 0 0 1 .5.5v2.5a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-2.5a.5.5 0 0 1 1 0v2.5a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2v-2.5a.5.5 0 0 1 .5-.5z"/>
-                                <path d="M7.646 11.854a.5.5 0 0 0 .708 0l3-3a.5.5 0 0 0-.708-.708L8.5 10.293V1.5a.5.5 0 0 0-1 0v8.793L5.354 8.146a.5.5 0 1 0-.708.708l3 3z"/>
-                            </svg>
-                            gpx
-                        </a>
-                        {% endif %}
-                    
-                        {% if user.is_superuser %}
-                            <a class="btn btn-light" href="{{ route.get_admin_url_change }}">   
-                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pencil-square" viewBox="0 0 16 16">
-                                    <path d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z"/>
-                                    <path fill-rule="evenodd" d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5v11z"/>
-                                </svg>
-                            </a>
-                            <a class="btn btn-light" href="{{ route.get_admin_url_delete }}">   
-                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-x-circle" viewBox="0 0 16 16">
-                                <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
-                                <path d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708z"/>
-                                </svg>
-                            </a>
-                        {% endif %}
-                    </div>
-                </div>
+        <li class="col my-3">
+            <div class="route-card" style="background-image: 
+                linear-gradient(to bottom, rgba(255, 255, 255, 0), rgba(0, 0, 0, 0.35)),
+                url('{{route.image.url}}');">
+                <a class="h4 route-card-title" href="{{ route.get_absolute_url }}">
+                    {{ route.name }}
+                    <small>
+                        {{ route.distance }} км
+                    </small>
+                </a>
             </div>
-        </div>
+            {% if route.text_brief %}
+            <p class="route-card-caption">
+                {{ route.text_brief }}
+            </p>
+            {% endif %}
+        </li>
     {% endfor %}
-</div>
+</ul>
 {% endblock %}

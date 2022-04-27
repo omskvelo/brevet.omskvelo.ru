@@ -18,7 +18,7 @@
 {% endblock %}
 
 {% block content %}
-
+    <h1 class="only-print">Следующий бревет</h1>
     {% if event %}
         <section class="next">
             <h2 class="h3 my-3">
@@ -78,13 +78,14 @@
     {% if prev_event %}
 <!-- Bodge: the next /div closes container opened in base.html. It is reopened later-->
 </div>
-<div class="cover" id="prev-brev">
+<div class="cover no-print" id="prev-brev">
     <h2 class="h-cover">
         Предыдущий бревет
     </h2>
 </div>
 <div class="container-body">
 <!-- /bodge-->
+    <h1 class="only-print">Предыдущий бревет</h1>
     <section class="prev">
             <!-- <h2 class="mt-3">Предыдущий бревет</h2> -->
             <h3 class="h3 my-3">

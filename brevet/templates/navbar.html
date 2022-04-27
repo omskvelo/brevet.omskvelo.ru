@@ -18,7 +18,7 @@
       {% if user.is_superuser %}
         <a class="btn btn-light me-2" href="\admin">
           <img src="{% static 'brevet/svg/admin.svg' %}"/>
-          Django Admin
+          Admin
         </a>
       {% endif %}
       <a class="btn btn-light  me-2" href="{% url 'user_profile' %}">

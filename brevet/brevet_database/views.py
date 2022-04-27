@@ -296,7 +296,7 @@ def event_index(request):
     } 
     return render(request, "brevet_database/event_index.html", context)      
 
-
+@never_cache
 def route(request, slug=None, route_id=None):
     if slug:
         route = get_object_or_404(Route, slug=slug)
@@ -310,7 +310,7 @@ def route(request, slug=None, route_id=None):
         }  
     return render(request, "brevet_database/route.html", context)       
 
-
+@never_cache
 def route_index(request, distance=200):
     routes = get_list_or_404(Route, active=True, distance=distance, club=DEFAULT_CLUB_ID)
 
@@ -321,7 +321,7 @@ def route_index(request, distance=200):
     } 
     return render(request, "brevet_database/route_index.html", context)         
 
-
+@never_cache
 def route_stats(request, slug=None, route_id=None):
     if slug:
         route = get_object_or_404(Route, slug=slug)

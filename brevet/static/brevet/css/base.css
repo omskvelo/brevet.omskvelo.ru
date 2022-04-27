@@ -6,8 +6,6 @@ body {
   font-family: 'Open Sans', sans-serif;
 }
 
-
-
 .container-nav {
   display: block;
   width: 100%;
@@ -200,9 +198,49 @@ body {
 }
 
 .card-brm {
-  width: 18rem; 
+  width: 20rem; 
   background-repeat: no-repeat;
   background-position: top 0px right 0px;
+}
+
+.route-list {
+  list-style: none;
+  padding: 0;
+}
+
+.route-card {
+  display: flex; 
+  flex-direction: column;
+  justify-content: flex-end;
+  height: 20rem;
+  width: 20rem;
+  background-size: cover;
+  background-position: center;
+  text-decoration: none;
+  border-radius: 5px;
+}
+
+.route-card-title {
+  color: #FFF;
+  text-decoration: none;
+  font-family: 'Russo One', sans-serif;
+  margin-top:auto;
+  margin-bottom: 0;
+  padding: 8px;
+}
+
+.route-card-title:hover {
+  color: #DDF;
+}
+
+.route-card-title small {
+  display: block;
+  margin: 0;
+}
+
+.route-card-caption {
+  padding: 8px;
+  width: 20rem;
 }
 
 @media screen and (max-width: 1210px) {
@@ -329,5 +367,28 @@ body {
 
   .card-brm {
     width: 16rem; 
+  }
+
+  .route-card {
+    height: 16rem;
+    width: 16rem;
+  }
+
+  .route-card-caption {
+    width: 16rem;
+  }
+}
+
+.only-print{
+  display: none;
+}
+
+@media print {
+  .no-print {
+    display: none;
+  }
+
+  .only-print {
+    display: block;
   }
 }

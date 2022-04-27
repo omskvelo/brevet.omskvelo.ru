@@ -17,6 +17,7 @@
 {% endblock %}
 
 {% block content %}
+    <h1 class="only-print">{{ randonneur.russian_surname }} {{ randonneur.russian_name }}</h1>
 
     {% if results %}
     <h5 class="text-muted">Общая дистанция: {{ total_distance }} км</h5>
