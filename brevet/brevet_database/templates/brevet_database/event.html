@@ -81,6 +81,12 @@
         {% endfor %}
     {% endif %}
 
+    {% if event.route.get_text %}
+        {% for line in event.route.get_text %}
+        <p class = "my-3">{{ line }}</p>
+        {% endfor %}
+    {% endif %}
+
     {% if event.warning_text %}
         <div class = "alert alert-danger my-3">
             {{ event.warning_text }}
