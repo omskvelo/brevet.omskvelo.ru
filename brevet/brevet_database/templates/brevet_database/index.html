@@ -1,6 +1,16 @@
 {% extends "base.html" %}
 
-{% block title %}
+{% block css %}
+{% load static %}
+<style>
+    #prev-brev {
+        background-image: 
+            linear-gradient(to bottom, rgba(50, 50, 0, 0.3), rgba(29, 54, 83, 0.7)),
+            url("{% static 'brevet/img/cover_prev.jpg' %}");
+
+      }
+
+</style>
 {% endblock %}
 
 {% block cover %}
@@ -66,9 +76,17 @@
     {% endif %}
 
     {% if prev_event %}
-        <section class="prev">
-            <h2 class="mt-3">Предыдущий бревет</h2>
-            <hr>
+<!-- Bodge: the next /div closes container opened in base.html. It is reopened later-->
+</div>
+<div class="cover" id="prev-brev">
+    <h2 class="h-cover">
+        Предыдущий бревет
+    </h2>
+</div>
+<div class="container-body">
+<!-- /bodge-->
+    <section class="prev">
+            <!-- <h2 class="mt-3">Предыдущий бревет</h2> -->
             <h3 class="h3 my-3">
                 {{prev_event.route.name}} 
                 <small class="text-muted">

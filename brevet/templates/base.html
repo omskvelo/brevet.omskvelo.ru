@@ -16,10 +16,6 @@
     <!-- Site CSS -->
     {% load static %}
     <link href="{% static 'brevet/css/base.css' %}" rel="stylesheet">
-    {% block css %}{% endblock %}
-
-    <!-- Site icon -->
-    <link rel="icon" href="{% static 'brevet/img/fav.ico' %}">
 
     <!-- Dynamic styles -->
     {% load split %}
@@ -49,6 +45,12 @@
 
     </style>
     {% endwith %}
+
+    <!-- Individual page style (if any)-->
+    {% block css %}{% endblock %}
+
+    <!-- Site icon -->
+    <link rel="icon" href="{% static 'brevet/img/fav.ico' %}">
 
     <title>
       {% block title %}{% endblock %} Цепная Реакция 
