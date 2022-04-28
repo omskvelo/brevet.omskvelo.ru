@@ -21,13 +21,13 @@ class User(AbstractUser):
     ordering = ('email',)
 
     def __str__(self):
-        return f"{self.last_name} {self.first_name} {self.phone_number} {self.email}"
+        return f"{self.last_name.capitalize()} {self.first_name.capitalize()} {self.phone_number} {self.email}"
 
     def get_username(self):
         return f"{self.email}"
 
     def get_display_name(self):
-        return f"{self.first_name} {self.last_name}"
+        return f"{self.first_name.capitalize()} {self.last_name.capitalize()}"
 
     def create_randonneur(self):
         if not self.randonneur:
