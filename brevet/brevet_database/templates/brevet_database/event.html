@@ -116,9 +116,11 @@
     {% endif %}
     
     {% if event.get_text %}
-        {% for line in event.get_text %}
-        <p class = "my-3">{{ line }}</p>
-        {% endfor %}
+        <div class = "alert alert-primary my-3">
+            {% for line in event.get_text %}
+                <p class = "my-3">{{ line }}</p>
+            {% endfor %}
+        </div>
     {% endif %}
 
     {% if event.route.get_text %}
