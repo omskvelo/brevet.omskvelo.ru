@@ -306,7 +306,7 @@ body {
   }
 }
 
-@media screen and (max-width: 575px){
+@media screen and (max-width: 600px){
   .h-cover{
     font-size: 32px;
   }
@@ -348,7 +348,15 @@ body {
   }
 }
 
-@media screen and (max-width: 424px){
+.only-mobile {
+  display: none;
+}
+
+.only-mobile small{
+  display: block;
+}
+
+@media screen and (max-width: 426px){
   .h-cover{
     font-size: 24px;
   }
@@ -377,7 +385,20 @@ body {
   .route-card-caption {
     width: 16rem;
   }
+
+  .table {
+    font-size: 0.6rem;
+  }
+
+  .only-mobile {
+    display: block;
+  }
+
+  .not-mobile {
+    display: none;
+  }
 }
+
 
 .only-print{
   display: none;
