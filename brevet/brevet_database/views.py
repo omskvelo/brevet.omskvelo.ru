@@ -1,10 +1,8 @@
 from datetime import datetime, timedelta
-from time import perf_counter
 
 from django.http import Http404
 from django.shortcuts import get_object_or_404, get_list_or_404, redirect, render
 from django.views.decorators.cache import cache_page, never_cache
-from django.db import connection
 
 import babel.dates
 

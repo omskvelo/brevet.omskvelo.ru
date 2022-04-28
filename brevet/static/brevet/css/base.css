@@ -348,11 +348,11 @@ body {
   }
 }
 
-.only-mobile {
+.only-mobile-table {
   display: none;
 }
 
-.only-mobile small{
+table small{
   display: block;
 }
 
@@ -390,15 +390,14 @@ body {
     font-size: 0.6rem;
   }
 
-  .only-mobile {
-    display: block;
+  .only-mobile-table {
+    display: table;
   }
 
   .not-mobile {
     display: none;
   }
 }
-
 
 .only-print{
   display: none;
