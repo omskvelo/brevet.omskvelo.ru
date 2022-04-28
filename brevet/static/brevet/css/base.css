@@ -390,6 +390,10 @@ table small{
     font-size: 0.6rem;
   }
 
+  .table td {
+    padding: 0.3rem;
+  }
+
   .only-mobile-table {
     display: table;
   }

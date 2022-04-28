@@ -13,15 +13,6 @@
 
     {% if years %}
         <div class="my-4">
-            {% if year %}
-                <a class="btn btn-light me-1 mb-1" href="{% url 'statistics_total' %}">
-                    {{ year_min_to_max }}
-                </a>     
-            {% else %}   
-                <a class="btn btn-dark me-1 mb-1" href="{% url 'statistics_total' %}">
-                    {{ year_min_to_max }}
-                </a>    
-            {% endif %} 
             {% for y in years %}
                 {% if year == y %}
                 <a class="btn btn-dark me-1 mb-1" href="{% url 'statistics' y %}">
@@ -33,6 +24,15 @@
                 </a>
                 {% endif %}
             {% endfor %}   
+            {% if year %}
+                <a class="btn btn-light me-1 mb-1" href="{% url 'statistics_total' %}">
+                    {{ year_min_to_max }}
+                </a>     
+            {% else %}   
+                <a class="btn btn-dark me-1 mb-1" href="{% url 'statistics_total' %}">
+                    {{ year_min_to_max }}
+                </a>    
+            {% endif %} 
         </div>
     {% endif %}
 
@@ -65,13 +65,15 @@
         <h5 class="my-4">
             Суперрандоннёры
         </h5>
+        <ul>
         {% for randonneur in sr %}
-            <p class="mx-4 my-1" >
+            <li>
                 <a href = "{{ randonneur.get_absolute_url }}">
                     {{ randonneur }}{{ randonneur.sr_string }}
                 </a>
-            </p>
+            </li>
         {% endfor %}
+        </ul>
     </p>
     {% endif %}
 
@@ -79,25 +81,66 @@
         <h5 class="my-4"> 
             Результаты бреветов LRM, SR600, 1000 км  
         </h5>
-        <table class="table table-striped table-hover">
+        <table class="table table-striped table-hover not-mobile">
             <thead>
                 <tr>
-                    <th>Дата</th>
-                    <th>Маршрут</th>
-                    <th>Дистанция</th>
                     <th>Рандоннёр</th>
+                    <th>
+                        <span class="d-none d-lg-block">
+                            Дата
+                        </span>
+                    </th>
+                    <th>Бревет</th>
+                    <th>Дистанция</th>
                     <th>Результат</th>
                 </tr>
             </thead>
             <tbody> 
                 {% for result in elite_dist %}
                     <tr>
-                        <td>{{ result.get_date }}</td>
-                        <td>{{ result.event.route.name }}</td>
-                        <td>{{ result.event.route.distance }} км</td>
                         <td>
                             <a href = "{{ result.randonneur.get_absolute_url }}">
                                 {{ result.randonneur }}
+                            </a>
+                        </td>
+                        <td>
+                            <span class="d-none d-lg-block">
+                                {{ result.get_date }}
+                            </span>
+                        </td>
+                        <td>
+                            <a href="{{ result.event.get_absolute_url }}">
+                                {{ result.event.route.name }}
+                            </a>
+                        </td>
+                        <td>{{ result.event.route.distance }} км</td>
+                        <td>{{ result.get_time }}</td>    
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        <table class="table table-striped table-hover only-mobile-table">
+            <thead>
+                <tr>
+                    <th>Рандоннёр</th>
+                    <th>Бревет</th>
+                    <th>Результат</th>
+                </tr>
+            </thead>
+            <tbody> 
+                {% for result in elite_dist %}
+                    <tr>
+                        <td>
+                            <a href = "{{ result.randonneur.get_absolute_url }}">
+                                {{ result.randonneur }}
+                            </a>
+                        </td>
+                        <td>
+                            <a href = "{{ result.event.get_absolute_url }}">
+                                {{ result.event.route.distance }} км 
+                                <small>
+                                    {{ result.event.route.name }}
+                                </small>
                             </a>
                         </td>
                         <td>{{ result.get_time }}</td>    
@@ -149,9 +192,10 @@
                     <th>Рандоннёр</th>
                     <th>Дата</th>
                     <th>Бревет</th>
-                    <th>Клуб-организатор</th>
+                    <th class="d-none d-lg-block">
+                        Клуб-организатор
+                    </th>
                     <th>Время</th>
-                    <th>Омологация</th>
                 </tr>
             </thead>
             <tbody>
@@ -168,9 +212,10 @@
                                 {{ result.event.route.name }}
                             </a>
                         </td>
-                        <td>{{ result.event.club }}</td>
-                        <td>{{ result.get_time }}</td>   
-                        <td>{{ result.homologation }}</td>     
+                        <td class="d-none d-lg-block">
+                            {{ result.event.club }}
+                        </td>
+                        <td>{{ result.get_time }}</td>    
                     </tr>
                 {% endfor %}
             </tbody>
@@ -188,9 +233,10 @@
                     <th>Рандоннёр</th>
                     <th>Дата</th>
                     <th>Бревет</th>
-                    <th>Клуб-организатор</th>
+                    <th class="d-none d-lg-block">
+                        Клуб-организатор
+                    </th>
                     <th>Время</th>
-                    <th>Омологация</th>
                 </tr>
             </thead>
             <tbody>
@@ -207,9 +253,10 @@
                                 {{ result.event.route.name }}
                             </a>
                         </td>
-                        <td>{{ result.event.club }}</td>
-                        <td>{{ result.get_time }}</td>   
-                        <td>{{ result.homologation }}</td>     
+                        <td class="d-none d-lg-block">
+                            {{ result.event.club }}
+                        </td>
+                        <td>{{ result.get_time }}</td>        
                     </tr>
                 {% endfor %}
             </tbody>
@@ -227,9 +274,10 @@
                     <th>Рандоннёр</th>
                     <th>Дата</th>
                     <th>Бревет</th>
-                    <th>Клуб-организатор</th>
+                    <th class="d-none d-lg-block">
+                        Клуб-организатор
+                    </th>
                     <th>Время</th>
-                    <th>Омологация</th>
                 </tr>
             </thead>
             <tbody>
@@ -246,9 +294,10 @@
                                 {{ result.event.route.name }}
                             </a>
                         </td>
-                        <td>{{ result.event.club }}</td>
-                        <td>{{ result.get_time }}</td>   
-                        <td>{{ result.homologation }}</td>     
+                        <td class="d-none d-lg-block">
+                            {{ result.event.club }}
+                        </td>
+                        <td>{{ result.get_time }}</td>        
                     </tr>
                 {% endfor %}
             </tbody>
@@ -265,9 +314,10 @@
                     <th>Рандоннёр</th>
                     <th>Дата</th>
                     <th>Бревет</th>
-                    <th>Клуб-организатор</th>
+                    <th class="d-none d-lg-block">
+                        Клуб-организатор
+                    </th>
                     <th>Время</th>
-                    <th>Омологация</th>
                 </tr>
             </thead>
             <tbody>
@@ -284,9 +334,10 @@
                                 {{ result.event.route.name }}
                             </a>
                         </td>
-                        <td>{{ result.event.club }}</td>
-                        <td>{{ result.get_time }}</td>   
-                        <td>{{ result.homologation }}</td>     
+                        <td class="d-none d-lg-block">
+                                {{ result.event.club }}
+                        </td>
+                        <td>{{ result.get_time }}</td>      
                     </tr>
                 {% endfor %}
             </tbody>
