@@ -115,7 +115,7 @@
     </a>
     {% endif %}
     
-    {% if event.get_text %}
+    {% if event.text %}
         <div class="alert alert-primary my-3">
             {% for line in event.get_text %}
                 <p class="m-0">{{ line }}</p>
@@ -123,7 +123,7 @@
         </div>
     {% endif %}
     
-    {% if event.route.get_text %}
+    {% if event.route.text %}
         <h3 class="mе-3">
             О маршруте
         </h3>
