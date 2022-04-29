@@ -27,7 +27,7 @@ class User(AbstractUser):
         return f"{self.email}"
 
     def get_display_name(self):
-        return f"{self.first_name.capitalize()} {self.last_name.capitalize()}"
+        return f"{self.last_name.capitalize()} {self.first_name.capitalize()}"
 
     def create_randonneur(self):
         if not self.randonneur:
