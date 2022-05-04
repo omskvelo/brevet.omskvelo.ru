@@ -25,7 +25,7 @@
                 </strong>
             {% else %}
                 {% if application.user.randonneur %}
-                    <a href="{{ user.randonneur.get_absolute_url }}">
+                    <a href="{{ application.user.randonneur.get_absolute_url }}">
                         {{ application.user.randonneur }}
                     </a>
                 {% else %}
