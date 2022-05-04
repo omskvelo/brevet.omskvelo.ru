@@ -49,8 +49,9 @@
     <!-- Individual page style (if any)-->
     {% block css %}{% endblock %}
 
-    <!-- Site icon -->
-    <link rel="icon" href="{% static 'brevet/img/fav.ico' %}">
+    <!-- Site icons -->
+    <link rel="icon" type="image/png" sizes="64x64" href="{% static 'brevet/img/logo_64.png' %}">
+    <link rel="apple-touch-icon" sizes="180x180" href="{% static 'brevet/img/logo_180.png' %}">
 
     <title>
       {% block title %}{% endblock %} Цепная Реакция 
