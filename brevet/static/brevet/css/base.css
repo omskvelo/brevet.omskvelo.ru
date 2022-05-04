@@ -1,5 +1,13 @@
+a {
+  color: rgb(50, 50, 50);
+}
+
+a:hover {
+  color: rgb(0, 0, 0);
+}
+
 :root {
-  --cr-blue: #1D3652;
+  --cr-blue: rgb(29, 54, 82);
 }
 
 body {

@@ -302,7 +302,7 @@ class Event(AbstractModel):
         return self.route.get_controls
     
     def get_text(self):
-        return self.text.split("\n")
+        return [x for x in self.text.split("\n") if x]
 
     def __str__(self):
         club = str(self.club) if self.club.id != DEFAULT_CLUB_ID else ""

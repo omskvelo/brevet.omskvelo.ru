@@ -4,7 +4,14 @@
         <li>
             {% if application.user == user %}
                 <strong> 
-                    {{ user.get_display_name }}
+                    {% if user.randonneur %}
+                        <a href="{{ user.randonneur.get_absolute_url }}">
+                            {{ user.randonneur }}
+                        </a>
+                    {% else %}
+                        {{ user.get_display_name }}
+                    {% endif %}
+
                     {% if application.result %}
                     - {{application.result.get_time}}
                     {% endif %}
