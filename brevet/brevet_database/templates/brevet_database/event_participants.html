@@ -13,20 +13,22 @@
                 
                 {% if application.result %}
                     - {{application.result.get_time}}
+                    {% if application.result.medal %}
+                        &#127941;<!--Medal emoji-->
+                    {% endif %}
+                {% elif application.dnf %}
+                    - DNF
+                {% else %}  
+                    {% if application.payment %}
+                        &#128179; <!--Payment processed emoji-->
+                    {% endif %}
                 {% endif %}
 
-                {% if application.dnf %}
-                    - DNF
-                {% endif %}
-                {% if application.result.medal %}
-                    &#127941;<!--Medal emoji-->
-                {% endif %}
             {% if application.user == user %}</strong>{% endif %}
 
+
+            
             {% if user.is_superuser %}
-                {% if application.payment %}
-                    &#128179; <!--Payment processed emoji-->
-                {% endif %}
                 <small>
                     <a href="{{ application.get_admin_url_change }}">   
                         (править)
