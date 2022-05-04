@@ -34,9 +34,12 @@ class ResultAdmin(admin.ModelAdmin):
 class RandonneurAdmin(admin.ModelAdmin):
     search_fields = ['russian_surname', 'russian_name']
 
+class ApplicationAdmin(admin.ModelAdmin):
+    raw_id_fields = ['result']
+
 admin.site.register(Club)
 admin.site.register(Randonneur, RandonneurAdmin)
 admin.site.register(Route)
 admin.site.register(Event)
 admin.site.register(Result, ResultAdmin)
-admin.site.register(Application)
+admin.site.register(Application, ApplicationAdmin)
