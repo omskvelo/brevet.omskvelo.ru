@@ -24,12 +24,12 @@
                     {% endif %}
                 </strong>
             {% else %}
-                {% if user.randonneur %}
+                {% if application.user.randonneur %}
                     <a href="{{ user.randonneur.get_absolute_url }}">
-                        {{ user.randonneur }}
+                        {{ application.user.randonneur }}
                     </a>
                 {% else %}
-                    {{ user.get_display_name }}
+                    {{ application.user.get_display_name }}
                 {% endif %}
                 
                 {% if application.result %}
