@@ -1,25 +1,36 @@
-html,
-body {
+html {
   height: 100%;
 }
 
 body {
-  display: flex;
-  align-items: center;
-  padding-top: 40px;
-  padding-bottom: 40px;
-  background-color: #fafaff;
+  height: 100%;
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed;
+}
+
+p, h1, h2, h3, h4, h5, li, a, a:hover {
+  color: white;
+}
+
+p, li {
+  list-style: none;
+}
+
+ul {
+  padding-left: 0;
 }
 
 .form-signin {
   width: 100%;
+  min-height: 100%;
   max-width: 330px;
   padding: 15px;
   margin: auto;
-}
-
-.form-signin .checkbox {
-  font-weight: 400;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  background-image: linear-gradient(to bottom, rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.6))
 }
 
 .form-signin .form-floating:focus-within {

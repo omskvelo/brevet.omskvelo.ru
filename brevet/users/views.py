@@ -74,6 +74,7 @@ def change_password(request):
             return redirect('index')
         else:
             messages.error(request, 'Невозможно сменить пароль.')
+            context = {'form': form}
     else:
         form = PasswordChangeForm(request.user)
         context = {'form': form}

@@ -9,10 +9,10 @@
     {% csrf_token %}
     <h3 class="mb-3 fw-normal">Вход</h3>
     {% if form.errors %}
-    <label class="mb-2">
+    <p class="mb-2">
       Введены неверные имя пользователя или пароль. 
       <a href="{% url 'password_reset' %}">Забыли пароль?</a>
-    </label>
+    </p>
     {% endif %}
 
     <div class="form-floating">
@@ -23,11 +23,6 @@
       <input type="password" name="password" class="form-control joined_field_lower" id ="floatingPassword" placeholder="Password">
       <label for="floatingPassword">Пароль</label>
     </div>
-    <!-- <div class="checkbox mb-3">
-      <label>
-        <input type="checkbox" name="remember_me"> Запомнить пользователя
-      </label>
-    </div> -->
     <button class="w-100 btn btn-lg btn-primary" type="submit">Войти</button>
   </form>
   <a class="w-100 btn btn-lg btn-secondary my-2" href="{% url 'signup' %}">Зарегистрироваться</a>
