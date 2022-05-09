@@ -333,8 +333,14 @@ class Application(AbstractModel):
     event = models.ForeignKey(Event, on_delete=models.CASCADE, blank=False)
     date = models.DateTimeField(auto_now_add=True, blank=False)
     dnf = models.BooleanField(default=False)
+    dns = models.BooleanField(default=False)
+    dsq = models.BooleanField(default=False)
+    otl = models.BooleanField(default=False)
     result = models.ForeignKey(Result, null=True, blank=True, default=None, on_delete=models.SET_NULL)
     payment = models.BooleanField(default=False)
+
+    class Meta:
+        ordering = ['date']
     
     def __str__(self):
         datestring = datetime.strftime(self.date, "%H:%M %d.%m.%Y")

@@ -10,7 +10,6 @@
                 {% else %}
                     {{ application.user.get_display_name }}
                 {% endif %}
-                
                 {% if application.result %}
                     - {{application.result.get_time}}
                     {% if application.result.medal %}
@@ -18,6 +17,12 @@
                     {% endif %}
                 {% elif application.dnf %}
                     - DNF
+                {% elif application.dns %}
+                    - DNS
+                {% elif application.dsq %}
+                    - DSQ
+                {% elif application.otl %}
+                    - OTL
                 {% else %}  
                     {% if application.payment %}
                         &#128179; <!--Payment processed emoji-->
