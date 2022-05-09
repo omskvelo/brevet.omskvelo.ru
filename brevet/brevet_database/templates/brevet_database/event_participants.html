@@ -31,8 +31,6 @@
 
             {% if application.user == user %}</strong>{% endif %}
 
-
-            
             {% if user.is_superuser %}
                 <small>
                     <a href="{{ application.get_admin_url_change }}">   
@@ -42,9 +40,60 @@
             {% endif %}
         </li>
     {% endfor %}
-    <p class="mt-2">
-        Всего участников: {{ event.get_applications|length }}
+    <p class="mt-2 mb-0">
+        Всего участников: 
+        <strong>
+            {{ event.get_applications|length }}
+        </strong>
     </p>
+
+    {% if not event.application_allowed %}
+        <p class="my-0">
+            Финишировали: 
+            <strong>
+                {{ event.get_finisher_count }}
+            </strong>
+        </p>
+        <p class="my-0">
+            В пути: 
+            <strong>
+                {{ event.get_moving_count }}
+            </strong>
+        </p>
+        {% if event.get_dsq_count %}
+            <p class="my-0">
+                Дисквалифицированы (DSQ):
+                <strong>
+                    {{ event.get_dsq_count }}
+                </strong> 
+            </p>
+        {% endif %}
+        {% if event.get_otl_count %}
+            <p class="my-0">
+                Не уложились в лимит по времени (OTL): 
+                <strong>
+                    {{ event.get_otl_count }}
+                </strong>
+            </p>
+        {% endif %}
+        {% if event.get_dns_count %}
+            <p class="my-0">
+                Не стартовали (DNS): 
+                <strong>
+                    {{ event.get_dns_count }}
+                </strong>
+            </p>
+        {% endif %}
+        {% if event.get_dnf_count %}
+            <p class="my-0">
+                Сошли (DNF): 
+                <strong>
+                    {{ event.get_dnf_count }}
+                </strong>
+            </p>
+        {% endif %}
+    {% endif %}
+
 </ul>
 {% else %}
     <p>

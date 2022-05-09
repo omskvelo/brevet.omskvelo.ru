@@ -237,8 +237,14 @@ class Event(AbstractModel):
         return reverse("protocol_upload_success", kwargs={'distance' : self.route.distance, 'date' : date})
 
     def get_applications(self):
-        applications = list(Application.objects.filter(event=self))
-        return applications
+        return Application.objects.filter(event=self).order_by(
+            'dns',
+            'dnf',
+            'otl',
+            'dsq',
+            'result__is_null',
+            'date',
+        )
 
     def get_applicants(self):
         applications = list(Application.objects.filter(event=self))
@@ -257,6 +263,31 @@ class Event(AbstractModel):
     def get_cancel_application_url(self):
         date = datetime.strftime(self.date, "%Y%m%d")
         return reverse('event_cancel_registration', kwargs={'distance' : self.route.distance, 'date' : date})
+
+    def get_finisher_count(self):
+        return Result.objects.filter(event=self).count()
+
+    def get_moving_count(self):
+        return Application.objects.filter(
+            event=self, 
+            dnf=False,
+            dns=False,
+            dsq=False,
+            otl=False,
+            result=None, 
+            ).count()
+
+    def get_dnf_count(self):
+        return Application.objects.filter(event=self, dnf=True).count()
+
+    def get_dns_count(self):
+        return Application.objects.filter(event=self, dns=True).count()
+
+    def get_dsq_count(self):
+        return Application.objects.filter(event=self, dsq=True).count()
+
+    def get_otl_count(self):
+        return Application.objects.filter(event=self, otl=True).count()    
 
     def is_homologated(self):
         results = list(Result.objects.filter(event=self))
@@ -338,9 +369,6 @@ class Application(AbstractModel):
     otl = models.BooleanField(default=False)
     result = models.ForeignKey(Result, null=True, blank=True, default=None, on_delete=models.SET_NULL)
     payment = models.BooleanField(default=False)
-
-    class Meta:
-        ordering = ['date']
     
     def __str__(self):
         datestring = datetime.strftime(self.date, "%H:%M %d.%m.%Y")
