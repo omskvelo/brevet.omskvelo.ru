@@ -291,7 +291,13 @@
                     {% for result in results %}
                         <tr>
                             <td>{{ result.homologation }}</td> 
-                            <td>{{ result.event.route.distance }} км </td>
+                            <td>
+                                {% if result.event.route.fleche %}
+                                    {{ result.event.fleche_distance }} км
+                                {% else %}
+                                    {{ result.event.route.distance }} км 
+                                {% endif %}
+                            </td>
                             <td>{{ result.get_date }}</td>
                             <td>
                                 <a href = "{{ result.event.get_absolute_url }}">
