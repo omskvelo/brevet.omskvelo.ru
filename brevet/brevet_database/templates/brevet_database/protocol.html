@@ -46,6 +46,11 @@
         Маршрут: <a href="{{ event.route.get_absolute_url }}"> "{{ event.route.name }}" </a>
     </p>
     {% endif %}
+    {% if event.route.fleche and event.fleche_distance %}
+        <p class="my-1">
+            Фактически пройдено: {{event.fleche_distance}} км.
+        </p>
+    {% endif %}
     {% if event.club %}
     <p class="my-1">
         Клуб-организатор: {{ event.club }}

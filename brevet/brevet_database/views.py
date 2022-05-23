@@ -75,9 +75,9 @@ def statistics_total(request, form="html"):
 @cache_page(60*60)
 # @never_cache
 def statistics(request, year=datetime.now().year, form="html"):
+    # from time import perf_counter
     # t1 = perf_counter()
     years = get_event_years()
-    # t2 = perf_counter()
     if year:
         if year not in years:
             year = max(years)
@@ -118,6 +118,7 @@ def statistics(request, year=datetime.now().year, form="html"):
     total_randonneurs = len(randonneurs)
     total_distance = sum([result.event.route.distance for result in results])
 
+    # t2 = perf_counter()
     # print (t2-t1)
     if form=="html":
         context = {

@@ -64,6 +64,12 @@ class Randonneur(AbstractModel):
     def get_xlsx_url(self):
         return reverse('personal_stats_f', kwargs={'uid' : self.pk, 'form' : 'xlsx'})
 
+    def get_results(self, year=None):
+        q = Result.objects.filter(randonneur=self, event__finished=True)
+        if year:
+            q = q.filter(event__date__year=year)
+        return q
+
     def get_active_years(self):
         years = set()
         q = list(Result.objects.filter(event__finished=True, randonneur=self))
@@ -73,8 +79,7 @@ class Randonneur(AbstractModel):
 
     def get_sr(self, year):
         sr = 0
-        results = list(Result.objects.filter(event__route__brm=True, randonneur=self, event__date__year=year))
-        brevets = [result.event.route.distance for result in results]
+        brevets = list(self.get_results(year).filter(event__route__brm=True).values_list('event__route__distance', flat=True))
         while True:
             if 600 in brevets:
                 del brevets[brevets.index(600)]
@@ -122,20 +127,13 @@ class Randonneur(AbstractModel):
             self.sr_string = ""
         return sr
 
-
-    def get_results(self, year=None):
-        q = Result.objects.filter(randonneur=self, event__finished=True)
-        if year:
-            q = q.filter(event__date__year=year)
-        return list(q)
-
     def get_total_distance(self, year=None):
-        results = self.get_results(year)
-        return sum([result.event.route.distance for result in results])
+        distance = self.get_results(year).filter(event__route__fleche=False).aggregate(models.Sum('event__route__distance'))['event__route__distance__sum']
+        distance += self.get_results(year).filter(event__route__fleche=True).aggregate(models.Sum('event__fleche_distance'))['event__fleche_distance__sum'] or 0
+        return distance
 
     def get_total_brevets(self, year=None):
-        results = self.get_results(year)
-        return len(results)        
+        return self.get_results(year).count()
 
     def from_user(user):
         r = Randonneur()
