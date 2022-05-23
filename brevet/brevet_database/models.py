@@ -197,9 +197,15 @@ class Route(AbstractModel):
         club = str(self.club) if self.club.id != DEFAULT_CLUB_ID else ""
         return f"{self.distance} км {self.name} {club}"     
 
+class PaymentInfo(models.Model):
+    text = models.TextField(max_length=1000, blank=False, null=False)
+
+    def __str__(self):
+        return self.text
+
 class Event(AbstractModel):
     name = models.CharField(max_length=50, blank=True) 
-    route = models.ForeignKey(Route, on_delete=models.PROTECT, blank = False)
+    route = models.ForeignKey(Route, on_delete=models.PROTECT, blank=False)
     date = models.DateField(auto_now=False, auto_now_add=False, blank=False)
     time = models.TimeField(auto_now=False, auto_now_add=False, blank=False, default=time(hour = 7))
     text_intro = models.TextField(blank=True)
@@ -212,6 +218,8 @@ class Event(AbstractModel):
     omskvelo_xref = models.URLField(blank=True)
     external_xref = models.URLField(blank=True)
     vk_xref = models.URLField(blank=True) 
+    fleche_distance = models.IntegerField(null=True, blank=True, verbose_name="Actual distance (Fleche only)")
+    payment_info = models.ForeignKey(PaymentInfo, on_delete=models.SET_NULL, null=True, default=1)
 
     class Meta:
         ordering = ['-date']

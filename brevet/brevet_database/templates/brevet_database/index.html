@@ -51,11 +51,9 @@
                                 </div>
                             {% endif %}
 
-                            {% if event.text %}
+                            {% if event.payment_info %}
                                 <div class="alert alert-primary my-3">
-                                    {% for line in event.get_text %}
-                                        <p class="m-0">{{ line }}</p>
-                                    {% endfor %}
+                                    {{ event.payment_info.text }}
                                 </div>
                             {% endif %}
 

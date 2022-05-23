@@ -114,17 +114,24 @@
         Внешний ресурс
     </a>
     {% endif %}
-    
-    {% if event.text %}
+
+    {% if event.payment_info and not event.finished %}
         <div class="alert alert-primary my-3">
-            {% for line in event.get_text %}
-                <p class="m-0">{{ line }}</p>
-            {% endfor %}
+            {{ event.payment_info.text }}
         </div>
+    {% endif %}
+
+    {% if event.text %}
+        <h3 class="my-3">
+            О событии
+        </h3>
+        {% for line in event.get_text %}
+            <p class="mb-3">{{ line }}</p>
+        {% endfor %}
     {% endif %}
     
     {% if event.route.text %}
-        <h3 class="mе-3">
+        <h3 class="mb-3">
             О маршруте
         </h3>
         {% for line in event.route.get_text %}

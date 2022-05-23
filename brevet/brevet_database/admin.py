@@ -3,7 +3,7 @@ import re
 from django.contrib import admin
 from django import forms
 
-from .models import Club, Randonneur, Route, Event, Result, Application
+from .models import Club, Randonneur, Route, Event, Result, Application, PaymentInfo
 
 result_pattern = re.compile("^\d\d\:\d\d$")
 
@@ -43,3 +43,4 @@ admin.site.register(Route)
 admin.site.register(Event)
 admin.site.register(Result, ResultAdmin)
 admin.site.register(Application, ApplicationAdmin)
+admin.site.register(PaymentInfo)

@@ -21,7 +21,7 @@
 
     {% if user.is_superuser %}
         {% if not event.is_homologated %}
-            <div class="alert alert-primary" role="alert">
+            <div class="alert alert-primary no-print" role="alert">
                 <strong>Загрузка результатов омологации</strong>
                 <form class = "my-2" method = "post" enctype="multipart/form-data">
                     {% csrf_token %}
