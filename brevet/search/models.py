@@ -44,6 +44,10 @@ def search(class_name:str, query:str, recursive=False):
                     results |= object_class.objects.filter(date__year=int(query))
             except ValueError:
                 pass 
+        
+        # Extras
+        if query.lower() in ["флеш", "флэш", "fleche", "flèche"]:
+            results = Event.objects.filter(fleche=True)
 
 
     elif class_name == 'Route':
