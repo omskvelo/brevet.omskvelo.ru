@@ -343,6 +343,12 @@ class Event(AbstractModel):
     def get_text(self):
         return [x for x in self.text.split("\n") if x]
 
+    def save(self):
+        if self.finished:
+            Application.objects.filter(event=self).delete()
+        super().save()
+        
+
     def __str__(self):
         club = str(self.club) if self.club.id != DEFAULT_CLUB_ID else ""
         return f"{self.get_date()} {self.route.distance} км {self.route.name} {club}"     
