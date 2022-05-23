@@ -428,54 +428,82 @@ def personal_stats(request, surname=None, name=None, uid=None, form="html"):
 
 @never_cache
 def index(request):
-    prev_event = Event.objects.filter(finished = True).order_by("date").last()
-    results = Result.objects.filter(event=prev_event).order_by("randonneur__russian_surname","randonneur__russian_name")
 
-    event = Event.objects.filter(finished = False).order_by("date").first()
-    errors = []
-
-    if event and request.user.is_authenticated:
-        application = Application.objects.filter(event=event, user=request.user).first()
-
-        if request.method == 'POST':
-            form = AddResultForm(request.POST)
-            if form.is_valid():
-                randonneur = request.user.randonneur
-                if not randonneur:
-                    raise Http404 
-                if not application:
-                    raise Http404
-                if application.result:
-                    raise Http404 
-                result_time = form.cleaned_data['result']
-
-                if result_time > TIME_LIMITS[event.route.distance]:
-                    errors.append(f"Лимит времени - {timedelta_to_str(TIME_LIMITS[event.route.distance])}.")
-
-                else:
-                    result = Result()
-                    result.time = result_time
-                    result.medal = form.cleaned_data['medal']
-                    result.event = event
-                    result.randonneur = randonneur
-                    result.save()
-
-                    application.result = result
-                    application.save()
-            else:
-                errors = form.errors
+    # Select latest finished events (there can be more than one event on a single date)
+    finished_events = Event.objects.filter(finished=True).order_by("-date")
+    prev_event_date = finished_events[0].date
+    prev_events = []
+    for event in finished_events:
+        if event.date == prev_event_date:
+            prev_events.append(event)
         else:
-            form = AddResultForm()
-    else:
-        application = None
-        form = None
+            break
+            
+    prev_events = [
+        {
+        'event': event,
+        'results': Result.objects.filter(event=event).order_by("randonneur__russian_surname","randonneur__russian_name"),
+        } for event in prev_events
+    ]
+
+
+    # Select next upcoming events (there can be more than one event on a single date)
+    upcoming_events = Event.objects.filter(finished=False).order_by("date")
+    next_event_date = upcoming_events[0].date
+    next_events = []   
+
+    for event in upcoming_events:
+        if event.date == next_event_date:
+            errors = []
+            if request.user.is_authenticated:
+                application = Application.objects.filter(event=event, user=request.user).first()
+
+                if request.method == 'POST':
+                    form = AddResultForm(request.POST)
+                    if form.is_valid():
+                        randonneur = request.user.randonneur
+                        if not randonneur:
+                            raise Http404 
+                        if not application:
+                            raise Http404
+                        if application.result:
+                            raise Http404 
+                        result_time = form.cleaned_data['result']
+
+                        if result_time > TIME_LIMITS[event.route.distance]:
+                            errors.append(f"Лимит времени - {timedelta_to_str(TIME_LIMITS[event.route.distance])}.")
+
+                        else:
+                            result = Result()
+                            result.time = result_time
+                            result.medal = form.cleaned_data['medal']
+                            result.event = event
+                            result.randonneur = randonneur
+                            result.save()
+
+                            application.result = result
+                            application.save()
+                    else:
+                        errors = form.errors
+                else:
+                    form = AddResultForm()
+            else:
+                application = None
+                form = None
+
+            next_events.append({
+                    'event' : event,
+                    'application' : application,
+                    'form' : form,
+                    'errors' : errors,
+                })
+        else:
+            break
+
+        
 
     context = {
-        'event' : event,
-        'application' : application,
-        'errors' : errors,  
-        'prev_event' : prev_event,
-        'results' : results,
-        'form' : form
+        'next_events' : next_events,
+        'prev_events' : prev_events,
     }
     return render(request, "brevet_database/index.html", context)
