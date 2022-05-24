@@ -51,6 +51,10 @@
                                 </div>
                             {% endif %}
 
+                            {% if event.lights_required or event.route.distance > 200 %}
+                                {% include 'brevet_database/alert_lights.html' %}
+                            {% endif %}
+
                             {% if event.payment_info %}
                                 <div class="alert alert-primary my-3">
                                     {{ event.payment_info.text }}

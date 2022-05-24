@@ -49,7 +49,6 @@ def search(class_name:str, query:str, recursive=False):
         if query.lower() in ["флеш", "флэш", "fleche", "flèche"]:
             results = Event.objects.filter(fleche=True)
 
-
     elif class_name == 'Route':
         object_class = Route
 

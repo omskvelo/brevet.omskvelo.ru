@@ -170,3 +170,6 @@ etc/
 
 # Credentials
 .env
+
+# Database dump
+dump.json
