@@ -128,7 +128,7 @@ class Randonneur(AbstractModel):
         return sr
 
     def get_total_distance(self, year=None):
-        distance = self.get_results(year).filter(event__route__fleche=False).aggregate(models.Sum('event__route__distance'))['event__route__distance__sum']
+        distance = self.get_results(year).filter(event__route__fleche=False).aggregate(models.Sum('event__route__distance'))['event__route__distance__sum'] or 0
         distance += self.get_results(year).filter(event__route__fleche=True).aggregate(models.Sum('event__fleche_distance'))['event__fleche_distance__sum'] or 0
         return distance
 
