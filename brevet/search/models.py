@@ -47,7 +47,7 @@ def search(class_name:str, query:str, recursive=False):
         
         # Extras
         if query.lower() in ["флеш", "флэш", "fleche", "flèche"]:
-            results = Event.objects.filter(fleche=True)
+            results = Event.objects.filter(route__fleche=True)
 
     elif class_name == 'Route':
         object_class = Route
@@ -66,7 +66,6 @@ def search(class_name:str, query:str, recursive=False):
 
     elif class_name == 'Result':
         object_class = Result
-        print ("I'm called")
 
         # Search individual homologation numbers
         results = object_class.objects.filter(homologation__contains=query)
