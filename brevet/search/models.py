@@ -47,7 +47,7 @@ def search(class_name:str, query:str, recursive=False):
         
         # Extras
         if query.lower() in ["флеш", "флэш", "fleche", "flèche"]:
-            results = Event.objects.filter(route__fleche=True)
+            results = object_class.objects.filter(route__fleche=True)
 
     elif class_name == 'Route':
         object_class = Route
@@ -63,6 +63,10 @@ def search(class_name:str, query:str, recursive=False):
                 results |= object_class.objects.filter(distance=int(query), active=True)
             except ValueError:
                 pass   
+
+        # Extras
+        if query.lower() in ["флеш", "флэш", "fleche", "flèche"]:
+            results = object_class.objects.filter(fleche=True)
 
     elif class_name == 'Result':
         object_class = Result
