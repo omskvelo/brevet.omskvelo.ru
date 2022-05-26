@@ -54,6 +54,7 @@ class Randonneur(AbstractModel):
     russian_surname = models.CharField(max_length=50, blank=False)
     club = models.ForeignKey(Club, on_delete=models.PROTECT, default=DEFAULT_CLUB_ID)
     female = models.BooleanField(default=False)
+    sr = models.JSONField(null=True, blank=True, default=dict)
 
     class Meta:
         ordering = ['russian_surname']
@@ -77,7 +78,15 @@ class Randonneur(AbstractModel):
             years.add(str(result.event.date.year))
         return sorted(list(years), reverse=True)
 
+    def update_sr(self):
+        years = self.get_active_years()
+        sr = {str(year):self.get_sr(year) for year in years}
+        self.sr = sr
+        self.save()
+        return True
+
     def get_sr(self, year):
+        """Calculate Super Randonneur status"""
         sr = 0
         brevets = list(self.get_results(year).filter(event__route__brm=True).values_list('event__route__distance', flat=True))
         while True:
@@ -118,6 +127,7 @@ class Randonneur(AbstractModel):
             sr += 1  
 
     def set_sr_string(self, years):
+        # Deprecated
         sr = 0
         for year in years:
             sr += self.get_sr(year)
@@ -343,7 +353,14 @@ class Event(AbstractModel):
 
     def save(self):
         if self.finished:
+            # Delete old applications
             Application.objects.filter(event=self).delete()
+
+            # Update SR status of participants
+            randonneurs = [result.randonneur for result in Result.objects.filter(event=self)]
+            for randonneur in randonneurs:
+                randonneur.update_sr()
+
         super().save()
         
 

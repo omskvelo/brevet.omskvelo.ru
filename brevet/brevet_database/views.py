@@ -72,11 +72,7 @@ def statistics_total(request, form="html"):
     return statistics(request, year=None, form=form)
 
 
-@cache_page(60*60)
-# @never_cache
-def statistics(request, year=datetime.now().year, form="html"):
-    # from time import perf_counter
-    # t1 = perf_counter()
+def statistics(request, year=datetime.now().year, form="html"):    
     years = get_event_years()
     if year:
         if year not in years:
@@ -84,7 +80,7 @@ def statistics(request, year=datetime.now().year, form="html"):
         results = list(Result.objects.filter(event__finished=True, event__date__year=year))
     else:
         results = list(Result.objects.filter(event__finished=True))
-
+   
     # LRM, SR600, 1000
     elite_dist = [x for x in results if x.event.route.lrm or x.event.route.sr600 or x.event.route.distance == 1000] 
     elite_dist = sorted(elite_dist, key=lambda x: x.event.date)
@@ -97,14 +93,19 @@ def statistics(request, year=datetime.now().year, form="html"):
         distance_rating.append([randonneur, randonneur.get_total_distance(year=year), randonneur.get_total_brevets(year=year)])
     distance_rating = sorted(distance_rating, key=lambda x: x[1], reverse=True)
 
+    # Get SR status
     sr = []
     for randonneur in randonneurs:
         if year:
-            r = randonneur.set_sr_string([year])
+            randonneur_sr = randonneur.sr.get(str(year)) or 0
         else:
-            r = randonneur.set_sr_string(years)
-        if r:
-            sr.append(randonneur)            
+            randonneur_sr = sum(randonneur.sr.get(str(y)) or 0 for y in years)
+        if randonneur_sr:
+            sr.append(randonneur)
+            if randonneur_sr > 1:
+                randonneur.sr_string = f" (x{randonneur_sr})"
+            else:
+                randonneur.sr_string = ""
     sr = sorted(sr, key=lambda x: x.sr_string, reverse=True)
 
     # Find best results
@@ -118,8 +119,6 @@ def statistics(request, year=datetime.now().year, form="html"):
     total_randonneurs = len(randonneurs)
     total_distance = sum([result.event.route.distance for result in results])
 
-    # t2 = perf_counter()
-    # print (t2-t1)
     if form=="html":
         context = {
             "total_distance" : total_distance,
@@ -359,7 +358,7 @@ def personal_stats_index(request):
     }
     return render(request, "brevet_database/stats_personal_index.html", context)    
 
-
+@never_cache
 def personal_stats(request, surname=None, name=None, uid=None, form="html"):
     if uid:
         randonneur = get_object_or_404(Randonneur, pk=uid)
@@ -385,12 +384,17 @@ def personal_stats(request, surname=None, name=None, uid=None, form="html"):
     best_600 = get_best(600, randonneur)
 
     years_active = randonneur.get_active_years()
+
+    # Get SR status
     sr = []
     for year in years_active:
-        for _ in range (randonneur.get_sr(year)):
-            sr.append(year)  
-    sr =  ", ".join(sr)
+        sr_times = randonneur.sr.get(str(year)) or 0
+        if sr_times > 1:
+            sr.append (f"{year} (x{sr_times})")
+        elif sr_times:
+            sr.append (f"{year}")
 
+    sr = ", ".join(sr)
     years_active = ", ".join(years_active)
 
     if form=="html":

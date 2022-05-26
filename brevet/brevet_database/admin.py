@@ -2,6 +2,7 @@ import re
 
 from django.contrib import admin
 from django import forms
+from django.http import HttpResponseRedirect
 
 from .models import Club, Randonneur, Route, Event, Result, Application, PaymentInfo
 
@@ -33,6 +34,18 @@ class ResultAdmin(admin.ModelAdmin):
 
 class RandonneurAdmin(admin.ModelAdmin):
     search_fields = ['russian_surname', 'russian_name']
+    change_form_template = 'admin/change_randonneur.html'
+
+    def response_change(self, request, obj):
+        if "_update_sr" in request.POST:
+            if (obj.update_sr()):
+                self.message_user(request, "Статус SR успешно обновлён")
+                return super().response_change(request, obj)
+            else:
+                self.message_user(request, "Что-то пошло не так", level="ERROR")
+                return HttpResponseRedirect(".")
+
+        return super().response_change(request, obj)
 
 class ApplicationAdmin(admin.ModelAdmin):
     raw_id_fields = ['result']
