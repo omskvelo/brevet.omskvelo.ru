@@ -17,18 +17,20 @@
                 <th>Рандоннёр</th>
                 <th>Общая дистанция</th>
                 <th>Бреветов</th>
+                <th class="not-mobile">Суперрандоннёр</th>
             </tr>
         </thead>
         <tbody>
-            {% for randonneur in distance_rating%}
+            {% for line in rating%}
             <tr>
                 <td>
-                    <a href = "{{ randonneur.0.get_absolute_url }}">
-                        {{ randonneur.0 }}
+                    <a href = "{{ line.randonneur.get_absolute_url }}">
+                        {{ line.randonneur }}
                     </a>
                 </td>
-                <td>{{ randonneur.1 }} км</td>
-                <td>{{ randonneur.2 }}</td>
+                <td>{{ line.total_distance }} км</td>
+                <td>{{ line.total_brevets }}</td>
+                <td class="not-mobile">{{ line.sr }}</td>
             </tr>
             {% endfor %}
         </tbody>

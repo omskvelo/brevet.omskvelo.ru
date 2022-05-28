@@ -127,7 +127,7 @@ class Randonneur(AbstractModel):
             sr += 1  
 
     def set_sr_string(self, years):
-        # Deprecated
+        """ Deprecated """
         sr = 0
         for year in years:
             sr += self.get_sr(year)

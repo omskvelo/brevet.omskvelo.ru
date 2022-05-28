@@ -348,17 +348,31 @@ def route_stats(request, slug=None, route_id=None):
 def personal_stats_index(request):
     randonneurs = get_randonneurs()
 
-    distance_rating = []
+    rating = []
     for randonneur in randonneurs:
-        distance_rating.append([randonneur, randonneur.get_total_distance(), randonneur.get_total_brevets()])
-    distance_rating = sorted(distance_rating, key=lambda x: x[1], reverse=True)
+        sr = []
+        for year in randonneur.sr:
+            sr_times = randonneur.sr[year] 
+            if sr_times > 1:
+                sr.append (f"{year} (x{sr_times})")
+            elif sr_times:
+                sr.append (f"{year}")
+        sr = ", ".join(sr)
+
+        rating.append({
+            'randonneur': randonneur, 
+            'total_distance': randonneur.get_total_distance(), 
+            'total_brevets': randonneur.get_total_brevets(),
+            'sr': sr,
+            }) 
+    rating = sorted(rating, key=lambda x: x['total_distance'], reverse=True)
+
 
     context = {
-        "distance_rating" : distance_rating,
+        "rating" : rating,
     }
     return render(request, "brevet_database/stats_personal_index.html", context)    
 
-@never_cache
 def personal_stats(request, surname=None, name=None, uid=None, form="html"):
     if uid:
         randonneur = get_object_or_404(Randonneur, pk=uid)
@@ -387,8 +401,8 @@ def personal_stats(request, surname=None, name=None, uid=None, form="html"):
 
     # Get SR status
     sr = []
-    for year in years_active:
-        sr_times = randonneur.sr.get(str(year)) or 0
+    for year in randonneur.sr:
+        sr_times = randonneur.sr[year] 
         if sr_times > 1:
             sr.append (f"{year} (x{sr_times})")
         elif sr_times:
