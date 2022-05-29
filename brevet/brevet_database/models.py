@@ -80,10 +80,12 @@ class Randonneur(AbstractModel):
 
     def update_sr(self):
         years = self.get_active_years()
-        sr = {str(year):self.get_sr(year) for year in years}
-        self.sr = sr
+        self.sr = dict()
+        for year in years:
+            sr_buffer = self.get_sr(str(year))
+            if sr_buffer:
+                self.sr[str(year)] = sr_buffer
         self.save()
-        return True
 
     def get_sr(self, year):
         """Calculate Super Randonneur status"""
