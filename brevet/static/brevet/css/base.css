@@ -251,6 +251,12 @@ body {
   width: 20rem;
 }
 
+.img-stamp {
+  width: 30%;
+  max-width: 199px;
+  height: auto;
+}
+
 @media screen and (max-width: 1210px) {
   .nav-item:not(:last-child) {
   margin-right: 8px;

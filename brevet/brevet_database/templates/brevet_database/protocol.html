@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{% load static %}
 
 {% block title %}
 Протокол бревета {{ event.route.distance }} км от {{ event.get_date }} г. | 
@@ -126,7 +127,7 @@
                 {% endif %}
             </tfoot>
         </table>
-        {% load static %}
+
         {% if event.route.brm %}
             <div class="no-print">
                 <a class="btn btn-dark" href="{{ event.get_protocol_xlsx_url }}">
@@ -139,7 +140,7 @@
             </div>
         {% endif %}
         <div class="d-flex justify-content-end">
-            <img src="{% static 'brevet/img/stamp.png' %}"/>
+            <img class = "img-stamp" src="{% static 'brevet/img/stamp.png' %}"/>
         </div>
 
     {% endif %}
