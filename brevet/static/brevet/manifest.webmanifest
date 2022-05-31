@@ -1,0 +1,9 @@
+{
+    "background_color": "rgb(29, 54, 82)",
+    "theme_color": "black",
+    "description": "Всё о бреветах в г.Омск: календарь, маршруты, результаты, статистика.",
+    "display": "standalone",
+    "name": "Бреветы \"Цепной реакции\"",
+    "short_name": "Бреветы",
+    "start_url": "/"
+}
