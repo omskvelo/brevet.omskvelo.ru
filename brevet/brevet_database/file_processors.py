@@ -43,8 +43,8 @@ def read_xls_protocol(file):
             
             # Format data
             homologation = str(int(homologation))
-            surname = surname.capitalize()
-            name = name.capitalize()
+            surname = surname.title()
+            name = name.title()
             code = int(code)
             h,m = time.split(":")
             time = timedelta(hours=int(h), minutes=int(m))
