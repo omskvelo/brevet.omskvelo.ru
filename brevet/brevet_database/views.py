@@ -173,33 +173,31 @@ def event(request, distance, date):
 
     errors = []
     if request.user.is_authenticated:
+        randonneur = request.user.randonneur
+
         application = Application.objects.filter(event=event, user=request.user).first()
+        result = Result.objects.get(event=event, randonneur=randonneur)
 
         if request.method == 'POST':
             form = AddResultForm(request.POST)
             if form.is_valid():
-                randonneur = request.user.randonneur
                 if not randonneur:
                     raise Http404 
                 if not application:
                     raise Http404
-                if application.result:
-                    raise Http404 
-                result_time = form.cleaned_data['result']
-
-                if result_time > TIME_LIMITS[distance]:
-                    errors.append(f"Лимит времени - {timedelta_to_str(TIME_LIMITS[distance])}.")
-
-                else:
-                    result = Result()
-                    result.time = result_time
-                    result.medal = form.cleaned_data['medal']
-                    result.event = event
-                    result.randonneur = randonneur
-                    result.save()
-
-                    application.result = result
-                    application.save()
+                if not result:
+                    result_time = form.cleaned_data['result']
+                    if result_time > TIME_LIMITS[distance]:
+                        errors.append(f"Лимит времени - {timedelta_to_str(TIME_LIMITS[distance])}.")
+                    else:
+                        result = Result()
+                        result.time = result_time
+                        result.medal = form.cleaned_data['medal']
+                        result.event = event
+                        result.randonneur = randonneur
+                        result.save()
+                        application.result = result
+                        application.save()
             else:
                 errors = form.errors
         else:
