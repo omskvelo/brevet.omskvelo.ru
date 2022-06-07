@@ -176,7 +176,7 @@ def event(request, distance, date):
         randonneur = request.user.randonneur
 
         application = Application.objects.filter(event=event, user=request.user).first()
-        result = Result.objects.get(event=event, randonneur=randonneur)
+        result = Result.objects.filter(event=event, randonneur=randonneur)
 
         if request.method == 'POST':
             form = AddResultForm(request.POST)
