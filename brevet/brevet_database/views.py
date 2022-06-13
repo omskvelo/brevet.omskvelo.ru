@@ -18,6 +18,13 @@ TIME_LIMITS = {
     1000 : timedelta(hours=75),
 }
 
+MIN_TIME_LIMITS = {
+    200 : timedelta(hours=5, minutes=53),
+    300 : timedelta(hours=9, minutes=0),
+    400 : timedelta(hours=12, minutes=8),
+    600 : timedelta(hours=18, minutes=48),
+    1000 : timedelta(hours=35, minutes=5),
+}
 
 def protocol(request, distance, date, upload_success=None, form="html"):
     try:
@@ -171,7 +178,7 @@ def event(request, distance, date):
     default_club = event.club.pk == DEFAULT_CLUB_ID
     route = event.route
 
-    form, application, errors = event_process_result_form(request, event)
+    form, application, errors = event_result_time_form(request, event)
 
     context = {
         'event' : event,
@@ -183,11 +190,11 @@ def event(request, distance, date):
         }  
     return render(request, "brevet_database/event.html", context)  
 
-def event_process_result_form(request, event):
+def event_result_form(request, event):
+    """ Process result form with manual time calculation. Deprecated. """
     errors = []
     if request.user.is_authenticated:
         randonneur = request.user.randonneur
-
         application = Application.objects.filter(event=event, user=request.user).first()
         result = Result.objects.filter(event=event, randonneur=randonneur)
 
@@ -218,6 +225,72 @@ def event_process_result_form(request, event):
         application = None
 
     return form, application, errors
+
+def event_result_time_form(request, event):
+    """ Process result form with automatic result time calculation"""
+    errors = []
+    if request.user.is_authenticated and request.user.randonneur:
+        randonneur = request.user.randonneur
+        application = Application.objects.filter(event=event, user=request.user).first()
+        result = Result.objects.filter(event=event, randonneur=randonneur)
+
+        if request.method == 'POST':
+            
+            form = AddResultTimeForm(request.POST)
+
+            if form.is_valid():
+                if application and not result:
+                    start = datetime(
+                        year=event.date.year, 
+                        month=event.date.month, 
+                        day=event.date.day, 
+                        hour=event.time.hour, 
+                        minute=event.time.minute
+                        )
+
+                    limit = start + TIME_LIMITS[event.route.distance]
+
+                    # First assume finish has the same date as limit
+                    finish = datetime(
+                        year=limit.year, 
+                        month=limit.month, 
+                        day=limit.day, 
+                        hour=form.cleaned_data['result'].hour, 
+                        minute=form.cleaned_data['result'].minute
+                        )
+
+                    # If not - finish either happened on the prevoius date...              
+                    if finish > limit:
+                        finish -= timedelta(days=1)
+
+                    # Or is invalid
+                    if (finish > limit 
+                        or finish < start
+                        or finish - start < MIN_TIME_LIMITS[event.route.distance]
+                        ):
+                        errors.append(f"Лимит времени - {timedelta_to_str(TIME_LIMITS[event.route.distance])}.")
+
+                    print (start, finish, limit)
+
+                    if not errors:
+                        result = Result()
+                        result.time = finish - start
+                        result.medal = form.cleaned_data['medal']
+                        result.event = event
+                        result.randonneur = randonneur
+                        result.save()
+                        application.result = result
+                        application.save()
+            else:
+                errors = form.errors
+        else:
+            form = AddResultTimeForm()
+    else:
+        form = None
+        application = None
+
+    return form, application, errors  
+
 
 def event_register(request, distance, date):
     if request.user.is_authenticated:
@@ -478,7 +551,7 @@ def index(request):
 
     for event in upcoming_events:
         if event.date == next_event_date:
-            form, application, errors = event_process_result_form(request, event)
+            form, application, errors = event_result_time_form(request, event)
             next_events.append({
                     'event' : event,
                     'application' : application,
