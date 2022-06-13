@@ -171,6 +171,19 @@ def event(request, distance, date):
     default_club = event.club.pk == DEFAULT_CLUB_ID
     route = event.route
 
+    form, application, errors = event_process_result_form(request, event)
+
+    context = {
+        'event' : event,
+        'route' : route,
+        'default_club' : default_club,
+        'form' : form,
+        'application' : application,
+        'errors' : errors,
+        }  
+    return render(request, "brevet_database/event.html", context)  
+
+def event_process_result_form(request, event):
     errors = []
     if request.user.is_authenticated:
         randonneur = request.user.randonneur
@@ -185,8 +198,8 @@ def event(request, distance, date):
                     raise Http404 
                 if application and not result:
                     result_time = form.cleaned_data['result']
-                    if result_time > TIME_LIMITS[distance]:
-                        errors.append(f"Лимит времени - {timedelta_to_str(TIME_LIMITS[distance])}.")
+                    if result_time > TIME_LIMITS[event.route.distance]:
+                        errors.append(f"Лимит времени - {timedelta_to_str(TIME_LIMITS[event.route.distance])}.")
                     else:
                         result = Result()
                         result.time = result_time
@@ -204,16 +217,7 @@ def event(request, distance, date):
         form = None
         application = None
 
-    context = {
-        'event' : event,
-        'route' : route,
-        'default_club' : default_club,
-        'form' : form,
-        'application' : application,
-        'errors' : errors,
-        }  
-    return render(request, "brevet_database/event.html", context)  
-
+    return form, application, errors
 
 def event_register(request, distance, date):
     if request.user.is_authenticated:
@@ -474,40 +478,7 @@ def index(request):
 
     for event in upcoming_events:
         if event.date == next_event_date:
-            errors = []
-
-            if request.user.is_authenticated:
-                randonneur = request.user.randonneur
-
-                application = Application.objects.filter(event=event, user=request.user).first()
-                result = Result.objects.filter(event=event, randonneur=randonneur)
-
-                if request.method == 'POST':
-                    form = AddResultForm(request.POST)
-                    if form.is_valid():
-                        if not randonneur:
-                            raise Http404 
-                        if application and not result:
-                            result_time = form.cleaned_data['result']
-                            if result_time > TIME_LIMITS[event.route.distance]:
-                                errors.append(f"Лимит времени - {timedelta_to_str(TIME_LIMITS[event.route.distance])}.")
-                            else:
-                                result = Result()
-                                result.time = result_time
-                                result.medal = form.cleaned_data['medal']
-                                result.event = event
-                                result.randonneur = randonneur
-                                result.save()
-                                application.result = result
-                                application.save()
-                    else:
-                        errors = form.errors
-                else:
-                    form = AddResultForm()
-            else:
-                application = None
-                form = None
-
+            form, application, errors = event_process_result_form(request, event)
             next_events.append({
                     'event' : event,
                     'application' : application,
