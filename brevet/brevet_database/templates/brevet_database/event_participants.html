@@ -24,7 +24,7 @@
                 {% elif application.otl %}
                     - OTL
                 {% else %}  
-                    {% if application.payment %}
+                    {% if application.payment and not user.is_superuser %}
                         &#128179; <!--Payment processed emoji-->
                     {% endif %}
                 {% endif %}
@@ -32,6 +32,9 @@
             {% if application.user == user %}</strong>{% endif %}
 
             {% if user.is_superuser %}
+                {% if application.payment %}
+                    &#128179; <!--Payment processed emoji-->
+                {% endif %}
                 <small>
                     <a href="{{ application.get_admin_url_change }}">   
                         (править)
