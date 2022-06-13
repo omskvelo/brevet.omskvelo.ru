@@ -4,8 +4,15 @@
             <a class="btn btn-dark"  href="{{ event.get_cancel_application_url }}">
                 Отменить заявку
             </a>
+        {% elif user in event.get_same_date_applicants %}
+            <a class="btn btn-dark disabled" aria-disabled="true">
+                Я еду!
+            </a>        
+            <p class="mt-2">
+                Вы уже заявились на другой бревет на {{ event.date}}
+            </p>      
         {% else %}
-            <a class="btn btn-dark"  href="{{ event.get_add_application_url }}">
+            <a class="btn btn-dark" href="{{ event.get_add_application_url }}">
                 Я еду!
             </a>
         {% endif %}

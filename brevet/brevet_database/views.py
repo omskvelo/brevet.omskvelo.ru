@@ -221,7 +221,12 @@ def event_register(request, distance, date):
             date = datetime.strptime(date, "%Y%m%d")
         except Exception:
             raise Http404
-        event = get_object_or_404(Event, route__distance=distance, date=date, )
+        event = get_object_or_404(Event, route__distance=distance, date=date)
+
+        conflict = Application.objects.filter(user=request.user, event__date=date)
+        if conflict:
+            return redirect(request.META.get('HTTP_REFERER'))
+
         if not event.application_allowed():
             return Http404
 

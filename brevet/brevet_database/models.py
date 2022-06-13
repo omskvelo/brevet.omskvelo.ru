@@ -269,6 +269,12 @@ class Event(AbstractModel):
         applicants = [application.user for application in applications]
         return applicants
 
+    def get_same_date_applicants(self):
+        same_date_events = Event.objects.filter(date=self.date)
+        print([x for event in same_date_events for x in event.get_applicants()])
+        return [x for event in same_date_events for x in event.get_applicants()]
+
+
     def application_allowed(self):
         timedelta_block = timedelta(hours = 12)
         datetime_start = datetime.combine(self.date, self.time)
