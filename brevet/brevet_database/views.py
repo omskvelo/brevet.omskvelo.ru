@@ -183,9 +183,7 @@ def event(request, distance, date):
             if form.is_valid():
                 if not randonneur:
                     raise Http404 
-                if not application:
-                    raise Http404
-                if not result:
+                if application and not result:
                     result_time = form.cleaned_data['result']
                     if result_time > TIME_LIMITS[distance]:
                         errors.append(f"Лимит времени - {timedelta_to_str(TIME_LIMITS[distance])}.")
@@ -472,34 +470,31 @@ def index(request):
     for event in upcoming_events:
         if event.date == next_event_date:
             errors = []
+
             if request.user.is_authenticated:
+                randonneur = request.user.randonneur
+
                 application = Application.objects.filter(event=event, user=request.user).first()
+                result = Result.objects.filter(event=event, randonneur=randonneur)
 
                 if request.method == 'POST':
                     form = AddResultForm(request.POST)
                     if form.is_valid():
-                        randonneur = request.user.randonneur
                         if not randonneur:
                             raise Http404 
-                        if not application:
-                            raise Http404
-                        if application.result:
-                            raise Http404 
-                        result_time = form.cleaned_data['result']
-
-                        if result_time > TIME_LIMITS[event.route.distance]:
-                            errors.append(f"Лимит времени - {timedelta_to_str(TIME_LIMITS[event.route.distance])}.")
-
-                        else:
-                            result = Result()
-                            result.time = result_time
-                            result.medal = form.cleaned_data['medal']
-                            result.event = event
-                            result.randonneur = randonneur
-                            result.save()
-
-                            application.result = result
-                            application.save()
+                        if application and not result:
+                            result_time = form.cleaned_data['result']
+                            if result_time > TIME_LIMITS[event.route.distance]:
+                                errors.append(f"Лимит времени - {timedelta_to_str(TIME_LIMITS[event.route.distance])}.")
+                            else:
+                                result = Result()
+                                result.time = result_time
+                                result.medal = form.cleaned_data['medal']
+                                result.event = event
+                                result.randonneur = randonneur
+                                result.save()
+                                application.result = result
+                                application.save()
                     else:
                         errors = form.errors
                 else:
@@ -516,8 +511,6 @@ def index(request):
                 })
         else:
             break
-
-        
 
     context = {
         'next_events' : next_events,
