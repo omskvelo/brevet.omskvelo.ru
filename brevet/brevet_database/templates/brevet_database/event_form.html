@@ -8,7 +8,7 @@
     {% for error in errors %}
     <p>{{ error }}</p>
     {% endfor %}
-    <p id="js_error"></p>
+    <p id="js_error" style="display:none;"></p>
     <div class="form-floating my-1">
         <input type="text" name="result" maxlength="5" class="form-control" required_id="id_result" id="floatingInput" placeholder="13:00:00">
         <label for="floatingInput">Время финиша, ЧЧ:ММ</label>

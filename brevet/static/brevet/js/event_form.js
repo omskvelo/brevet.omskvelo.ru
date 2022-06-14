@@ -39,9 +39,11 @@ function continuous_validation(event) {
 }
 
 function submit_validation(event){
-    if (!time_input.value.match(/^\d{1,2}:\d\d$/)){
+    if (!time_input.value.match(/^([0-1]?[0-9]|2[0-4]):([0-5][0-9])$/)){
         event.preventDefault()
+        error.style.display = "block"
         error.innerText = "Введите корректное время."
+        
     }  
 }
 
