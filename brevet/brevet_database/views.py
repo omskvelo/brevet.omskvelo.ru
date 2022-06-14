@@ -270,8 +270,6 @@ def event_result_time_form(request, event):
                         ):
                         errors.append(f"Лимит времени - {timedelta_to_str(TIME_LIMITS[event.route.distance])}.")
 
-                    print (start, finish, limit)
-
                     if not errors:
                         result = Result()
                         result.time = finish - start
@@ -283,6 +281,9 @@ def event_result_time_form(request, event):
                         application.save()
             else:
                 errors = form.errors
+                print (errors)
+                if 'result' in errors:
+                    errors = ["Введите корректное время."]
         else:
             form = AddResultTimeForm()
     else:

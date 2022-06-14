@@ -1,3 +1,5 @@
+{% load static %}
+
 <h3 class="h4">Сообщить результат</h3>
 <form class = "form-send-result alert alert-dark" method = "post" enctype="multipart/form-data" autocomplete="off">
     <input autocomplete="false" name="hidden" type="text" style="display:none;">
@@ -6,6 +8,7 @@
     {% for error in errors %}
     <p>{{ error }}</p>
     {% endfor %}
+    <p id="js_error"></p>
     <div class="form-floating my-1">
         <input type="text" name="result" maxlength="5" class="form-control" required_id="id_result" id="floatingInput" placeholder="13:00:00">
         <label for="floatingInput">Время финиша, ЧЧ:ММ</label>
@@ -18,3 +21,4 @@
     <button class="btn btn-md btn-dark w-100 my-1" type="submit">Подтвердить</button>
     <a class="btn btn-md btn-secondary w-100 my-1" href="{{ event.get_dnf_url }}">Сообщить о сходе</a>
 </form>
+<script src="{% static 'brevet/js/event_form.js' %}"></script>

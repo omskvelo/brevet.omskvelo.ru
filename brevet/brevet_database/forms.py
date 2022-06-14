@@ -23,9 +23,6 @@ class AddResultForm(forms.Form):
             result_match = result_pattern.match(result)
             if result_match:
                 data['result'] = result_match.group(1) + ":" + result_match.group(2) + ":00"
-
-            print (data['result'])
-
         super().__init__(data, *args, **kwargs)
 
 
@@ -44,7 +41,5 @@ class AddResultTimeForm(forms.Form):
             result_match = result_pattern.match(result)
             if result_match:
                 data['result'] = result_match.group(1) + ":" + result_match.group(2) + ":00"
-
-            print (data['result'])
 
         super().__init__(data, *args, **kwargs)
