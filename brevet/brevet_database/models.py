@@ -55,6 +55,8 @@ class Randonneur(AbstractModel):
     club = models.ForeignKey(Club, on_delete=models.PROTECT, default=DEFAULT_CLUB_ID)
     female = models.BooleanField(default=False)
     sr = models.JSONField(null=True, blank=True, default=dict)
+    total_distance = models.IntegerField(default=0)
+    total_brevets = models.IntegerField(default=0)
 
     class Meta:
         ordering = ['russian_surname']
@@ -76,16 +78,7 @@ class Randonneur(AbstractModel):
         q = list(Result.objects.filter(event__finished=True, randonneur=self))
         for result in q:
             years.add(str(result.event.date.year))
-        return sorted(list(years), reverse=True)
-
-    def update_sr(self):
-        years = self.get_active_years()
-        self.sr = dict()
-        for year in years:
-            sr_buffer = self.get_sr(str(year))
-            if sr_buffer:
-                self.sr[str(year)] = sr_buffer
-        self.save()
+        return sorted(list(years))
 
     def get_sr(self, year):
         """Calculate Super Randonneur status"""
@@ -146,6 +139,20 @@ class Randonneur(AbstractModel):
 
     def get_total_brevets(self, year=None):
         return self.get_results(year).count()
+
+    def update_stats(self):
+        years = self.get_active_years()
+        self.sr = dict()
+        for year in years:
+            sr_buffer = self.get_sr(str(year))
+            if sr_buffer:
+                self.sr[str(year)] = sr_buffer
+
+        self.total_brevets = self.get_total_brevets()
+        self.total_distance = self.get_total_distance()
+        self.save()
+
+        return True
 
     def from_user(user):
         r = Randonneur()
@@ -363,10 +370,10 @@ class Event(AbstractModel):
             # Delete old applications
             Application.objects.filter(event=self).delete()
 
-            # Update SR status of participants
+            # Update stats of participants
             randonneurs = [result.randonneur for result in Result.objects.filter(event=self)]
             for randonneur in randonneurs:
-                randonneur.update_sr()
+                randonneur.update_stats()
 
         super().save()
         

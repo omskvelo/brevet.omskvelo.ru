@@ -37,9 +37,9 @@ class RandonneurAdmin(admin.ModelAdmin):
     change_form_template = 'admin/change_randonneur.html'
 
     def response_change(self, request, obj):
-        if "_update_sr" in request.POST:
-            if (obj.update_sr()):
-                self.message_user(request, "Статус SR успешно обновлён")
+        if "_update_stats" in request.POST:
+            if (obj.update_stats()):
+                self.message_user(request, "Статистика успешно обновлена")
                 return super().response_change(request, obj)
             else:
                 self.message_user(request, "Что-то пошло не так", level="ERROR")

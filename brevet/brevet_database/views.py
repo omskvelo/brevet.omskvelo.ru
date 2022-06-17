@@ -96,8 +96,11 @@ def statistics(request, year=datetime.now().year, form="html"):
     randonneurs = get_randonneurs(year)
 
     distance_rating = []
-    for randonneur in randonneurs:
-        distance_rating.append([randonneur, randonneur.get_total_distance(year=year), randonneur.get_total_brevets(year=year)])
+    if year:
+        distance_rating = [[randonneur, randonneur.get_total_distance(year=year), randonneur.get_total_brevets(year=year)] for randonneur in randonneurs]
+    else:
+        distance_rating = [[randonneur, randonneur.total_distance, randonneur.total_brevets] for randonneur in randonneurs]
+        
     distance_rating = sorted(distance_rating, key=lambda x: x[1], reverse=True)
 
     # Get SR status
@@ -440,8 +443,8 @@ def personal_stats_index(request):
 
         rating.append({
             'randonneur': randonneur, 
-            'total_distance': randonneur.get_total_distance(), 
-            'total_brevets': randonneur.get_total_brevets(),
+            'total_distance': randonneur.total_distance, 
+            'total_brevets': randonneur.total_brevets,
             'sr': sr,
             }) 
     rating = sorted(rating, key=lambda x: x['total_distance'], reverse=True)
@@ -466,8 +469,8 @@ def personal_stats(request, surname=None, name=None, uid=None, form="html"):
     
     first_brevet = results[-1] if results else None
     
-    total_distance = randonneur.get_total_distance()
-    total_brevets = len(results)
+    total_distance = randonneur.total_distance
+    total_brevets = randonneur.total_brevets
     
     elite_dist = [x for x in results if x.event.route.lrm or x.event.route.sr600 or x.event.route.distance == 1000] 
     
