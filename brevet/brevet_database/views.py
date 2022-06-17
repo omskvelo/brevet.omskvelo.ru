@@ -284,7 +284,6 @@ def event_result_time_form(request, event):
                         application.save()
             else:
                 errors = form.errors
-                print (errors)
                 if 'result' in errors:
                     errors = ["Введите корректное время."]
         else:

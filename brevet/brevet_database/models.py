@@ -278,7 +278,6 @@ class Event(AbstractModel):
 
     def get_same_date_applicants(self):
         same_date_events = Event.objects.filter(date=self.date).exclude(pk=self.pk)
-        print([x for event in same_date_events for x in event.get_applicants()])
         return [x for event in same_date_events for x in event.get_applicants()]
 
     def application_allowed(self):
