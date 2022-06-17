@@ -333,8 +333,8 @@ class Event(AbstractModel):
                     name = result.randonneur.name
 
                     for entry in content["results"]:
-                        if (entry['name'] == name
-                            and entry['surname'] == surname):
+                        if (entry['name'].lower() == name.lower()
+                            and entry['surname'].lower() == surname.lower()):
                             if entry['homologation']:
                                 result.homologation = entry['homologation']
                                 result.save()
