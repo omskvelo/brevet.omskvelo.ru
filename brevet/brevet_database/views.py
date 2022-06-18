@@ -98,10 +98,12 @@ def statistics(request, year=datetime.now().year, form="html"):
     distance_rating = []
     if year:
         distance_rating = [[randonneur, randonneur.get_total_distance(year=year), randonneur.get_total_brevets(year=year)] for randonneur in randonneurs]
+        distance_rating = sorted(distance_rating, key=lambda x: x[1], reverse=True)[:10]
     else:
-        distance_rating = [[randonneur, randonneur.total_distance, randonneur.total_brevets] for randonneur in randonneurs]
+        sorted_by_distance = Randonneur.objects.order_by("-total_distance")[:10]
+        distance_rating = [[randonneur, randonneur.total_distance, randonneur.total_brevets] for randonneur in sorted_by_distance]
         
-    distance_rating = sorted(distance_rating, key=lambda x: x[1], reverse=True)
+    
 
     # Get SR status
     sr = []
@@ -135,7 +137,7 @@ def statistics(request, year=datetime.now().year, form="html"):
             "total_randonneurs" : total_randonneurs,
             "total_sr" : total_sr,
             "sr" : sr,
-            "distance_rating" : distance_rating[:10],
+            "distance_rating" : distance_rating,
             "best_200" : best_200,
             "best_300" : best_300,
             "best_400" : best_400,

@@ -435,7 +435,7 @@ def get_best(distance, randonneur=None, year=None, limit=None):
     q=q.order_by("time")
     if limit:
         q = q[:limit]
-    return list(q)
+    return q
 
 
 def get_randonneurs(year=None):
@@ -447,7 +447,7 @@ def get_randonneurs(year=None):
         results = results.filter(event__date__year=year)
     for result in list(results):
         randonneurs.add(result.randonneur)
-    return list(randonneurs)
+    return randonneurs
 
 
 def timedelta_to_str(t:timedelta):
