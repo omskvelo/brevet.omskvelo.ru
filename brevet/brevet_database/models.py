@@ -280,6 +280,10 @@ class Event(AbstractModel):
         same_date_events = Event.objects.filter(date=self.date).exclude(pk=self.pk)
         return [x for event in same_date_events for x in event.get_applicants()]
 
+    def started(self):
+        datetime_start = datetime.combine(self.date, self.time)
+        return datetime_start < datetime.now()
+
     def application_allowed(self):
         timedelta_block = timedelta(hours = 12)
         datetime_start = datetime.combine(self.date, self.time)
