@@ -1,0 +1,54 @@
+{% extends "registration/registration_base.html" %}
+{% load static %}
+
+{% block title %}
+  Калькулятор КП | 
+{% endblock %}
+
+{% block content %}
+    <form>
+        <h1 class="mb-3 h3 fw-normal">
+            Калькулятор КП
+        </h3>
+        
+        <div class="form-floating">
+            <input type="number" class="form-control joined_field_upper" id="distance" placeholder="_" value = "200">
+            <label for="distance">Дистанция, км</label>
+        </div>
+        <div class="form-floating">
+            <input type="time"  class="form-control joined_field_lower" id ="start" placeholder="_" value="07:00:00">
+            <label for="start">Старт</label>
+        </div>
+
+        <div class="form-floating">
+            <input type="number" class="form-control joined_field_upper" id="distance1" placeholder="_">
+            <label for="distance1">КП1, км</label>
+        </div>
+        <div class="form-floating">
+            <input type="text"  class="form-control joined_field_lower" id ="control1" placeholder="_" disabled>
+            <label for="control1">Время</label>
+        </div>
+
+        <div class="form-floating" id="insertionPoint">
+            <input type="number" class="form-control joined_field_upper" id="distance-finish" placeholder="_" disabled>
+            <label for="distance-finish">Финиш, км</label>
+        </div>
+        <div class="form-floating">
+            <input type="text"  class="form-control joined_field_lower" id ="finish" placeholder="_" disabled>
+            <label for="finish">Время</label>
+        </div>
+
+        <p>
+            Источник формул: 
+            <a href="http://www.audax-club-parisien.com/download/plages_horaires_brm_10_FR.xls">
+                xls-файл
+            </a>, опубликованный на сайте АСР в разделе 
+            <a href="https://www.audax-club-parisien.com/en/our-organizations/brm-world/">
+                "BRM".
+            </a>
+        </p>
+
+
+        <script src="{% static '/brevet/js/calc.js' %}"></script>
+    </form>
+{% endblock %}

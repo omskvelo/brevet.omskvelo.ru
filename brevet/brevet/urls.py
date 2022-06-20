@@ -24,6 +24,7 @@ from brevet_database.views import index
 urlpatterns = [
     path('', index, name = 'index'),
     path('faq/', views.faq, name = 'faq'),
+    path('calc/', views.calc, name = 'calc'),
     path('database/', include ('brevet_database.urls')),
     path('search/', include ('search.urls')),
     path('users/', include ('users.urls')),
