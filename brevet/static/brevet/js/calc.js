@@ -9,6 +9,7 @@ const finishDom = document.querySelector('#finish')
 const container = document.querySelector('form')
 const insertionPoint = document.querySelector('#insertionPoint')
 
+
 let controls = [
     {
         timeDom: document.querySelector('#control1'),
@@ -24,8 +25,25 @@ const limits = {
     '1000': 75
 }
 
+//Populate DOM from URL
+let url = new URL(window.location.href)
+let i = 0;
+
+if (url.searchParams.get("start")) startDom.value = url.searchParams.get("start")
+if (url.searchParams.get("distance")) distanceDom.value = url.searchParams.get("distance")
+if (url.searchParams.get("cp")){
+    url.searchParams.get("cp").split(",").map(Number).forEach(control =>{
+        if (control){
+            if (i + 1 >= controls.length) add_cp_dom()
+            controls[i].distanceDom.value = control
+            i++
+        }
+    })
+}
+
 
 function refresh(){
+    // Calculate
     start = startDom.value
     distance = distanceDom.value
 
@@ -42,14 +60,35 @@ function refresh(){
         }
     })
 
+    //Update URL
+    if (url.searchParams.get("start")) url.searchParams.set("start", startDom.value)
+    else url.searchParams.append("start", startDom.value)
+
+    if (url.searchParams.get("distance")) url.searchParams.set("distance", distanceDom.value)
+    else url.searchParams.append("distance", distanceDom.value)
+
+    let cp = "";
+    controls.forEach(control => {
+        cp += control.distanceDom.value
+        cp += ","
+    })
+    cp = cp.slice(0,-2)
+
+    if (cp) {
+        if (url.searchParams.get("cp")) url.searchParams.set("cp", cp)
+        else url.searchParams.append("cp", cp)
+    }
+    
+    window.history.pushState({}, '', url)
+
+    // Update DOM
     if (controls[controls.length-1].distanceDom.value != ""){
         add_cp_dom()
     }
-    if (controls[controls.length-1].distanceDom.value == ""
+    while (controls[controls.length-1].distanceDom.value == ""
         && controls[controls.length-2].distanceDom.value == ""){
             remove_cp_dom(controls.length-1)
         }
-
 }
 
 function calculate_control_open(time, km){
@@ -57,13 +96,13 @@ function calculate_control_open(time, km){
     let min =  Number(time.split(":")[1])
     let t = hr + min/60
 
-    t = t + Math.min(km,200)/34
-    t = t + Math.min(Math.max(km-200,0),200)/32
-    t = t + Math.min(Math.max(km-400,0),200)/30
-    t = t + Math.min(Math.max(km-600,0),400)/28
-    t = t + Math.min(Math.max(km-1000,0),200)/26
-    t = t + Math.min(Math.max(km-1200,0),600)/25
-    t = t + Math.min(Math.max(km-1800,0),200)/24
+    t += Math.min(km,200)/34
+    t += Math.min(Math.max(km-200,0),200)/32
+    t += Math.min(Math.max(km-400,0),200)/30
+    t += Math.min(Math.max(km-600,0),400)/28
+    t += Math.min(Math.max(km-1000,0),200)/26
+    t += Math.min(Math.max(km-1200,0),600)/25
+    t += Math.min(Math.max(km-1800,0),200)/24
 
     return format_time(t)
 }
