@@ -136,10 +136,18 @@ function calculate_finish_close(time, km){
 }
 
 function format_time(t){
-    hr = String(Math.floor(t % 24)).padStart(2,"0")
-    min = String(Math.round(t % 1 * 60)).padStart(2,"0")
-    days = Math.floor(t / 24)
-
+    let hr = Math.floor(t % 24)
+    let min = Math.round(t % 1 * 60)
+    let days = Math.floor(t / 24)
+    
+    if (min == 60){
+      hr += 1
+      min = 0
+    }
+    
+    hr = String(hr).padStart(2,"0")
+    min = String(min).padStart(2,"0")
+    
     if (days === 0) days = ""
     else days = ` (+${days})`
 
