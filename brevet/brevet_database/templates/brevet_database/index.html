@@ -14,12 +14,24 @@
 {% endblock %}
 
 {% block cover %}
-    Следующий бревет
+    {% if next_events %}
+        {% if not next_events.0.event.started %}
+            Следующий бревет
+        {% else %}
+            Текущий бревет
+        {% endif %}
+    {% else %}
+        Запланированных бреветов нет
+    {% endif %}
 {% endblock %}
 
 {% block content %}
-    <h1 class="only-print">Следующий бревет</h1>
     {% if next_events %}
+        {% if not next_events.0.event.started %}
+            <h1 class="only-print">Следующий бревет</h1>
+        {% else %}
+            <h1 class="only-print">Текущий бревет</h1>
+        {% endif %}
         {% for next in next_events %}
             {% with event=next.event application=next.application form=next.form errors=next.errors %}
                 <section class="next">
@@ -97,7 +109,6 @@
             {% endwith %}
         {% endfor %}
     {% else %}
-        <h2 class="h3 my-3"> Запланированных бреветов нет </h2>
         <p>
             Бреветы были, да все вышли :) Мы уже проехали все бреветы, запланированные в календаре на этот год. Ничего страшного, скоро будет новый календарь и новый сезон! 
         </p>
