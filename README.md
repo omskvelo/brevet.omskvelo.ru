@@ -26,4 +26,4 @@ python manage.py loaddata data.json
 ### .gitignore
 В исходный код не вошли необходимые для работы файлы:
 - .env - файл, содержащий приватные ключи. Вместо него приведён шаблон .env.example.
-- static\brevet\img\* - статические изображения.
+- static\brevet\img\\* - статические изображения.
