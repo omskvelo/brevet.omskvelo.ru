@@ -17,9 +17,11 @@ Python | Django | Bootstrap | PostgreSQL | Gunicorn | Nginx | Docker
 `docker-compose up -d --build`
 
 #### Загрузить дамп
-`docker exec -it brevetomskveloru-web-1 sh `
-`cd /home/brevet/web/brevet`
-`python manage.py loaddata data.json`
+```
+docker exec -it brevetomskveloru-web-1 sh
+cd /home/brevet/web/brevet
+python manage.py loaddata data.json
+```
 
 ### .gitignore
 В исходный код не вошли необходимые для работы файлы:
