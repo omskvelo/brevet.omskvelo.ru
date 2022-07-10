@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{% load static %}
 
 {% block title %}
 Маршруты | 
@@ -39,7 +40,7 @@
         <li class="col my-3">
             <div class="route-card" style="background-image: 
                 linear-gradient(to bottom, rgba(255, 255, 255, 0), rgba(0, 0, 0, 0.35)),
-                url('{{route.image.url}}');">
+                url('{{route.get_image_url}}')">
                 <a class="h4 route-card-title" href="{{ route.get_absolute_url }}">
                     {{ route.name }}
                     <small>

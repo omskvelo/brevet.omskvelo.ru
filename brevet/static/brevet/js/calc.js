@@ -11,10 +11,7 @@ const insertionPoint = document.querySelector('#insertionPoint')
 
 
 let controls = [
-    {
-        timeDom: document.querySelector('#control1'),
-        distanceDom: document.querySelector('#distance1')
-    }
+
 ]
 
 const limits = {
@@ -41,7 +38,6 @@ if (url.searchParams.get("cp")){
     })
 }
 
-
 function refresh(){
     // Calculate
     start = startDom.value
@@ -61,12 +57,6 @@ function refresh(){
     })
 
     //Update URL
-    if (url.searchParams.get("start")) url.searchParams.set("start", startDom.value)
-    else url.searchParams.append("start", startDom.value)
-
-    if (url.searchParams.get("distance")) url.searchParams.set("distance", distanceDom.value)
-    else url.searchParams.append("distance", distanceDom.value)
-
     let cp = "";
     controls.forEach(control => {
         cp += control.distanceDom.value
@@ -74,10 +64,9 @@ function refresh(){
     })
     cp = cp.slice(0,-2)
 
-    if (cp) {
-        if (url.searchParams.get("cp")) url.searchParams.set("cp", cp)
-        else url.searchParams.append("cp", cp)
-    }
+    manage_url_param("distance", distanceDom.value)
+    manage_url_param("start", startDom.value)
+    manage_url_param("cp", cp)
     
     window.history.pushState({}, '', url)
 
@@ -89,6 +78,14 @@ function refresh(){
         && controls[controls.length-2].distanceDom.value == ""){
             remove_cp_dom(controls.length-1)
         }
+}
+
+function manage_url_param(name, value){
+    if (value) {
+        if (url.searchParams.get(name)!= null) url.searchParams.set(name, value)
+        else url.searchParams.append(name, value)        
+    }
+    else url.searchParams.delete(name)
 }
 
 function calculate_control_open(time, km){
@@ -165,6 +162,16 @@ function add_cp_dom(){
     inputTop.setAttribute('id',`distance${index}`)
     inputTop.setAttribute('placeholder', "_")
     inputTop.addEventListener('input', refresh)
+    inputTop.onkeyup = function(e) {
+        if(e.key == "Enter"){
+            controls[index].distanceDom.focus()
+        }
+    }
+    inputTop.onfocus = function(e) {
+        temp = inputTop.value
+        inputTop.value = ""
+        inputTop.value = temp
+    }
 
     let labelTop = document.createElement("label")
     labelTop.setAttribute('for', `distance${index}`) 
@@ -206,6 +213,7 @@ function remove_cp_dom(index){
 
 inputs.forEach(input => input.addEventListener('input', refresh))
 
+add_cp_dom()
 refresh()
 
 function test_calc(){
