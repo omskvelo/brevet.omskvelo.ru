@@ -18,7 +18,7 @@ def read_xls_protocol(file):
 
         content["date"] = datetime.strptime(date, "%d/%m/%Y").date()
         content["distance"] = int(distance[:-2].strip())
-        content["code"] = int(code)
+        content["code"] = int("".join(x for x in code if x.isdigit()))
         content["results"] = []
 
         row = 3
