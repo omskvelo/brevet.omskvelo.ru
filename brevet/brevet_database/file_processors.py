@@ -45,7 +45,7 @@ def read_xls_protocol(file):
             homologation = str(int(homologation))
             surname = surname.title()
             name = name.title()
-            code = int(code)
+            code = int("".join(x for x in code if x.isdigit()))
             h,m = time.split(":")
             time = timedelta(hours=int(h), minutes=int(m))
             medal = medal != ""
