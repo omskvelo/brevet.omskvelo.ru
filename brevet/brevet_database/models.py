@@ -4,6 +4,7 @@ from pathlib import Path
 
 from django.db import models
 from django.urls import reverse
+from django.dispatch import receiver
 
 from transliterate import translit
 
@@ -374,25 +375,24 @@ class Event(AbstractModel):
     def get_text(self):
         return [x for x in self.text.split("\n") if x]
 
-    def save(self):
-        if self.finished:
-            # Update stats of participants
-            applications = Application.objects.filter(event=self)
-            results = [a.result for a in applications if a.result]
-            randonneurs = [result.randonneur for result in results]
-
-            for randonneur in randonneurs:
-                randonneur.update_stats()
-
-            # Delete old applications
-            applications.delete()
-
-        super().save()
-        
-
     def __str__(self):
         club = str(self.club) if self.club.id != DEFAULT_CLUB_ID else ""
-        return f"{self.get_date()} {self.route.distance} км {self.route.name} {club}"     
+        return f"{self.get_date()} {self.route.distance} км {self.route.name} {club}"  
+
+@receiver(models.signals.post_save, sender=Event)
+def update_randonneur_stats(sender, instance, created, **kwargs):
+    if instance.finished:
+        # Update stats of participants
+        applications = Application.objects.filter(event=instance)
+        results = [a.result for a in applications if a.result]
+        randonneurs = [result.randonneur for result in results]
+
+        for randonneur in randonneurs:
+            randonneur.update_stats()
+
+        # Delete old applications
+        applications.delete()
+           
 
 class Result(AbstractModel):
     event = models.ForeignKey(Event, on_delete=models.CASCADE)
