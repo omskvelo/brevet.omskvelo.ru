@@ -257,6 +257,11 @@ body {
   height: auto;
 }
 
+.img-faq-ACP {
+  width: 100%;
+  max-width: 776px;
+}
+
 .strava-badge- { 
   display: inline-block; 
   height: 32px; 

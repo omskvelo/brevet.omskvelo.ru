@@ -39,7 +39,7 @@ def get_xlsx_protocol(event, results, filename):
     worksheet.write(0, 6, "DISTANCE", text_format)
     worksheet.write(0, 7, "INFORMATIONS", text_format)
 
-    worksheet.write(1, 0, "'N° de brevet ", text_format)
+    worksheet.write(1, 0, "N° de brevet ", text_format)
     worksheet.write(1, 7, "Médaille", text_format)
     worksheet.write(1, 8, "Sexe", text_format)
 

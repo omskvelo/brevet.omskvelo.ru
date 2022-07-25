@@ -376,13 +376,16 @@ class Event(AbstractModel):
 
     def save(self):
         if self.finished:
-            # Delete old applications
-            Application.objects.filter(event=self).delete()
-
             # Update stats of participants
-            randonneurs = [result.randonneur for result in Result.objects.filter(event=self)]
+            applications = Application.objects.filter(event=self)
+            results = [a.result for a in applications if a.result]
+            randonneurs = [result.randonneur for result in results]
+
             for randonneur in randonneurs:
                 randonneur.update_stats()
+
+            # Delete old applications
+            applications.delete()
 
         super().save()
         
