@@ -17,6 +17,7 @@ services:
       db:
         condition: service_healthy
     env_file: .env
+    restart: unless-stopped
 
   db:
     image: postgres:14.2-alpine
@@ -28,6 +29,7 @@ services:
       interval: 1s
       timeout: 1s
       retries: 10
+    restart: unless-stopped
 
 
   nginx:
@@ -38,6 +40,7 @@ services:
       - 1337:80
     depends_on: 
       - web
+    restart: unless-stopped
 
 volumes:
   postgres_data:
