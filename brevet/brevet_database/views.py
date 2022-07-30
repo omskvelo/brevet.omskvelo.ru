@@ -348,9 +348,9 @@ def event_dnf(request, distance, date):
 
         application = get_object_or_404(Application, event=event, user=request.user )
         application.dnf = True
-        result = application.result
-        result.delete()
-        application.result = None
+        if application.result:
+            application.result.delete()
+            application.result = None
         application.save() 
 
         return redirect(request.META.get('HTTP_REFERER'))
