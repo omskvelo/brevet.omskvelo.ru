@@ -282,6 +282,18 @@ body {
   background: url(//badges.strava.com/echelon-sprite-32.png) no-repeat 0 0; 
 }
 
+.hidden {
+  display: none;
+}
+
+.row-button {
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  background: none !important;
+}
+
 @media screen and (max-width: 1210px) {
   .nav-item:not(:last-child) {
   margin-right: 8px;

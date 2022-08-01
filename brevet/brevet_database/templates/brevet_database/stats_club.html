@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{% load static %}
 
 {% block title %}
 Статистика | 
@@ -46,24 +47,16 @@
     </h4>
     {% endif %}
 
-    <p class="my-2">
+    <h5 class="text-muted">
        Общая дистанция:  <strong>{{ total_distance }} км</strong>
-    </p>
-    <p class="my-2">
+    </h5>
+    <h5 class="text-muted">
         Всего участников:  <strong>{{ total_randonneurs }}</strong>
-    </p>   
-
-    <a class="btn btn-dark" href="./xlsx/">
-        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-download" viewBox="0 0 16 16">
-            <path d="M.5 9.9a.5.5 0 0 1 .5.5v2.5a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-2.5a.5.5 0 0 1 1 0v2.5a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2v-2.5a.5.5 0 0 1 .5-.5z"/>
-            <path d="M7.646 11.854a.5.5 0 0 0 .708 0l3-3a.5.5 0 0 0-.708-.708L8.5 10.293V1.5a.5.5 0 0 0-1 0v8.793L5.354 8.146a.5.5 0 1 0-.708.708l3 3z"/>
-        </svg>
-        xlsx
-    </a>
+    </h5>   
 
     {% if total_sr %}
         <h5 class="my-4">
-            Суперрандоннёры
+            Суперрандоннёры: <strong>{{ sr|length }}</strong>
         </h5>
         <ul>
         {% for randonneur in sr %}
@@ -96,7 +89,7 @@
                 </tr>
             </thead>
             <tbody> 
-                {% for result in elite_dist %}
+                {% for result in elite_dist|slice:":15" %}
                     <tr>
                         <td>
                             <a href = "{{ result.randonneur.get_absolute_url }}">
@@ -117,6 +110,45 @@
                         <td>{{ result.get_time }}</td>    
                     </tr>
                 {% endfor %}
+                {% for result in elite_dist|slice:"15:" %}
+                    <tr class="hidden collapsible">
+                        <td>
+                            <a href = "{{ result.randonneur.get_absolute_url }}">
+                                {{ result.randonneur }}
+                            </a>
+                        </td>
+                        <td>
+                            <span class="d-none d-lg-block">
+                                {{ result.get_date }}
+                            </span>
+                        </td>
+                        <td>
+                            <a href="{{ result.event.get_absolute_url }}">
+                                {{ result.event.route.name }}
+                            </a>
+                        </td>
+                        <td>{{ result.event.route.distance }} км</td>
+                        <td>{{ result.get_time }}</td>    
+                    </tr>
+                {% endfor %}      
+                {% if elite_dist|slice:"15:"|length %} 
+                    <tr>
+                        <td colspan="5">
+                            <button class="row-button" id="btn-collapse" hidden>
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-chevron-double-up" viewBox="0 0 16 16">
+                                    <path fill-rule="evenodd" d="M7.646 2.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1-.708.708L8 3.707 2.354 9.354a.5.5 0 1 1-.708-.708l6-6z"/>
+                                    <path fill-rule="evenodd" d="M7.646 6.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1-.708.708L8 7.707l-5.646 5.647a.5.5 0 0 1-.708-.708l6-6z"/>
+                                </svg>
+                            </button>
+                            <button class="row-button" id="btn-expand">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-chevron-double-down" viewBox="0 0 16 16">
+                                    <path fill-rule="evenodd" d="M1.646 6.646a.5.5 0 0 1 .708 0L8 12.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z"/>
+                                    <path fill-rule="evenodd" d="M1.646 2.646a.5.5 0 0 1 .708 0L8 8.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z"/>
+                                </svg>
+                            </button>
+                        </td>
+                    </tr>
+                {% endif %}
             </tbody>
         </table>
         <table class="table table-striped table-hover only-mobile-table">
@@ -128,7 +160,7 @@
                 </tr>
             </thead>
             <tbody> 
-                {% for result in elite_dist %}
+                {% for result in elite_dist|slice:":15" %}
                     <tr>
                         <td>
                             <a href = "{{ result.randonneur.get_absolute_url }}">
@@ -146,19 +178,50 @@
                         <td>{{ result.get_time }}</td>    
                     </tr>
                 {% endfor %}
+                {% for result in elite_dist|slice:"15:" %}
+                    <tr class="hidden collapsible1">
+                        <td>
+                            <a href = "{{ result.randonneur.get_absolute_url }}">
+                                {{ result.randonneur }}
+                            </a>
+                        </td>
+                        <td>
+                            <a href = "{{ result.event.get_absolute_url }}">
+                                {{ result.event.route.distance }} км 
+                                <small>
+                                    {{ result.event.route.name }}
+                                </small>
+                            </a>
+                        </td>
+                        <td>{{ result.get_time }}</td>    
+                    </tr>
+                {% endfor %}
+                {% if elite_dist|slice:"15:"|length %} 
+                    <tr>
+                        <td colspan="3">
+                            <button class="row-button" id="btn-collapse1" hidden>
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-chevron-double-up" viewBox="0 0 16 16">
+                                    <path fill-rule="evenodd" d="M7.646 2.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1-.708.708L8 3.707 2.354 9.354a.5.5 0 1 1-.708-.708l6-6z"/>
+                                    <path fill-rule="evenodd" d="M7.646 6.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1-.708.708L8 7.707l-5.646 5.647a.5.5 0 0 1-.708-.708l6-6z"/>
+                                </svg>
+                            </button>
+                            <button class="row-button" id="btn-expand1">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-chevron-double-down" viewBox="0 0 16 16">
+                                    <path fill-rule="evenodd" d="M1.646 6.646a.5.5 0 0 1 .708 0L8 12.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z"/>
+                                    <path fill-rule="evenodd" d="M1.646 2.646a.5.5 0 0 1 .708 0L8 8.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z"/>
+                                </svg>
+                            </button>
+                        </td>
+                    </tr>
+                {% endif %}
+
             </tbody>
         </table>
     {% endif %}
 
-    {% if not year %}
-    <h5 class="my-4">
-        Топ-10 рандоннёров по общей дистанции
-    </h5>
-    {% else %}
     <h5 class="my-4">
         Рейтинг рандоннёров по общей дистанции
     </h5>
-    {% endif %}
     <table class="table table-striped table-hover">
         <thead>
             <tr>
@@ -168,17 +231,46 @@
             </tr>
         </thead>
         <tbody>
-            {% for randonneur in distance_rating%}
-            <tr>
-                <td>
-                    <a href = "{{ randonneur.0.get_absolute_url }}">
-                        {{ randonneur.0 }}
-                    </a>
-                </td>
-                <td>{{ randonneur.1 }} км</td>
-                <td>{{ randonneur.2 }}</td>
-            </tr>
+            {% for randonneur in distance_rating|slice:":10" %}
+                <tr>
+                    <td>
+                        <a href = "{{ randonneur.0.get_absolute_url }}">
+                            {{ randonneur.0 }}
+                        </a>
+                    </td>
+                    <td>{{ randonneur.1 }} км</td>
+                    <td>{{ randonneur.2 }}</td>
+                </tr>
             {% endfor %}
+            {% for randonneur in distance_rating|slice:"10:" %}
+                <tr class="hidden collapsible2">
+                    <td>
+                        <a href = "{{ randonneur.0.get_absolute_url }}">
+                            {{ randonneur.0 }}
+                        </a>
+                    </td>
+                    <td>{{ randonneur.1 }} км</td>
+                    <td>{{ randonneur.2 }}</td>
+                </tr>
+            {% endfor %}
+            {% if distance_rating|slice:"10:"|length %}
+                <tr>
+                    <td colspan="3">
+                        <button class="row-button" id="btn-collapse2" hidden>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-chevron-double-up" viewBox="0 0 16 16">
+                                <path fill-rule="evenodd" d="M7.646 2.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1-.708.708L8 3.707 2.354 9.354a.5.5 0 1 1-.708-.708l6-6z"/>
+                                <path fill-rule="evenodd" d="M7.646 6.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1-.708.708L8 7.707l-5.646 5.647a.5.5 0 0 1-.708-.708l6-6z"/>
+                            </svg>
+                        </button>
+                        <button class="row-button" id="btn-expand2">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-chevron-double-down" viewBox="0 0 16 16">
+                                <path fill-rule="evenodd" d="M1.646 6.646a.5.5 0 0 1 .708 0L8 12.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z"/>
+                                <path fill-rule="evenodd" d="M1.646 2.646a.5.5 0 0 1 .708 0L8 8.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z"/>
+                            </svg>
+                        </button>
+                    </td>
+                </tr>
+            {% endif %}
         </tbody>
     </table>
 
@@ -344,7 +436,13 @@
         </table> 
     {% endif %}
 
+    <a class="btn btn-dark" href="./xlsx/">
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-download" viewBox="0 0 16 16">
+            <path d="M.5 9.9a.5.5 0 0 1 .5.5v2.5a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-2.5a.5.5 0 0 1 1 0v2.5a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2v-2.5a.5.5 0 0 1 .5-.5z"/>
+            <path d="M7.646 11.854a.5.5 0 0 0 .708 0l3-3a.5.5 0 0 0-.708-.708L8.5 10.293V1.5a.5.5 0 0 0-1 0v8.793L5.354 8.146a.5.5 0 1 0-.708.708l3 3z"/>
+        </svg>
+        xlsx
+    </a>
 
-
-
+    <script src="{% static 'brevet/js/collapse_table.js' %}"></script>
 {% endblock %}

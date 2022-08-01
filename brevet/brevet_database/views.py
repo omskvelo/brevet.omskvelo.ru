@@ -90,7 +90,7 @@ def statistics(request, year=datetime.now().year, form="html"):
    
     # LRM, SR600, 1000
     elite_dist = [x for x in results if x.event.route.lrm or x.event.route.sr600 or x.event.route.distance == 1000] 
-    elite_dist = sorted(elite_dist, key=lambda x: x.event.date)
+    elite_dist = sorted(elite_dist, key=lambda x: x.event.date, reverse=True)
 
     # Personal stats 
     randonneurs = get_randonneurs(year)
@@ -98,9 +98,9 @@ def statistics(request, year=datetime.now().year, form="html"):
     distance_rating = []
     if year:
         distance_rating = [[randonneur, randonneur.get_total_distance(year=year), randonneur.get_total_brevets(year=year)] for randonneur in randonneurs]
-        distance_rating = sorted(distance_rating, key=lambda x: x[1], reverse=True)[:10]
+        distance_rating = sorted(distance_rating, key=lambda x: x[1], reverse=True)
     else:
-        sorted_by_distance = Randonneur.objects.order_by("-total_distance")[:10]
+        sorted_by_distance = Randonneur.objects.filter(total_distance__gt=0).order_by("-total_distance")
         distance_rating = [[randonneur, randonneur.total_distance, randonneur.total_brevets] for randonneur in sorted_by_distance]
         
     
@@ -121,10 +121,10 @@ def statistics(request, year=datetime.now().year, form="html"):
     sr = sorted(sr, key=lambda x: x.sr_string, reverse=True)
 
     # Find best results
-    best_200 = get_best(200, year=year, limit=10)
-    best_300 = get_best(300, year=year, limit=10)
-    best_400 = get_best(400, year=year, limit=10)
-    best_600 = get_best(600, year=year, limit=10)
+    best_200 = get_best(200, year=year, limit=10, unique_randonneurs=True)
+    best_300 = get_best(300, year=year, limit=10, unique_randonneurs=True)
+    best_400 = get_best(400, year=year, limit=10, unique_randonneurs=True)
+    best_600 = get_best(600, year=year, limit=10, unique_randonneurs=True)
 
     # Calculate total stats
     total_sr = len(sr)

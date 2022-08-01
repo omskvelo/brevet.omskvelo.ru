@@ -436,19 +436,29 @@ def get_event_years(reverse=True, finished=True):
     return sorted(list(years), reverse=reverse)
 
 
-def get_best(distance, randonneur=None, year=None, limit=None):
+def get_best(distance, randonneur=None, year=None, limit=None, unique_randonneurs=False):
     """Returns best results on brm distance for randonneur 
     (or all randonneurs if None) for a given year (or all years if None)
     """
-    q = Result.objects.filter(event__route__distance=distance, event__route__brm=True)
+    query = Result.objects.filter(event__route__distance=distance, event__route__brm=True)
+    
     if randonneur:
-        q = q.filter(randonneur=randonneur)
+        query = query.filter(randonneur=randonneur)
+    
     if year:
-        q = q.filter(event__date__year=year)
-    q=q.order_by("time")
-    if limit:
-        q = q[:limit]
-    return q
+        query = query.filter(event__date__year=year)
+    
+    query = query.order_by("time", "event__date")
+
+    if unique_randonneurs:
+        for q in query:
+            query = query.exclude(randonneur=q.randonneur, time__gt=q.time)
+
+    if limit and len(query) > limit:
+        while query[limit-1].time == query[limit].time:
+            limit += 1
+        query = query[:limit]
+    return query
 
 
 def get_randonneurs(year=None):
