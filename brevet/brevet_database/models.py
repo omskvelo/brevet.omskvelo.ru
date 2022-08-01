@@ -452,7 +452,8 @@ def get_best(distance, randonneur=None, year=None, limit=None, unique_randonneur
 
     if unique_randonneurs:
         for q in query:
-            query = query.exclude(randonneur=q.randonneur, time__gt=q.time, event__date__gt=q.event.date)
+            query = query.exclude(randonneur=q.randonneur, time__gt=q.time)
+            query = query.exclude(randonneur=q.randonneur, event__date__gt=q.event.date)
 
     if limit and len(query) > limit:
         while query[limit-1].time == query[limit].time:
