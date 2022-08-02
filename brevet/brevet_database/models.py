@@ -441,23 +441,31 @@ def get_best(distance, randonneur=None, year=None, limit=None, unique_randonneur
     (or all randonneurs if None) for a given year (or all years if None)
     """
     query = Result.objects.filter(event__route__distance=distance, event__route__brm=True)
-    
-    if randonneur:
-        query = query.filter(randonneur=randonneur)
-    
+
     if year:
         query = query.filter(event__date__year=year)
 
-    query = query.order_by("time", "event__date")
+    if randonneur:
+        query = query.filter(randonneur=randonneur)
+        query = query.order_by("time")
+        if limit:
+            query = query[:limit]
 
-    if unique_randonneurs:
-        query = query.distinct('randonneur')
+        return query
+        
+    else:
+        query = query.order_by("time", "event__date")
+        buffer = []
+        results = []
+        for result in query:
+            if len(results) >= limit:
+                if result.time != results[-1].time:
+                    break
+            if result.randonneur not in buffer:
+                buffer.append(result.randonneur)
+                results.append(result)
 
-    if limit and len(query) > limit:
-        while query[limit-1].time == query[limit].time:
-            limit += 1
-        query = query[:limit]
-    return query
+        return results
 
 
 def get_randonneurs(year=None):

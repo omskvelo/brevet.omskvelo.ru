@@ -121,10 +121,10 @@ def statistics(request, year=datetime.now().year, form="html"):
     sr = sorted(sr, key=lambda x: x.sr_string, reverse=True)
 
     # Find best results
-    best_200 = get_best(200, year=year, limit=10, unique_randonneurs=True)
-    best_300 = get_best(300, year=year, limit=10, unique_randonneurs=True)
-    best_400 = get_best(400, year=year, limit=10, unique_randonneurs=True)
-    best_600 = get_best(600, year=year, limit=10, unique_randonneurs=True)
+    best_200 = get_best(200, year=year, limit=10)
+    best_300 = get_best(300, year=year, limit=10)
+    best_400 = get_best(400, year=year, limit=10)
+    best_600 = get_best(600, year=year, limit=10)
 
     # Calculate total stats
     total_sr = len(sr)
