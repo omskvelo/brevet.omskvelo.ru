@@ -90,6 +90,11 @@ body {
   color: white;
 }
 
+.navbar-dark:hover .navbar-nav:hover .nav-link:hover {
+  color: rgba(255, 255, 255, 0.8);
+}
+
+
 .navbar-external-user {
   justify-content: flex-end;
 } 
