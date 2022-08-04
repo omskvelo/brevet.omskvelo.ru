@@ -2,17 +2,34 @@ let inputs = document.querySelectorAll('input')
 
 const distanceDom = document.querySelector('#distance')
 const distanceFinishDom = document.querySelector('#distance-finish')
-
 const startDom = document.querySelector('#start')
 const finishDom = document.querySelector('#finish')
-
 const container = document.querySelector('form')
 const insertionPoint = document.querySelector('#insertionPoint')
+const methodDom = document.querySelector('#method')
+const methodListDom = document.querySelector('#method-list')
+const sourceDom = document.querySelector('#calc-source')
+const elevationDom = document.querySelector('#elevation')
+const extendedLimitDom = document.querySelector('#extended-limit')
+
+const methods = {
+    brm: {
+        name: 'BRM',
+        source: 'Источник формул: \
+        <a href="http://www.audax-club-parisien.com/download/plages_horaires_brm_10_FR.xls" target="_blank"> xls-файл </a>, \
+        опубликованный на сайте АСР в разделе \
+        <a href="https://www.audax-club-parisien.com/en/our-organizations/brm-world/"> "BRM". </a>'
+    },
+    lrm: {
+        name: 'LRM',
+        source: 'Источник формул: \
+        <a href="https://www.randonneursmondiaux.org/files/Rules_2019.pdf" target="_blank"> правила LRM </a>'
+    },
+}
 
 
-let controls = [
 
-]
+let controls = []
 
 const limits = {
     '200':  13.5,
@@ -26,8 +43,11 @@ const limits = {
 let url = new URL(window.location.href)
 let i = 0;
 
-if (url.searchParams.get("start")) startDom.value = url.searchParams.get("start")
-if (url.searchParams.get("distance")) distanceDom.value = url.searchParams.get("distance")
+let currentMethod = url.searchParams.get("method")     || 'brm'
+startDom.value = url.searchParams.get("start")         || '07:00'
+distanceDom.value = url.searchParams.get("distance")   || '200'
+elevationDom.value = url.searchParams.get("elevation") || '0'
+
 if (url.searchParams.get("cp")){
     url.searchParams.get("cp").split(",").map(Number).forEach(control =>{
         if (control){
@@ -40,21 +60,43 @@ if (url.searchParams.get("cp")){
 
 function refresh(){
     // Calculate
-    start = startDom.value
-    distance = distanceDom.value
+    let start = startDom.value
+    let distance = distanceDom.value
+    let elevation = elevationDom.value
 
     distanceFinishDom.value = distance
-    finishDom.value = `c ${calculate_control_open(start,distance)} по ${calculate_finish_close(start,distance)}`
 
-    controls.forEach(control => {
-        let km = control.distanceDom.value
-        if (km){
-            control.timeDom.value = `c ${calculate_control_open(start,km)} по ${calculate_control_close(start,km)}`
-        }
-        else{
-            control.timeDom.value = ""
-        }
-    })
+    if (currentMethod == 'brm'){
+        finishDom.value = `c ${calculate_control_open(start,distance)} по ${calculate_finish_close(start,distance)}`
+
+        controls.forEach(control => {
+            let km = control.distanceDom.value
+            if (km){
+                control.timeDom.value = `c ${calculate_control_open(start,km)} по ${calculate_control_close(start,km)}`
+            }
+            else{
+                control.timeDom.value = ""
+            }
+        })
+    }
+
+    if (currentMethod == 'lrm'){
+        let limit = calculate_extended_limit(distance, elevation)
+        let extra_hours = calculate_lrm_extended_hours(distance, limit)
+        extendedLimitDom.value = `${limit}% (${extra_hours})`
+
+        finishDom.value = `c ${calculate_lrm_control_open(start,distance)} по ${calculate_lrm_finish_close(start,distance,distance,limit)}`
+
+        controls.forEach(control => {
+            let km = control.distanceDom.value
+            if (km){
+                control.timeDom.value = `c ${calculate_lrm_control_open(start,km)} по ${calculate_lrm_control_close(start,km,distance,limit)}`
+            }
+            else{
+                control.timeDom.value = ""
+            }
+        })
+    }
 
     //Update URL
     let cp = "";
@@ -67,6 +109,8 @@ function refresh(){
     manage_url_param("distance", distanceDom.value)
     manage_url_param("start", startDom.value)
     manage_url_param("cp", cp)
+    manage_url_param('method', currentMethod)
+    manage_url_param('elevation', elevation)
     
     window.history.pushState({}, '', url)
 
@@ -74,10 +118,13 @@ function refresh(){
     if (controls[controls.length-1].distanceDom.value != ""){
         add_cp_dom()
     }
-    while (controls[controls.length-1].distanceDom.value == ""
-        && controls[controls.length-2].distanceDom.value == ""){
-            remove_cp_dom(controls.length-1)
-        }
+    if (controls[controls.length-2] != undefined){
+        while (controls[controls.length-1].distanceDom.value == ""
+            && controls[controls.length-2].distanceDom.value == ""){
+                remove_cp_dom(controls.length-1)
+                if (controls.length == 1) break
+            }
+    }
 }
 
 function manage_url_param(name, value){
@@ -132,6 +179,37 @@ function calculate_finish_close(time, km){
     else return calculate_control_close(time, km)
 }
 
+function calculate_lrm_control_open(time, km){
+    let hr = Number(time.split(":")[0])
+    let min =  Number(time.split(":")[1])
+    let t = hr + min/60
+
+    t += km/30
+
+    return format_time(t)
+}
+
+function calculate_lrm_control_close(time, km, distance, limit){
+    let hr =  Number(time.split(":")[0])
+    let min =  Number(time.split(":")[1])
+    let t = hr + min/60
+    let dt
+
+    if (distance <= 1299) dt = km/13.3333 
+    if (distance >= 1300 && distance <= 1899) dt = km/12
+    if (distance >= 1900 && distance <= 2499) dt = km/10
+    if (distance >= 2500) dt = km/8.3333
+    dt *= (limit + 100)/100
+
+    t += dt
+    return format_time(t)
+}
+
+function calculate_lrm_finish_close(time, km, distance, limit){
+    return calculate_lrm_control_close(time, km, distance, limit)
+}
+
+
 function format_time(t){
     let hr = Math.floor(t % 24)
     let min = Math.round(t % 1 * 60)
@@ -149,6 +227,39 @@ function format_time(t){
     else days = ` (+${days})`
 
     return `${hr}:${min}${days}`
+}
+
+function calculate_extended_limit (distance, elevation){
+    if (elevation == "") return 0
+    if (distance == 0) return 0
+    rate = elevation / distance
+    if (rate <= 11) return 0
+    return Math.floor((rate - 11))*5
+}
+
+function calculate_lrm_extended_hours(distance, limit){
+    let hr
+    let min
+    let km = distance
+
+    if (distance <= 1299) hr = km/13.3333 
+    if (distance >= 1300 && distance <= 1899) hr = km/12
+    if (distance >= 1900 && distance <= 2499) hr = km/10
+    if (distance >= 2500) hr = km/8.3333
+    hr *= limit/100
+
+    min = Math.round(hr % 1 * 60)
+    hr = Math.floor(hr)
+
+    if (min == 60){
+      hr += 1
+      min = 0
+    }
+    
+    hr = String(hr).padStart(2,"0")
+    min = String(min).padStart(2,"0")
+
+    return `${hr}:${min}`
 }
 
 function add_cp_dom(){
@@ -211,10 +322,43 @@ function remove_cp_dom(index){
     controls.splice(index,1)
 }
 
+function load_methods(){
+    for(let method of Object.getOwnPropertyNames(methods)){
+        let li = document.createElement('li')
+        let item = document.createElement('button')
+        item.setAttribute('class','w-100 dropdown-item')
+        item.setAttribute('id', `select-${method}`)
+        item.innerText = methods[method]['name']
+        item.onclick = e => select_method(method)
+
+        li.append(item)
+        methodListDom.append(li)
+    }
+}
+
+function select_method(method){
+    currentMethod = method
+    methodDom.innerText = methods[method]['name']
+    sourceDom.innerHTML = methods[method]['source']
+    if (currentMethod == 'lrm'){
+        elevationDom.removeAttribute('hidden')
+        extendedLimitDom.removeAttribute('hidden')
+    } else {
+        elevationDom.setAttribute('hidden',"")
+        extendedLimitDom.setAttribute('hidden',"")
+    }
+    refresh()
+}
+
+
 inputs.forEach(input => input.addEventListener('input', refresh))
 
+
 add_cp_dom()
+load_methods()
+select_method(currentMethod)
 refresh()
+
 
 function test_calc(){
     // Check results against reference dataset: https://www.audax-club-parisien.com/en/our-organizations/brm-world/
@@ -243,4 +387,11 @@ function test_calc(){
     console.assert(calculate_finish_close("00:00", 700) === "00:45 (+2)", "Test failed!")
     console.assert(calculate_finish_close("00:00", 900) === "18:15 (+2)", "Test failed!")
     console.assert(calculate_finish_close("10:00", 1000) === "13:00 (+3)", "Test failed!")
+
+    //Check results against dataset(Appendix 3): https://www.randonneursmondiaux.org/files/Rules_2019.pdf 
+    console.assert(calculate_lrm_control_close("07:00", 1440, 1440, calculate_extended_limit(1440, 12200)) === "07:00 (+5)", "Test failed!") //LEL
+    console.assert(calculate_lrm_control_close("07:00", 1518, 1518, calculate_extended_limit(1518, 21000)) === "02:09 (+6)", "Test failed!") //Alpi 4000
+    console.assert(calculate_lrm_control_close("07:00", 1600, 1600, calculate_extended_limit(1600, 20000)) === "03:00 (+6)", "Test failed!") //1001 Miglia
+    console.assert(calculate_lrm_control_close("07:00", 1300, 1300, calculate_extended_limit(1300, 20000)) === "17:00 (+5)", "Test failed!") //Brasil 1300
+    console.assert(calculate_lrm_control_close("07:00", 1200, 1200, calculate_extended_limit(1200, 15000)) === "05:30 (+4)", "Test failed!") //Tasmania
 }

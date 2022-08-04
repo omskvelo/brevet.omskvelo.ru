@@ -1,0 +1,8 @@
+/* Calculator uses login page base, see login.css for background/container styles */
+.dropdown-option {
+    padding: 1rem 0.75rem;
+    height: calc(3.5rem + 2px);
+    line-height: 1.25;
+    border-radius: 0.25rem;
+    width: 100%;
+}

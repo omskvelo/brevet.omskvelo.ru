@@ -5,6 +5,10 @@
   Калькулятор КП | 
 {% endblock %}
 
+{% block css %}
+    <link href="{% static 'brevet/css/calc.css' %}" rel="stylesheet">
+{% endblock %}
+
 {% block content %}
     <form>
         <h1 class="mb-3 h3 fw-normal">
@@ -20,7 +24,18 @@
             <label for="start">Старт</label>
         </div>
 
-        <div class="form-floating" id="insertionPoint">
+        <div class="form-floating">
+            <input type="number" class="form-control joined_field_upper" id="elevation" placeholder="_" hidden>
+            <label for="distance">Набор высоты, м</label>
+        </div>
+        <div class="form-floating">
+            <input type="text"  class="form-control joined_field_lower" id ="extended-limit" placeholder="_" hidden disabled>
+            <label for="start">Расширение лимита</label>
+        </div>
+
+        <div id="insertionPoint"></div>
+
+        <div class="form-floating">
             <input type="number" class="form-control joined_field_upper" id="distance-finish" placeholder="_" disabled>
             <label for="distance-finish">Финиш, км</label>
         </div>
@@ -28,18 +43,18 @@
             <input type="text"  class="form-control joined_field_lower" id ="finish" placeholder="_" disabled>
             <label for="finish">Время</label>
         </div>
-
-        <p>
-            Источник формул: 
-            <a href="http://www.audax-club-parisien.com/download/plages_horaires_brm_10_FR.xls" target="_blank">
-                xls-файл
-            </a>, опубликованный на сайте АСР в разделе 
-            <a href="https://www.audax-club-parisien.com/en/our-organizations/brm-world/">
-                "BRM".
-            </a>
-        </p>
-
-
-        <script src="{% static 'brevet/js/calc.js' %}"></script>
     </form>
+
+    <div class="dropdown">
+        <button class="w-100 btn btn-primary btn-lg dropdown-toggle dropdown-calc" type="button" data-bs-toggle="dropdown" aria-expanded="false" id="method">
+        </button>
+        <ul class="w-100 dropdown-menu" id ="method-list">
+        </ul>
+    </div>
+
+    <p id="calc-source">
+    </p>
+    
+    <script src="{% static 'brevet/js/calc.js' %}"></script>
+
 {% endblock %}
