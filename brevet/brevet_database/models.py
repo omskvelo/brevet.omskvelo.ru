@@ -269,7 +269,7 @@ class Event(AbstractModel):
         return reverse("protocol_upload_success", kwargs={'distance' : self.route.distance, 'date' : date})
 
     def get_applications(self):
-        return Application.objects.filter(event=self).order_by(
+        return Application.objects.filter(event=self, active=True).order_by(
             'dns',
             'dnf',
             'otl',
@@ -279,7 +279,7 @@ class Event(AbstractModel):
         )
 
     def get_applicants(self):
-        applications = list(Application.objects.filter(event=self))
+        applications = list(Application.objects.filter(event=self, active=True))
         applicants = [application.user for application in applications]
         return applicants
 
@@ -315,19 +315,20 @@ class Event(AbstractModel):
             dsq=False,
             otl=False,
             result=None, 
+            active=True,
             ).count()
 
     def get_dnf_count(self):
-        return Application.objects.filter(event=self, dnf=True).count()
+        return Application.objects.filter(event=self, dnf=True, active=True).count()
 
     def get_dns_count(self):
-        return Application.objects.filter(event=self, dns=True).count()
+        return Application.objects.filter(event=self, dns=True, active=True).count()
 
     def get_dsq_count(self):
-        return Application.objects.filter(event=self, dsq=True).count()
+        return Application.objects.filter(event=self, dsq=True, active=True).count()
 
     def get_otl_count(self):
-        return Application.objects.filter(event=self, otl=True).count()    
+        return Application.objects.filter(event=self, otl=True, active=True).count()    
 
     def is_homologated(self):
         results = list(Result.objects.filter(event=self))
@@ -383,7 +384,7 @@ class Event(AbstractModel):
 def update_randonneur_stats(sender, instance, created, **kwargs):
     if instance.finished:
         # Update stats of participants
-        applications = Application.objects.filter(event=instance)
+        applications = Application.objects.filter(event=instance, active=True)
         results = [a.result for a in applications if a.result]
         randonneurs = [result.randonneur for result in results]
 
@@ -391,7 +392,10 @@ def update_randonneur_stats(sender, instance, created, **kwargs):
             randonneur.update_stats()
 
         # Delete old applications
-        applications.delete()
+        for application in applications:
+            application.active = False
+            application.save()
+
            
 
 class Result(AbstractModel):
@@ -424,10 +428,12 @@ class Application(AbstractModel):
     otl = models.BooleanField(default=False)
     result = models.ForeignKey(Result, null=True, blank=True, default=None, on_delete=models.SET_NULL)
     payment = models.BooleanField(default=False)
+    active = models.BooleanField(default=True)
     
     def __str__(self):
+        active_str = "" if self.active else "(Удалена)"
         datestring = datetime.strftime(self.date, "%H:%M %d.%m.%Y")
-        return f"{datestring} - заявка от {self.user.get_display_name()} на бревет {self.event}"
+        return f"{active_str} {datestring} - заявка от {self.user.get_display_name()} на бревет {self.event}"
 
 
 def get_event_years(reverse=True, finished=True):

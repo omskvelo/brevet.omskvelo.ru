@@ -63,7 +63,7 @@
                 </ul>
             {% endif %}
         </div>
-        {% if not event.application_allowed and not application.result and user.randonneur and user in event.get_applicants %}
+        {% if not event.application_allowed and user.randonneur and user in event.get_applicants and not application.result and not application.dnf and not application.dsq and not application.otl %}
             <div class="event__brief__item">
                 {% include 'brevet_database/event_form.html' %}
             </div>

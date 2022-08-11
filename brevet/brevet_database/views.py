@@ -200,7 +200,7 @@ def event_result_form(request, event):
     errors = []
     if request.user.is_authenticated:
         randonneur = request.user.randonneur
-        application = Application.objects.filter(event=event, user=request.user).first()
+        application = Application.objects.filter(event=event, user=request.user, active=True).first()
         result = Result.objects.filter(event=event, randonneur=randonneur)
 
         if request.method == 'POST':
@@ -236,7 +236,7 @@ def event_result_time_form(request, event):
     errors = []
     if request.user.is_authenticated and request.user.randonneur:
         randonneur = request.user.randonneur
-        application = Application.objects.filter(event=event, user=request.user).first()
+        application = Application.objects.filter(event=event, user=request.user, active=True).first()
         result = Result.objects.filter(event=event, randonneur=randonneur)
 
         if request.method == 'POST':
@@ -303,18 +303,16 @@ def event_register(request, distance, date):
             date = datetime.strptime(date, "%Y%m%d")
         except Exception:
             raise Http404
-        event = get_object_or_404(Event, route__distance=distance, date=date)
 
-        conflict = Application.objects.filter(user=request.user, event__date=date)
-        if conflict:
-            return redirect(request.META.get('HTTP_REFERER'))
+        event = get_object_or_404(Event, route__distance=distance, date=date)
 
         if not event.application_allowed():
             return Http404
 
-        application = Application()
+        application = Application.objects.filter(user=request.user, event__date=date).first() or Application()
         application.event = event
         application.user = request.user
+        application.active = True
         application.save()
 
         return redirect(request.META.get('HTTP_REFERER'))
@@ -331,7 +329,8 @@ def event_cancel_registration(request, distance, date):
         event = get_object_or_404(Event, route__distance=distance, date=date, )
 
         application = get_object_or_404(Application, event=event, user=request.user )
-        application.delete()
+        application.active = False
+        application.save()
 
         return redirect(request.META.get('HTTP_REFERER'))
     else:
