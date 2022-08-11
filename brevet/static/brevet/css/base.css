@@ -199,8 +199,19 @@ body {
 
 .event__brief{
   display: flex;
-  justify-content: space-between;
-  margin-bottom: 40px;
+  justify-content: flex-start;
+  margin-bottom: 20px;
+}
+
+.event__brief__item {
+  width: 100%;
+  max-width: 600px;
+  padding-right: 40px;
+  padding-bottom: 40px;
+}
+
+.ievent__brief__item:last-child {
+  padding-right: 0px;
 }
 
 .error_img {
