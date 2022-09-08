@@ -41,29 +41,35 @@ class AbstractModel(models.Model):
         abstract = True
 
 class Club(AbstractModel):
-    name = models.CharField(max_length=50, blank=False, unique=True)
-    ACP_code = models.IntegerField(blank=False, unique=True)
-    french_name = models.CharField(max_length=50, blank=False, unique=True)
-    city = models.CharField(max_length=50, blank=True, null=True)
-    country = models.CharField(max_length=50, blank=True, null=True)
-    foreign = models.BooleanField(default=False)
+    name = models.CharField(max_length=50, blank=False, unique=True, verbose_name="Название")
+    ACP_code = models.IntegerField(blank=False, unique=True, verbose_name="Код АСР")
+    french_name = models.CharField(max_length=50, blank=False, unique=True, verbose_name="Название на французском")
+    city = models.CharField(max_length=50, blank=True, null=True, verbose_name="Город")
+    country = models.CharField(max_length=50, blank=True, null=True, verbose_name="Страна")
+    foreign = models.BooleanField(default=False, verbose_name="Иностранный")
+
+    class Meta:
+        verbose_name = "Клуб"
+        verbose_name_plural = "Клубы"
     
     def __str__(self):
         return f"{self.name} {self.ACP_code}"
 
 class Randonneur(AbstractModel):
-    name = models.CharField(max_length=50, blank=False)
-    surname = models.CharField(max_length=50, blank=False)
-    russian_name = models.CharField(max_length=50, blank=False)
-    russian_surname = models.CharField(max_length=50, blank=False)
-    club = models.ForeignKey(Club, on_delete=models.PROTECT, default=DEFAULT_CLUB_ID)
-    female = models.BooleanField(default=False)
-    sr = models.JSONField(null=True, blank=True, default=dict)
-    total_distance = models.IntegerField(default=0)
-    total_brevets = models.IntegerField(default=0)
+    name = models.CharField(max_length=50, blank=False, verbose_name="Имя (кириллица)")
+    surname = models.CharField(max_length=50, blank=False, verbose_name="Фамилия (кириллица)")
+    russian_name = models.CharField(max_length=50, blank=False, verbose_name="Имя (латиница)")
+    russian_surname = models.CharField(max_length=50, blank=False, verbose_name="Фамилия (латиница)")
+    club = models.ForeignKey(Club, on_delete=models.PROTECT, default=DEFAULT_CLUB_ID, verbose_name="Клуб")
+    female = models.BooleanField(default=False, verbose_name="Женского пола")
+    sr = models.JSONField(null=True, blank=True, default=dict, verbose_name="Суперрандоннёр")
+    total_distance = models.IntegerField(default=0, verbose_name="Общая дистанция")
+    total_brevets = models.IntegerField(default=0, verbose_name="Всего бреветов")
 
     class Meta:
         ordering = ['russian_surname']
+        verbose_name = "Рандоннёр"
+        verbose_name_plural = "Рандоннёры"
 
     def get_absolute_url(self):
         return reverse('personal_stats', kwargs={'uid' : self.pk})
@@ -170,28 +176,30 @@ class Randonneur(AbstractModel):
         return f"{self.russian_surname} {self.russian_name}"
 
 class Route(AbstractModel):
-    name = models.CharField(max_length=200, blank=True) 
+    name = models.CharField(max_length=200, blank=True, verbose_name="Название") 
     slug = models.SlugField(blank=True)
-    distance = models.IntegerField(blank=False)
-    active = models.BooleanField(default=False)
-    controls = models.TextField(blank=True)
-    text = models.TextField(blank=True)
-    text_brief = models.TextField(max_length=120, blank=True)
-    bad_roads = models.BooleanField(default=False)
-    brm = models.BooleanField(default=True)
-    lrm = models.BooleanField(default=False)
-    fleche = models.BooleanField(default=False)
-    sr600 = models.BooleanField(default=False)
-    club = models.ForeignKey(Club, on_delete=models.PROTECT, blank=True, default=DEFAULT_CLUB_ID)
-    external_xref = models.URLField(blank=True)
-    map_embed_src = models.CharField(max_length=500, blank=True) 
-    image = models.ImageField(upload_to=img_path, blank=True)
-    gpx = models.FileField(upload_to=gpx_path, blank=True)
-    pdf = models.FileField(upload_to=pdf_path, blank=True)
-    orvm = models.FileField(upload_to=pdf_path, blank=True)
+    distance = models.IntegerField(blank=False, verbose_name="Дистанция")
+    active = models.BooleanField(default=False, verbose_name="Активный")
+    controls = models.TextField(blank=True, verbose_name="КП")
+    text = models.TextField(blank=True, verbose_name="Описание полное")
+    text_brief = models.TextField(max_length=120, blank=True, verbose_name="Описание краткое")
+    bad_roads = models.BooleanField(default=False, verbose_name="Плохие дороги")
+    brm = models.BooleanField(default=True, verbose_name="BRM")
+    lrm = models.BooleanField(default=False, verbose_name="LRM")
+    fleche = models.BooleanField(default=False, verbose_name="Flèche")
+    sr600 = models.BooleanField(default=False, verbose_name="SR600")
+    club = models.ForeignKey(Club, on_delete=models.PROTECT, blank=True, default=DEFAULT_CLUB_ID, verbose_name="Клуб")
+    external_xref = models.URLField(blank=True, verbose_name="Внешний ресурс")
+    map_embed_src = models.CharField(max_length=500, blank=True, verbose_name="Ссылка на карту") 
+    image = models.ImageField(upload_to=img_path, blank=True, verbose_name="Картинка")
+    gpx = models.FileField(upload_to=gpx_path, blank=True, verbose_name="*.gpx")
+    pdf = models.FileField(upload_to=pdf_path, blank=True, verbose_name="*.pdf")
+    orvm = models.FileField(upload_to=pdf_path, blank=True, verbose_name="Документ ОРВМ")
 
     class Meta:
         ordering = ['-active', 'distance']
+        verbose_name = "Мартшрут"
+        verbose_name_plural = "Маршруты"
 
     def get_controls(self):        
         if self.controls == "":
@@ -227,33 +235,39 @@ class Route(AbstractModel):
 class PaymentInfo(models.Model):
     text = models.TextField(max_length=1000, blank=False, null=False)
 
+    class Meta:
+        verbose_name = "Платёжная информация"
+        verbose_name_plural = "Платёжная информация"
+
     def __str__(self):
         return self.text
 
 class Event(AbstractModel):
-    name = models.CharField(max_length=50, blank=True) 
-    route = models.ForeignKey(Route, on_delete=models.PROTECT, blank=False)
-    date = models.DateField(auto_now=False, auto_now_add=False, blank=False)
-    time = models.TimeField(auto_now=False, auto_now_add=False, blank=False, default=time(hour = 7))
-    text_intro = models.TextField(blank=True)
-    text = models.TextField(blank=True)
-    warning_text = models.TextField(blank=True)
-    lights_required = models.BooleanField(default=False)
-    club = models.ForeignKey(Club, on_delete=models.PROTECT, default=DEFAULT_CLUB_ID)
-    responsible = models.CharField(max_length=50, blank=True)
-    finished = models.BooleanField(default=False)
-    omskvelo_xref = models.URLField(blank=True)
-    external_xref = models.URLField(blank=True)
-    vk_xref = models.URLField(blank=True) 
-    fleche_name = models.CharField(max_length=50, null=True, blank=True, verbose_name="Fleche name (Fleche only!)")
-    fleche_team = models.CharField(max_length=50, null=True, blank=True, verbose_name="Fleche team name (Fleche only!)")
-    fleche_start = models.CharField(max_length=50, null=True, blank=True, verbose_name="Start location (Fleche only!)")
-    fleche_finish = models.CharField(max_length=50, null=True, blank=True, verbose_name="Actual finish location (Fleche only!)")
-    fleche_distance = models.IntegerField(null=True, blank=True, verbose_name="Actual distance (Fleche only!)")
-    payment_info = models.ForeignKey(PaymentInfo, on_delete=models.SET_NULL, null=True, default=1)
+    name = models.CharField(max_length=50, blank=True, verbose_name="Название (не обязательно)") 
+    route = models.ForeignKey(Route, on_delete=models.PROTECT, blank=False, verbose_name="Маршрут")
+    date = models.DateField(auto_now=False, auto_now_add=False, blank=False, verbose_name="Дата")
+    time = models.TimeField(auto_now=False, auto_now_add=False, blank=False, default=time(hour = 7), verbose_name="Время старта")
+    text_intro = models.TextField(blank=True, verbose_name="Введение")
+    text = models.TextField(blank=True, verbose_name="Описание")
+    warning_text = models.TextField(blank=True, verbose_name="Предупреждение")
+    lights_required = models.BooleanField(default=False, verbose_name="Свет обязателен")
+    club = models.ForeignKey(Club, on_delete=models.PROTECT, default=DEFAULT_CLUB_ID, verbose_name="Клуб")
+    responsible = models.CharField(max_length=50, blank=True, verbose_name="Ответственный")
+    finished = models.BooleanField(default=False, verbose_name="Завершен")
+    omskvelo_xref = models.URLField(blank=True, verbose_name="Ссылка на форум")
+    external_xref = models.URLField(blank=True, verbose_name="Внешний ресурс")
+    vk_xref = models.URLField(blank=True, verbose_name="Ссылка вк") 
+    fleche_name = models.CharField(max_length=50, null=True, blank=True, verbose_name="Название (Только для флеша, на англ.)")
+    fleche_team = models.CharField(max_length=50, null=True, blank=True, verbose_name="Имя команды (Только для флеша, на англ.)")
+    fleche_start = models.CharField(max_length=50, null=True, blank=True, verbose_name="Место старта (Только для флеша, на англ.)")
+    fleche_finish = models.CharField(max_length=50, null=True, blank=True, verbose_name="Факт. место финиша (Только для флеша, на англ.)")
+    fleche_distance = models.IntegerField(null=True, blank=True, verbose_name="Факт. дистанция (Только для флеша, на англ.)")
+    payment_info = models.ForeignKey(PaymentInfo, on_delete=models.SET_NULL, null=True, default=1, verbose_name="Информация об оплате")
 
     class Meta:
         ordering = ['-date']
+        verbose_name = "Бревет"
+        verbose_name_plural = "Бреветы"
 
     def get_absolute_url(self):
         date = datetime.strftime(self.date, "%Y%m%d")
@@ -406,14 +420,16 @@ def update_randonneur_stats(sender, instance, created, **kwargs):
            
 
 class Result(AbstractModel):
-    event = models.ForeignKey(Event, on_delete=models.CASCADE)
-    homologation = models.CharField(max_length=50, blank=True) 
-    randonneur = models.ForeignKey(Randonneur, on_delete=models.CASCADE) 
-    time = models.DurationField(blank=True)
-    medal = models.BooleanField(default=False)
+    event = models.ForeignKey(Event, on_delete=models.CASCADE, verbose_name="Бревет")
+    homologation = models.CharField(max_length=50, blank=True, verbose_name="№ омологации") 
+    randonneur = models.ForeignKey(Randonneur, on_delete=models.CASCADE, verbose_name="Рандоннёр") 
+    time = models.DurationField(blank=True, verbose_name="Время")
+    medal = models.BooleanField(default=False, verbose_name="Медаль")
 
     class Meta:
         ordering = ['-event__date']
+        verbose_name = "Результат"
+        verbose_name_plural = "Результаты"
 
     def get_date(self):
         return self.event.get_date()
@@ -426,17 +442,21 @@ class Result(AbstractModel):
 
 
 class Application(AbstractModel):
-    user = models.ForeignKey("users.User", on_delete=models.CASCADE)
-    event = models.ForeignKey(Event, on_delete=models.CASCADE, blank=False)
-    date = models.DateTimeField(auto_now_add=True, blank=False)
-    dnf = models.BooleanField(default=False)
-    dns = models.BooleanField(default=False)
-    dsq = models.BooleanField(default=False)
-    otl = models.BooleanField(default=False)
-    result = models.ForeignKey(Result, null=True, blank=True, default=None, on_delete=models.SET_NULL)
-    payment = models.BooleanField(default=False)
-    active = models.BooleanField(default=True)
+    user = models.ForeignKey("users.User", on_delete=models.CASCADE, verbose_name="Пользователь")
+    event = models.ForeignKey(Event, on_delete=models.CASCADE, blank=False, verbose_name="Бревет")
+    date = models.DateTimeField(auto_now_add=True, blank=False, verbose_name="Дата подачи")
+    dnf = models.BooleanField(default=False, verbose_name="DNF")
+    dns = models.BooleanField(default=False, verbose_name="DNS")
+    dsq = models.BooleanField(default=False, verbose_name="DSQ")
+    otl = models.BooleanField(default=False, verbose_name="OTL")
+    result = models.ForeignKey(Result, null=True, blank=True, default=None, on_delete=models.SET_NULL, verbose_name="Результат")
+    payment = models.BooleanField(default=False, verbose_name="Оплачена")
+    active = models.BooleanField(default=True, verbose_name="Активна")
     
+    class Meta:
+        verbose_name = "Заявка"
+        verbose_name_plural = "Заявки"
+
     def __str__(self):
         active_str = "" if self.active else "(Удалена)"
         datestring = datetime.strftime(self.date, "%H:%M %d.%m.%Y")
