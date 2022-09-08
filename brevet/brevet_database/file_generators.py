@@ -420,9 +420,9 @@ def get_yearly_protocol(year, results, club):
 
     # Set colomn width
     worksheet.set_column("A:A", width=10)
-    worksheet.set_column("B:D", width=20)
+    worksheet.set_column("B:D", width=25)
     worksheet.set_column("E:E", width=10)
-    worksheet.set_column("F:G", width=35)
+    worksheet.set_column("F:G", width=30)
     
     # Merge cells
     worksheet.merge_range("C2:D2", "", text_format)
@@ -436,7 +436,7 @@ def get_yearly_protocol(year, results, club):
     worksheet.write("D3", "финиша", text_format)
     worksheet.write("E3", "Дистанция", text_format)
     worksheet.write("F3", "Команда", text_format)
-    worksheet.write("G3", "Участник", text_format)
+    worksheet.write("G3", "Участник", name_format)
 
     # Write rows
     for row, result in enumerate(results_fleche, start=3):
