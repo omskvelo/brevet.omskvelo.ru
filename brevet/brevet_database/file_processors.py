@@ -14,7 +14,7 @@ def read_xls_protocol(file):
 
         date = sheet.cell_value(rowx=1, colx=5)
         distance = sheet.cell_value(rowx=1, colx=6)
-        code = sheet.cell_value(rowx=1, colx=4)      
+        code = str(sheet.cell_value(rowx=1, colx=4))      
 
         content["date"] = datetime.strptime(date, "%d/%m/%Y").date()
         content["distance"] = int(distance[:-2].strip())
@@ -36,7 +36,7 @@ def read_xls_protocol(file):
             homologation = sheet.cell_value(rowx=row, colx=col_homologation)
             surname = sheet.cell_value(rowx=row, colx=col_surname)
             name = sheet.cell_value(rowx=row, colx=col_name)
-            code = sheet.cell_value(rowx=row, colx=col_code)
+            code = str(sheet.cell_value(rowx=row, colx=col_code))
             time = sheet.cell_value(rowx=row, colx=col_time)
             medal = sheet.cell_value(rowx=row, colx=col_medal)
             female = sheet.cell_value(rowx=row, colx=col_female)
