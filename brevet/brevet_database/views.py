@@ -65,15 +65,25 @@ def protocol_index(request, year=datetime.now().year):
     years = get_event_years()
     if year not in years:
         year = max(years)
-    events = get_list_or_404(Event, finished=True, club=DEFAULT_CLUB_ID, date__year=year)
+    events = Event.objects.filter(finished=True, club=DEFAULT_CLUB_ID, date__year=year)
+    unfinished_events = Event.objects.filter(finished=False, club=DEFAULT_CLUB_ID, date__year=year)
+    season_closed = len(unfinished_events) == 0
 
     context = {
         "events" : events,
         "year" : year,
         "years" : years,
+        "season_closed" : season_closed,
     }
     return render(request, "brevet_database/protocol_index.html", context)
 
+def protocol_yearly(request, year):
+    years = get_event_years()
+    if year not in years:
+        year = max(years)
+        
+    response = file_generators.get_yearly_protocol(year)
+    return response
 
 def statistics_total(request, form="html"):
     return statistics(request, year=None, form=form)
@@ -103,8 +113,6 @@ def statistics(request, year=datetime.now().year, form="html"):
         sorted_by_distance = Randonneur.objects.filter(total_distance__gt=0).order_by("-total_distance")
         distance_rating = [[randonneur, randonneur.total_distance, randonneur.total_brevets] for randonneur in sorted_by_distance]
         
-    
-
     # Get SR status
     sr = []
     for randonneur in randonneurs:

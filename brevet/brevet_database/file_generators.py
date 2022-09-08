@@ -282,3 +282,8 @@ def write_results_sheet(worksheet, results, time_format, text_format, date_forma
         worksheet.write(row, 5, result.get_time(), time_format)
         worksheet.write(row, 6, result.homologation, text_format)
         row += 1
+
+
+def get_yearly_protocol(year):
+    print ("Yearly protocol requested")
+    pass
