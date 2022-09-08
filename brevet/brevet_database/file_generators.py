@@ -284,6 +284,205 @@ def write_results_sheet(worksheet, results, time_format, text_format, date_forma
         row += 1
 
 
-def get_yearly_protocol(year):
-    print ("Yearly protocol requested")
-    pass
+def get_yearly_protocol(year, results, club):
+    """ Generates yearly protocol for ORVM """
+
+    # Preprocessing
+    results_fleche = results.filter(event__route__fleche=True).order_by("-event__fleche_distance")
+    results = results.filter(event__route__fleche=False).order_by("event__route__distance", "homologation")
+    results_abroad = results.filter(event__club__foreign=True).order_by("event__date")
+
+    randonneurs = []
+    randonneurs_guests = []
+    for result in results:
+        randonneur = result.randonneur
+        if randonneur not in randonneurs and randonneur.club == club:
+            randonneurs.append(randonneur)
+        if randonneur not in randonneurs_guests and randonneur.club != club:
+            randonneurs_guests.append(randonneur)
+
+    events = {
+        200: [],
+        300: [],
+        400: [],
+        600: [],
+        1000: [],
+        1200: [],
+    }
+    for result in results:
+        event = result.event
+        distance = event.route.distance
+        if event not in events[distance] and event.club == club:
+            events[distance].append(event)
+
+    file = BytesIO()
+    filename = f"{year}"
+    workbook = xlsxwriter.Workbook(file,  {'in_memory': True})
+    worksheets_distance = {
+        200: workbook.add_worksheet("200"),
+        300: workbook.add_worksheet("300"),
+        400: workbook.add_worksheet("400"),
+        600: workbook.add_worksheet("600"),
+        1000: workbook.add_worksheet("1000"),
+        1200: workbook.add_worksheet("1200"),
+    }
+    worksheet_fleche = workbook.add_worksheet("Флеши")
+    worksheet_abroad = workbook.add_worksheet("Участие в зарубежных бреветах")
+
+    # Set formats
+    text_format = workbook.add_format({'border': True, 'align':'center'})
+    name_format = workbook.add_format({'border': True, 'align':'left'})
+    int_format  = workbook.add_format({'border': True, 'align':'center', 'num_format' : '0'})
+    time_format = workbook.add_format({'border': True, 'align':'center', 'num_format' : '[h]:mm;@'})
+    date_format = workbook.add_format({'border': True, 'align':'center', 'num_format' : 'DD.MM;@'})
+    guest_format = workbook.add_format({'align':'left'})
+
+
+    # -= DISTANCE SHEETS =-    
+
+    for distance, worksheet in worksheets_distance.items():
+
+        # Set colomn width
+        worksheet.set_column("A:A", width=6)
+        worksheet.set_column("B:B", width=20)
+        worksheet.set_column("C:E", width=12)
+        worksheet.set_column("F:F", width=20)
+        worksheet.set_column("G:Z", width=10)
+        
+        # Merge cells
+        worksheet.merge_range("C2:E2", "", text_format)
+
+        # Write static header data
+        worksheet.write("A1", "", text_format)
+        worksheet.write("B1", "Протокол бреветов", text_format)
+        worksheet.write("F1", "Код ACP:", text_format)
+        worksheet.write("A2", "", text_format)
+        worksheet.write("F2", "Дата:", text_format)
+        worksheet.write("A3", "№", text_format)
+        worksheet.write("B3", "Фамилия", text_format)
+        worksheet.write("C3", "Имя", text_format)
+        worksheet.write("D3", "Год.рожд.", text_format)
+        worksheet.write("E3", "Город", text_format)
+        worksheet.write("F3", "Клуб участника", text_format)
+        worksheet.write(len(randonneurs)+5, 1, "Участники из других клубов ОРВМ", guest_format)
+        worksheet.write(len(randonneurs)+6, 0, "№", text_format)
+        worksheet.write(len(randonneurs)+6, 1, "Фамилия", text_format)
+        worksheet.write(len(randonneurs)+6, 2, "Имя", text_format)
+        worksheet.write(len(randonneurs)+6, 3, "Год.рожд.", text_format)
+        worksheet.write(len(randonneurs)+6, 4, "Город", text_format)
+        worksheet.write(len(randonneurs)+6, 5, "Клуб участника", text_format)
+        
+
+        # Write dynamic header data
+        worksheet.write("D1", year, int_format)
+        worksheet.write("B2", distance, int_format)
+        worksheet.write("C2", club.name, text_format)
+        for col, event in enumerate(events[distance], start=6):
+            worksheet.write(0, col, event.club.ACP_code, int_format)
+            worksheet.write(1, col, event.date, date_format)
+            worksheet.write(2, col, "Результат", text_format)
+            worksheet.write(len(randonneurs)+6, col, "Результат", text_format)
+
+        # Write rows
+        for row, randonneur in enumerate(randonneurs, start=3):
+            worksheet.write(row, 0, row-2, int_format)
+            worksheet.write(row, 1, randonneur.russian_surname, name_format)
+            worksheet.write(row, 2, randonneur.russian_name, name_format)
+            worksheet.write(row, 3, "", text_format)
+            worksheet.write(row, 4, randonneur.club.city, text_format)
+            worksheet.write(row, 5, randonneur.club.name, text_format)
+
+            for col, event in enumerate(events[distance], start=6):
+                worksheet.write(row, col, None, time_format)
+                for result in results:
+                    if result.randonneur == randonneur and result.event == event:
+                        worksheet.write(row, col, result.time, time_format)
+                        break
+        
+        for row, randonneur in enumerate(randonneurs_guests, start=len(randonneurs)+7):
+            worksheet.write(row, 0, row-2, int_format)
+            worksheet.write(row, 1, randonneur.russian_surname, name_format)
+            worksheet.write(row, 2, randonneur.russian_name, name_format)
+            worksheet.write(row, 3, "", text_format)
+            worksheet.write(row, 4, randonneur.club.city, text_format)
+            worksheet.write(row, 5, randonneur.club.name, text_format)
+
+            for col, event in enumerate(events[distance], start=6):
+                worksheet.write(row, col, None, time_format)
+                for result in results:
+                    if result.randonneur == randonneur and result.event == event:
+                        worksheet.write(row, col, result.time, time_format)
+                        break
+    
+
+    # -= FLECHE SHEETS =- 
+    worksheet = worksheet_fleche
+
+    # Set colomn width
+    worksheet.set_column("A:A", width=10)
+    worksheet.set_column("B:D", width=20)
+    worksheet.set_column("E:E", width=10)
+    worksheet.set_column("F:G", width=35)
+    
+    # Merge cells
+    worksheet.merge_range("C2:D2", "", text_format)
+
+    # Write static header data
+    worksheet.write("B1", "Флеши", guest_format)
+    worksheet.write("C2", "Пункты", text_format)
+    worksheet.write("A3", "Дата", text_format)
+    worksheet.write("B3", "Название", text_format)
+    worksheet.write("C3", "старта", text_format)
+    worksheet.write("D3", "финиша", text_format)
+    worksheet.write("E3", "Дистанция", text_format)
+    worksheet.write("F3", "Команда", text_format)
+    worksheet.write("G3", "Участник", text_format)
+
+    # Write rows
+    for row, result in enumerate(results_fleche, start=3):
+        worksheet.write(row, 0, result.event.date, date_format)
+        worksheet.write(row, 1, result.event.fleche_name, name_format)
+        worksheet.write(row, 2, result.event.fleche_start, text_format)
+        worksheet.write(row, 3, result.event.fleche_finish, text_format)
+        worksheet.write(row, 4, result.event.fleche_distance, int_format)
+        worksheet.write(row, 5, result.event.fleche_team, text_format)
+        worksheet.write(row, 6, str(result.randonneur), text_format)
+
+
+    # -= Rides abroad =-
+    worksheet = worksheet_abroad
+
+    # Set colomn width
+    worksheet.set_column("A:F", width=17)
+    worksheet.set_column("G:G", width=10)
+    
+    # Write static header data
+    worksheet.write("B1", "Участие в зарубежных бреветах", guest_format)
+    worksheet.write("A3", "Фамилия", text_format)
+    worksheet.write("B3", "Имя", text_format)
+    worksheet.write("C3", "Дата", text_format)
+    worksheet.write("D3", "Дистанция", text_format)
+    worksheet.write("E3", "Страна", text_format)
+    worksheet.write("F3", "Клуб-организатор", text_format)
+    worksheet.write("G3", "Результат", text_format)
+
+    # Write dynamic data
+    for row, result in enumerate(results_abroad, start=3):
+        worksheet.write(row, 0, result.randonneur.surname, name_format)
+        worksheet.write(row, 1, result.randonneur.name, name_format)
+        worksheet.write(row, 2, result.event.date, date_format)
+        worksheet.write(row, 3, result.event.route.distance, int_format)
+        worksheet.write(row, 4, result.event.club.country, text_format)
+        worksheet.write(row, 5, result.event.club.name, text_format)
+        worksheet.write(row, 6, result.time, time_format)        
+
+
+    workbook.close()
+    file.seek(0)
+
+    response = HttpResponse(file, content_type="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")
+    response['Content-Disposition'] = f"attachment; filename={filename}.xlsx"
+    file.close()
+
+    return response
+        

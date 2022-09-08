@@ -44,6 +44,9 @@ class Club(AbstractModel):
     name = models.CharField(max_length=50, blank=False, unique=True)
     ACP_code = models.IntegerField(blank=False, unique=True)
     french_name = models.CharField(max_length=50, blank=False, unique=True)
+    city = models.CharField(max_length=50, blank=True, null=True)
+    country = models.CharField(max_length=50, blank=True, null=True)
+    foreign = models.BooleanField(default=False)
     
     def __str__(self):
         return f"{self.name} {self.ACP_code}"
@@ -242,7 +245,11 @@ class Event(AbstractModel):
     omskvelo_xref = models.URLField(blank=True)
     external_xref = models.URLField(blank=True)
     vk_xref = models.URLField(blank=True) 
-    fleche_distance = models.IntegerField(null=True, blank=True, verbose_name="Actual distance (Fleche only)")
+    fleche_name = models.CharField(max_length=50, null=True, blank=True, verbose_name="Fleche name (Fleche only!)")
+    fleche_team = models.CharField(max_length=50, null=True, blank=True, verbose_name="Fleche team name (Fleche only!)")
+    fleche_start = models.CharField(max_length=50, null=True, blank=True, verbose_name="Start location (Fleche only!)")
+    fleche_finish = models.CharField(max_length=50, null=True, blank=True, verbose_name="Actual finish location (Fleche only!)")
+    fleche_distance = models.IntegerField(null=True, blank=True, verbose_name="Actual distance (Fleche only!)")
     payment_info = models.ForeignKey(PaymentInfo, on_delete=models.SET_NULL, null=True, default=1)
 
     class Meta:

@@ -81,8 +81,11 @@ def protocol_yearly(request, year):
     years = get_event_years()
     if year not in years:
         year = max(years)
+
+    results = Result.objects.filter(event__date__year=year)
+    club = Club.objects.get(id=DEFAULT_CLUB_ID)
         
-    response = file_generators.get_yearly_protocol(year)
+    response = file_generators.get_yearly_protocol(year, results, club)
     return response
 
 def statistics_total(request, form="html"):

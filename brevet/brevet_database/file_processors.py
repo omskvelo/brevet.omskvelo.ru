@@ -14,11 +14,11 @@ def read_xls_protocol(file):
 
         date = sheet.cell_value(rowx=1, colx=5)
         distance = sheet.cell_value(rowx=1, colx=6)
-        code = str(sheet.cell_value(rowx=1, colx=4))      
+        code = str(sheet.cell_value(rowx=1, colx=4))  
 
         content["date"] = datetime.strptime(date, "%d/%m/%Y").date()
         content["distance"] = int(distance[:-2].strip())
-        content["code"] = int("".join(x for x in code if x.isdigit()))
+        content["code"] = int("".join(x for x in code.split(".")[0] if x.isdigit()))
         content["results"] = []
 
         row = 3
