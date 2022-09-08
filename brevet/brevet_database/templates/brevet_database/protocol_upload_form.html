@@ -1,0 +1,18 @@
+{% if user.is_superuser %}
+    {% if not event.is_homologated %}
+        <div class="alert alert-primary no-print" role="alert">
+            <strong>Загрузка результатов омологации</strong>
+            <form class = "my-2" method = "post" enctype="multipart/form-data">
+                {% csrf_token %}
+                {{ form }}
+                <input type="submit" value="OK">
+            </form>
+            {% if upload_exception %}
+                <p class="my-1">Ошибка при загрузке: {{ upload_exception }}</p>
+            {% endif %}
+            {% if upload_success %}
+            <p class="my-1">Протокол успешно загружен.</p>
+            {% endif %}
+        </div>
+    {% endif %}
+{% endif %}
