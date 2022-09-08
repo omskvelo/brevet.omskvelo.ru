@@ -436,7 +436,7 @@ def get_yearly_protocol(year, results, club):
     worksheet.write("D3", "финиша", text_format)
     worksheet.write("E3", "Дистанция", text_format)
     worksheet.write("F3", "Команда", text_format)
-    worksheet.write("G3", "Участник", name_format)
+    worksheet.write("G3", "Участник", text_format)
 
     # Write rows
     for row, result in enumerate(results_fleche, start=3):
@@ -446,7 +446,7 @@ def get_yearly_protocol(year, results, club):
         worksheet.write(row, 3, result.event.fleche_finish, text_format)
         worksheet.write(row, 4, result.event.fleche_distance, int_format)
         worksheet.write(row, 5, result.event.fleche_team, text_format)
-        worksheet.write(row, 6, str(result.randonneur), text_format)
+        worksheet.write(row, 6, str(result.randonneur), name_format)
 
 
     # -= Rides abroad =-
