@@ -56,10 +56,10 @@ class Club(AbstractModel):
         return f"{self.name} {self.ACP_code}"
 
 class Randonneur(AbstractModel):
-    name = models.CharField(max_length=50, blank=False, verbose_name="Имя (кириллица)")
-    surname = models.CharField(max_length=50, blank=False, verbose_name="Фамилия (кириллица)")
-    russian_name = models.CharField(max_length=50, blank=False, verbose_name="Имя (латиница)")
-    russian_surname = models.CharField(max_length=50, blank=False, verbose_name="Фамилия (латиница)")
+    name = models.CharField(max_length=50, blank=False, verbose_name="Имя (латиница)")
+    surname = models.CharField(max_length=50, blank=False, verbose_name="Фамилия (латиница)")
+    russian_name = models.CharField(max_length=50, blank=False, verbose_name="Имя (кириллица)")
+    russian_surname = models.CharField(max_length=50, blank=False, verbose_name="Фамилия (кириллица)")
     club = models.ForeignKey(Club, on_delete=models.PROTECT, default=DEFAULT_CLUB_ID, verbose_name="Клуб")
     female = models.BooleanField(default=False, verbose_name="Женского пола")
     sr = models.JSONField(null=True, blank=True, default=dict, verbose_name="Суперрандоннёр")
