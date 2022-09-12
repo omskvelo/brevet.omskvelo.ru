@@ -77,6 +77,7 @@ def protocol_index(request, year=datetime.now().year):
     }
     return render(request, "brevet_database/protocol_index.html", context)
 
+@never_cache
 def protocol_yearly(request, year):
     years = get_event_years()
     if year not in years:
