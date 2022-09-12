@@ -21,7 +21,7 @@
             Текущий бревет
         {% endif %}
     {% else %}
-        Запланированных бреветов нет
+        Предыдущий бревет
     {% endif %}
 {% endblock %}
 
@@ -107,24 +107,22 @@
                 </section>
             {% endwith %}
         {% endfor %}
-    {% else %}
-        <p>
-            Бреветы были, да все вышли :) Мы уже проехали все бреветы, запланированные в календаре на этот год. Ничего страшного, скоро будет новый календарь и новый сезон! 
-        </p>
     {% endif %}
 
     {% if prev_events %}
 
-        <!-- Bodge: the next /div closes container opened in base.html. It is reopened later-->
-        </div>
-        <div class="cover no-print" id="prev-brev">
-            <h2 class="h-cover">
-                Предыдущий бревет
-            </h2>
-        </div>
-        <div class="container-body">
-        <h1 class="only-print">Предыдущий бревет</h1>
-        <!-- /bodge-->
+        {% if next_events %}
+            <!-- Bodge: the next /div closes container opened in base.html. It is reopened later-->
+            </div>
+            <div class="cover no-print" id="prev-brev">
+                <h2 class="h-cover">
+                    Предыдущий бревет
+                </h2>
+            </div>
+            <div class="container-body">
+            <h1 class="only-print">Предыдущий бревет</h1>
+            <!-- /bodge-->
+        {% endif %}
 
         {% for prev in prev_events %}
             {% with event=prev.event results=prev.results %}

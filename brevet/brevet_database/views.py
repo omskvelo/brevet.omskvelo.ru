@@ -369,7 +369,7 @@ def event_dnf(request, distance, date):
 
 @never_cache
 def event_index(request):
-    events = get_list_or_404(Event.objects.order_by("date"), club=DEFAULT_CLUB_ID, finished=False)
+    events = Event.objects.filter(club=DEFAULT_CLUB_ID, finished=False).order_by("date")
 
     # Allocate events into a dict {year : {month: [events]}}
     years = {}
@@ -561,20 +561,21 @@ def index(request):
 
     # Select next upcoming events (there can be more than one event on a single date)
     upcoming_events = Event.objects.filter(finished=False).order_by("date")
-    next_event_date = upcoming_events[0].date
-    next_events = []   
+    next_events = []  
 
-    for event in upcoming_events:
-        if event.date == next_event_date:
-            form, application, errors = event_result_time_form(request, event)
-            next_events.append({
-                    'event' : event,
-                    'application' : application,
-                    'form' : form,
-                    'errors' : errors,
-                })
-        else:
-            break
+    if upcoming_events:
+        next_event_date = upcoming_events[0].date
+        for event in upcoming_events:
+            if event.date == next_event_date:
+                form, application, errors = event_result_time_form(request, event)
+                next_events.append({
+                        'event' : event,
+                        'application' : application,
+                        'form' : form,
+                        'errors' : errors,
+                    })
+            else:
+                break
 
     context = {
         'next_events' : next_events,

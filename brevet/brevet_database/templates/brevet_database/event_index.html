@@ -22,6 +22,7 @@
 {% endblock %}
 
 {% block content %}
+  {% if events %}
     <h1 class="only-print">Календарь {{ year }}</h1>
     <hr class="only-print">
     {% for year, months in years.items %}
@@ -70,6 +71,9 @@
         </div>
       {% endfor %}
     {% endfor %}
+  {% else %}
+    Бреветы были, да все вышли :) Мы уже проехали все бреветы, запланированные в календаре на этот год. Ничего страшного, скоро будет новый календарь и новый сезон! 
+  {% endif %}
 
   {% if user.is_superuser %}
     <a class="btn btn-light" href="{{ events.0.get_admin_url_add }}">   
