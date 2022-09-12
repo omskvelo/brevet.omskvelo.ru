@@ -289,7 +289,7 @@ def get_yearly_protocol(year, results, club):
 
     # Preprocessing
     results_fleche = results.filter(event__route__fleche=True).order_by("-event__fleche_team")
-    results = results.filter(event__route__fleche=False).order_by("event__route__distance", "homologation")
+    results = results.filter(event__route__fleche=False).order_by("event__route__distance", "randonneur__surname")
     results_abroad = results.filter(event__club__foreign=True).order_by("event__date")
 
     randonneurs = []
