@@ -83,7 +83,7 @@ def change_password(request):
 @never_cache
 def profile(request):
     events = []
-    for a in Application.objects.filter(user=request.user):
+    for a in Application.objects.filter(user=request.user, active=True):
         events.append(a.event)
 
     context = {
