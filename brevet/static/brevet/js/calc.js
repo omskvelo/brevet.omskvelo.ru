@@ -3,6 +3,7 @@ let inputs = document.querySelectorAll('input')
 const distanceDom = document.querySelector('#distance')
 const distanceFinishDom = document.querySelector('#distance-finish')
 const distanceFinishDeltaDom = document.querySelector('#distance-finish-delta')
+const distanceFinishDeltaLabelDom = document.querySelector('#label-distance-finish-delta')
 const startDom = document.querySelector('#start')
 const finishDom = document.querySelector('#finish')
 const container = document.querySelector('form')
@@ -156,11 +157,14 @@ function refresh(){
     }
 
     //Calculate finish delta (must be done AFTER DOM update)
-    finish_delta = Number(distance)
-    if (controls.length > 1){
-        finish_delta -= controls[controls.length-2].distanceDom.valueAsNumber
+    if (controls.length == 1){
+        distanceFinishDeltaDom.value = distance
+        distanceFinishDeltaLabelDom.innerText = "От старта, км"
     }
-    distanceFinishDeltaDom.value = finish_delta  
+    else{
+        distanceFinishDeltaDom.value = Number(distance) - controls[controls.length-2].distanceDom.valueAsNumber
+        distanceFinishDeltaLabelDom.innerText = `От КП${controls.length-1}, км`
+    } 
 }
 
 function manage_url_param(name, value){
@@ -363,7 +367,8 @@ function add_cp_dom(){
 
     let labelTopRight = document.createElement("label")
     labelTopRight.setAttribute('for', `distance${index}-delta`) 
-    labelTopRight.textContent = `До КП${index}, км`
+    if (index == 1) labelTopRight.textContent = `От старта, км`
+    else labelTopRight.textContent = `От КП${index-1}, км`
 
     let formTop = document.createElement("div")
     formTop.setAttribute('class', 'form-twin')
