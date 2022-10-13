@@ -48,3 +48,22 @@ ul {
   border-top-left-radius: 0;
   border-top-right-radius: 0;
 }
+
+.form-signin .joined_field_upper_left {
+  margin-bottom: -1px;
+  border-bottom-right-radius: 0;
+  border-bottom-left-radius: 0;
+  border-top-right-radius: 0;
+}
+
+.form-signin .joined_field_upper_right {
+  margin-bottom: -1px;
+  border-bottom-right-radius: 0;
+  border-bottom-left-radius: 0;
+  border-top-left-radius: 0;
+}
+
+.form-signin .form-twin {
+  display: flex;
+  flex-direction: row;
+}

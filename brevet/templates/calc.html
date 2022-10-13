@@ -35,9 +35,15 @@
 
         <div id="insertionPoint"></div>
 
-        <div class="form-floating">
-            <input type="number" class="form-control joined_field_upper" id="distance-finish" placeholder="_" disabled>
-            <label for="distance-finish">Финиш, км</label>
+        <div class="form-twin">
+            <div class="form-floating">
+                <input type="number" class="form-control joined_field_upper_left" id="distance-finish" placeholder="_" disabled>
+                <label for="distance-finish">Финиш, км</label>
+            </div>
+            <div class="form-floating">
+                <input type="number" class="form-control joined_field_upper_right" id="distance-finish-delta" placeholder="_" disabled>
+                <label class="label-twin-right" for="distance-finish-delta">До финиша, км</label>
+            </div>
         </div>
         <div class="form-floating">
             <input type="text"  class="form-control joined_field_lower" id ="finish" placeholder="_" disabled>

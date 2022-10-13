@@ -2,6 +2,7 @@ let inputs = document.querySelectorAll('input')
 
 const distanceDom = document.querySelector('#distance')
 const distanceFinishDom = document.querySelector('#distance-finish')
+const distanceFinishDeltaDom = document.querySelector('#distance-finish-delta')
 const startDom = document.querySelector('#start')
 const finishDom = document.querySelector('#finish')
 const container = document.querySelector('form')
@@ -68,16 +69,30 @@ function refresh(){
 
     if (currentMethod == 'brm'){
         finishDom.value = `c ${calculate_control_open(start,distance)} по ${calculate_finish_close(start,distance)}`
-
-        controls.forEach(control => {
+        
+        for (const [i, control] of controls.entries()){
             let km = control.distanceDom.value
+
+            // Delta fields
+            let delta = km
+            if (i > 0) {
+                delta -= controls[i-1].distanceDom.value
+            }
+            if (delta >= 0) {
+                control.distanceDeltaDom.value = delta
+            }
+            else {
+                control.distanceDeltaDom.value = ""
+            }
+
+            // Time fields
             if (km){
                 control.timeDom.value = `c ${calculate_control_open(start,km)} по ${calculate_control_close(start,km)}`
             }
             else{
                 control.timeDom.value = ""
             }
-        })
+        }
     }
 
     if (currentMethod == 'lrm'){
@@ -87,15 +102,29 @@ function refresh(){
 
         finishDom.value = `c ${calculate_lrm_control_open(start,distance)} по ${calculate_lrm_finish_close(start,distance,distance,limit)}`
 
-        controls.forEach(control => {
+        for (const [i, control] of controls.entries()){
             let km = control.distanceDom.value
+
+            // Delta fields
+            let delta = km
+            if (i > 0) {
+                delta -= controls[i-1].distanceDom.value
+            }
+            if (delta >= 0) {
+                control.distanceDeltaDom.value = delta
+            }
+            else {
+                control.distanceDeltaDom.value = ""
+            }
+
+            // Time fields
             if (km){
                 control.timeDom.value = `c ${calculate_lrm_control_open(start,km)} по ${calculate_lrm_control_close(start,km,distance,limit)}`
             }
             else{
                 control.timeDom.value = ""
             }
-        })
+        }
     }
 
     //Update URL
@@ -115,7 +144,7 @@ function refresh(){
     window.history.pushState({}, '', url)
 
     // Update DOM
-    if (controls[controls.length-1].distanceDom.value != ""){
+    if (controls[controls.length-1].distanceDom.value != "" || controls[controls.length-1].distanceDeltaDom.value != ""){
         add_cp_dom()
     }
     if (controls[controls.length-2] != undefined){
@@ -125,6 +154,13 @@ function refresh(){
                 if (controls.length == 1) break
             }
     }
+
+    //Calculate finish delta (must be done AFTER DOM update)
+    finish_delta = Number(distance)
+    if (controls.length > 1){
+        finish_delta -= controls[controls.length-2].distanceDom.valueAsNumber
+    }
+    distanceFinishDeltaDom.value = finish_delta  
 }
 
 function manage_url_param(name, value){
@@ -264,29 +300,73 @@ function calculate_lrm_extended_hours(distance, limit){
 
 function add_cp_dom(){
     const index = controls.length + 1
-    let floatTop = document.createElement("div")
-    floatTop.setAttribute('class', 'form-floating')
+    let floatTopLeft = document.createElement("div")
+    floatTopLeft.setAttribute('class', 'form-floating')
 
-    let inputTop = document.createElement("input")
-    inputTop.setAttribute('type', 'number')
-    inputTop.setAttribute('class', 'form-control joined_field_upper')
-    inputTop.setAttribute('id',`distance${index}`)
-    inputTop.setAttribute('placeholder', "_")
-    inputTop.addEventListener('input', refresh)
-    inputTop.onkeyup = function(e) {
+    let inputTopLeft = document.createElement("input")
+    inputTopLeft.setAttribute('type', 'number')
+    inputTopLeft.setAttribute('class', 'form-control joined_field_upper_left')
+    inputTopLeft.setAttribute('id',`distance${index}`)
+    inputTopLeft.setAttribute('placeholder', "_")
+    inputTopLeft.addEventListener('input', refresh)
+    inputTopLeft.onkeyup = function(e) {
         if(e.key == "Enter"){
             controls[index].distanceDom.focus()
         }
     }
-    inputTop.onfocus = function(e) {
-        temp = inputTop.value
-        inputTop.value = ""
-        inputTop.value = temp
+    inputTopLeft.onfocus = function(e) {
+        temp = inputTopLeft.value
+        inputTopLeft.value = ""
+        inputTopLeft.value = temp
     }
 
-    let labelTop = document.createElement("label")
-    labelTop.setAttribute('for', `distance${index}`) 
-    labelTop.textContent = `КП${index}, км`
+    let labelTopLeft = document.createElement("label")
+    labelTopLeft.setAttribute('for', `distance${index}`) 
+    labelTopLeft.textContent = `КП${index}, км`
+
+    let floatTopRight = document.createElement("div")
+    floatTopRight.setAttribute('class', 'form-floating')
+
+    let inputTopRight = document.createElement("input")
+    inputTopRight.setAttribute('type', 'number')
+    inputTopRight.setAttribute('class', 'form-control joined_field_upper_right')
+    inputTopRight.setAttribute('id',`distance${index}-delta`)
+    inputTopRight.setAttribute('placeholder', "_")
+    inputTopRight.oninput = function(e) {
+        km = inputTopRight.valueAsNumber
+        if (index > 1){
+            km += controls[index-2].distanceDom.valueAsNumber
+        }
+        inputTopLeft.value = km
+    }
+    inputTopLeft.onkeyup = function(e) {
+        if(e.key == "Enter"){
+            controls[index].distanceDom.focus()
+        }
+    }
+    inputTopLeft.onfocus = function(e) {
+        temp = inputTopLeft.value
+        inputTopLeft.value = ""
+        inputTopLeft.value = temp
+    }
+    inputTopRight.onkeyup = function(e) {
+        if(e.key == "Enter"){
+            controls[index].distanceDeltaDom.focus()
+        }
+        refresh()
+    }
+    inputTopRight.onfocus = function(e) {
+        temp = inputTopLeft.value
+        inputTopLeft.value = ""
+        inputTopLeft.value = temp
+    }
+
+    let labelTopRight = document.createElement("label")
+    labelTopRight.setAttribute('for', `distance${index}-delta`) 
+    labelTopRight.textContent = `До КП${index}, км`
+
+    let formTop = document.createElement("div")
+    formTop.setAttribute('class', 'form-twin')
 
     let floatBottom = document.createElement("div")
     floatBottom.setAttribute('class', 'form-floating')
@@ -303,22 +383,24 @@ function add_cp_dom(){
     labelBottom.setAttribute('for', `control${index}`)
     labelBottom.textContent = "Время"
 
-    floatTop.append(inputTop,labelTop)
+    floatTopLeft.append(inputTopLeft,labelTopLeft)
+    floatTopRight.append(inputTopRight, labelTopRight)
+    formTop.append(floatTopLeft, floatTopRight)
     floatBottom.append(inputBottom,labelBottom)
-    container.insertBefore(floatTop, insertionPoint)
+    container.insertBefore(formTop, insertionPoint)
     container.insertBefore(floatBottom, insertionPoint)
 
     controls[index-1] = {
         timeDom: document.querySelector(`#control${index}`),
-        distanceDom: document.querySelector(`#distance${index}`)
+        distanceDom: document.querySelector(`#distance${index}`),
+        distanceDeltaDom: document.querySelector(`#distance${index}-delta`)
     }
-
-    inputs = document.querySelectorAll('input')
 }
 
 function remove_cp_dom(index){
     controls[index].timeDom.parentElement.remove()
     controls[index].distanceDom.parentElement.remove()
+    controls[index].distanceDeltaDom.parentElement.remove()
     controls.splice(index,1)
 }
 
@@ -349,7 +431,6 @@ function select_method(method){
     }
     refresh()
 }
-
 
 inputs.forEach(input => input.addEventListener('input', refresh))
 
