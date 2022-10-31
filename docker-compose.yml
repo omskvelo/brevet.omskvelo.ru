@@ -1,7 +1,7 @@
 version: '3.7'
 
 services:
-  web:
+  web-1:
     build: .
     command: sh -c "
       cd /home/brevet/web/brevet
@@ -13,6 +13,24 @@ services:
       - media:/home/brevet/web/brevet/media
     expose:
       - 8000
+    depends_on:
+      db:
+        condition: service_healthy
+    env_file: .env
+    restart: unless-stopped
+
+  web-2:
+    build: .
+    command: sh -c "
+      cd /home/brevet/web/brevet
+      && python manage.py migrate
+      && python manage.py createcachetable
+      && python manage.py collectstatic --noinput
+      && gunicorn brevet.wsgi --bind 0.0.0.0:8080"
+    volumes:
+      - media:/home/brevet/web/brevet/media
+    expose:
+      - 8080
     depends_on:
       db:
         condition: service_healthy
@@ -38,8 +56,6 @@ services:
       - media:/home/brevet/web/brevet/media
     ports:
       - 1337:80
-    depends_on: 
-      - web
     restart: unless-stopped
 
 volumes:
