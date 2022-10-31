@@ -1,10 +1,11 @@
 FROM nginx:1.21.6-alpine
 RUN rm /etc/nginx/conf.d/default.conf
 COPY nginx.conf /etc/nginx/conf.d
-COPY nginx_blue.conf /etc/nginx/conf.d
-COPY nginx_green.conf /etc/nginx/conf.d
 
 RUN mkdir -p /home/brevet
+COPY nginx_blue.conf /home/brevet
+COPY nginx_green.conf /home/brevet
+
 
 # Create user and set ownership
 RUN addgroup -S  brevet 
