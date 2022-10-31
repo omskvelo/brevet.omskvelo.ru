@@ -1,7 +1,7 @@
 version: '3.7'
 
 services:
-  web-1:
+  web-blue:
     build: .
     command: sh -c "
       cd /home/brevet/web/brevet
@@ -19,18 +19,18 @@ services:
     env_file: .env
     restart: unless-stopped
 
-  web-2:
+  web-green:
     build: .
     command: sh -c "
       cd /home/brevet/web/brevet
       && python manage.py migrate
       && python manage.py createcachetable
       && python manage.py collectstatic --noinput
-      && gunicorn brevet.wsgi --bind 0.0.0.0:8080"
+      && gunicorn brevet.wsgi --bind 0.0.0.0:8000"
     volumes:
       - media:/home/brevet/web/brevet/media
     expose:
-      - 8080
+      - 8000
     depends_on:
       db:
         condition: service_healthy
