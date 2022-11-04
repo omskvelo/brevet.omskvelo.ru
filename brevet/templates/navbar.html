@@ -52,7 +52,10 @@
             Результаты
           </a>
           <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-            <a class="dropdown-item" href="{% url 'protocol_index' %}">Протоколы</a>
+            {% if user.randonneur %}
+              <a class="dropdown-item" href="{{ user.randonneur.get_absolute_url }}">Мои результаты</a>
+            {% endif %}
+              <a class="dropdown-item" href="{% url 'protocol_index' %}">Протоколы</a>
             <a class="dropdown-item" href="{% url 'personal_stats_index' %}">Статистика участников</a>
             <a class="dropdown-item" href="{% url 'statistics_default' %}">Статистика клуба</a>
           </div>
