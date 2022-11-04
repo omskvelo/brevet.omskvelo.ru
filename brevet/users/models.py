@@ -38,18 +38,3 @@ class User(AbstractUser):
 
     class Meta:
         db_table = 'auth_user'
-
-
-class Profile(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
-    email_confirmed = models.BooleanField(default=False)
-
-    def __str__(self):
-        return f"{self.user.email}  {'v' if self.email_confirmed else 'x'}" 
-
-
-@receiver(post_save, sender=User)
-def update_user_profile(sender, instance, created, **kwargs):
-    if created:
-        Profile.objects.create(user=instance)
-    instance.profile.save()
