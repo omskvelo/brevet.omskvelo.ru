@@ -10,17 +10,9 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
-# Load environment variables (DEBUG mode only)
-if DEBUG:
-    import dotenv
-    dotenv.load_dotenv(BASE_DIR.parent / '.env')
-
 SECRET_KEY = os.environ['DJANGO_SECRET']
 
-if DEBUG:
-    ALLOWED_HOSTS = ['*']
-else:
-    ALLOWED_HOSTS = ['.omskvelo.ru', 'localhost']
+ALLOWED_HOSTS = ['.omskvelo.ru', '127.0.0.1']
 
 # Application definition
 
@@ -85,24 +77,16 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'brevet.wsgi.application'
 
-if DEBUG:
-    DATABASES = {
-        'default': {
-            'ENGINE': 'django.db.backends.sqlite3',
-            'NAME': BASE_DIR / 'db.sqlite3',
-        }
-    }  
-else:
-    DATABASES = {
-        'default': {
-            'ENGINE': 'django.db.backends.postgresql_psycopg2',
-            'NAME': 'brevet',
-            'USER' : os.environ['POSTGRES_USER'],
-            'PASSWORD' : os.environ['POSTGRES_PASSWORD'],
-            'HOST' : 'db',
-            'PORT' : '5432',
-        }
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': 'brevet',
+        'USER' : os.environ['POSTGRES_USER'],
+        'PASSWORD' : os.environ['POSTGRES_PASSWORD'],
+        'HOST' : 'db',
+        'PORT' : '5432',
     }
+}
 
 DATA_UPLOAD_MAX_NUMBER_FIELDS = 2000
 
@@ -175,3 +159,8 @@ SECURE_SSL_REDIRECT = False
 CSRF_COOKIE_SECURE = False
 CSRF_TRUSTED_ORIGINS = ['http://localhost:1337',
                         'https://brevet.omskvelo.ru']
+
+try: 
+    from .local_settings import *
+except ImportError:
+    pass
