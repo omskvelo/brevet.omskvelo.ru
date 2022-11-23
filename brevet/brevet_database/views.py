@@ -3,6 +3,7 @@ from datetime import datetime, timedelta
 from django.http import Http404
 from django.shortcuts import get_object_or_404, get_list_or_404, redirect, render
 from django.views.decorators.cache import cache_page, never_cache
+from django.core.exceptions import ObjectDoesNotExist
 
 import babel.dates
 
@@ -96,10 +97,15 @@ def statistics(request, year='', form="html"):
     if year == '':
         year=datetime.now().year
 
-    if year is None:
-        stats = ClubStatsCache.objects.get(year__isnull=True)
-    else:
-        stats = ClubStatsCache.objects.get(year=year)
+    try:
+        if year is None:
+            stats = ClubStatsCache.objects.get(year__isnull=True)
+        else:
+            stats = ClubStatsCache.objects.get(year=year)
+    except ObjectDoesNotExist:
+        stats = ClubStatsCache()
+        stats.year = year
+        stats.refresh()
 
     sr = []
     for entry in stats.data['sr']:
