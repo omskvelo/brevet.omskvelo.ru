@@ -591,7 +591,6 @@ class ClubStatsCache(AbstractModel):
                     randonneur.total_brevets,
                     ] for randonneur in sorted_by_distance]    
 
-        self.data['years'] = get_event_years()
         self.data['elite_dist'] = [x.pk for x in elite_dist]
         self.data['distance_rating'] = distance_rating
                 

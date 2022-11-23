@@ -94,6 +94,7 @@ def statistics_total(request, form="html"):
     return statistics(request, year=None, form=form)
 
 def statistics(request, year='', form="html"):
+    years = get_event_years()
     if year == '':
         year=datetime.now().year
 
@@ -141,8 +142,8 @@ def statistics(request, year='', form="html"):
             "best_600" : best_600,
             "elite_dist" : elite_dist,
             "year" : year,
-            "years" : stats.data['years'],
-            "year_min_to_max": str(stats.data['years'][-1]) + " - " + str(stats.data['years'][0])
+            "years" : years,
+            "year_min_to_max": str(years[-1]) + " - " + str(years[0])
         }
         return render(request, "brevet_database/stats_club.html", context) 
     elif form=="xlsx":
@@ -158,7 +159,7 @@ def statistics(request, year='', form="html"):
             best_600,
             elite_dist,
             year,
-            stats.data['years'],
+            years,
             filename=f"{year if year else 'total'}")
         return response     
     else:
