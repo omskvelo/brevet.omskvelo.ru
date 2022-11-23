@@ -5,6 +5,7 @@ from pathlib import Path
 from django.db import models
 from django.urls import reverse
 from django.dispatch import receiver
+from django.core.exceptions import ObjectDoesNotExist
 
 from transliterate import translit
 
@@ -84,11 +85,10 @@ class Randonneur(AbstractModel):
         return q
 
     def get_active_years(self):
-        years = set()
-        q = list(Result.objects.filter(event__finished=True, randonneur=self))
-        for result in q:
-            years.add(str(result.event.date.year))
-        return sorted(list(years))
+        q = Result.objects.filter(event__finished=True, randonneur=self)
+        dates = q.dates('event__date', 'year')
+        years = sorted([x.year for x in dates])
+        return years
 
     def get_sr(self, year):
         """Calculate Super Randonneur status"""
@@ -163,6 +163,75 @@ class Randonneur(AbstractModel):
         self.save()
 
         return True
+
+    def get_stats_charts(self):
+        active_years = self.get_active_years()
+        years = list(range(min(active_years), max(active_years) + 1))
+
+        not_completed_brm = {
+            200: True, 
+            300: True, 
+            400: True, 
+            600: True}
+        distance = []
+        events = []
+        for year in years:
+            i = 0
+            if True in not_completed_brm.values():
+                brm = Result.objects.filter(event__finished=True, randonneur=self, event__date__year=year, event__route__brm=True, event__route__distance__lt=999).order_by('event__route__distance')
+                for result in brm:
+                    if not_completed_brm.get(result.event.route.distance):
+                        not_completed_brm[result.event.route.distance] = False
+                        events.append({
+                            'x': year,
+                            'y': i,
+                            'label': f'Первый бревет {result.event.route.distance} км!'
+                        })
+                        i += 1
+
+            if self.sr.get(year):
+                for _ in range(self.sr.get(year)):
+                    events.append({
+                        'x': year,
+                        'y': i,
+                        'label': 'SR'
+                    })
+                    i += 1
+
+            sr600 = Result.objects.filter(event__finished=True, randonneur=self, event__date__year=year, event__route__sr600=True)
+            for result in sr600:
+                events.append({
+                    'x': year,
+                    'y': i,
+                    'label': f"{result.event.route.name}"
+                })
+                i += 1
+
+            thousands = Result.objects.filter(event__finished=True, randonneur=self, event__date__year=year, event__route__brm=True, event__route__distance=1000)
+            for result in thousands:
+                events.append({
+                    'x': year,
+                    'y': i,
+                    'label': f"{result.event.route.distance} км"
+                })
+                i += 1
+
+            lrm = Result.objects.filter(event__finished=True, randonneur=self, event__date__year=year, event__route__lrm=True)
+            for result in lrm:
+                events.append({
+                    'x': year,
+                    'y': i,
+                    'label': f"{result.event.route.distance} км {result.event.route.name}"
+                })
+                i += 1            
+
+            distance.append({
+                'x': year,
+                'y': self.get_total_distance(year=year),
+            })
+
+        return distance, events
+
 
     def from_user(user):
         r = Randonneur()
@@ -402,7 +471,7 @@ class Event(AbstractModel):
         return f"{self.get_date()} {self.route.distance} км {self.route.name} {club}"  
 
 @receiver(models.signals.post_save, sender=Event)
-def update_randonneur_stats(sender, instance, created, **kwargs):
+def update_randonneur_stats(sender, instance:Event, created, **kwargs):
     if instance.finished:
         # Update stats of participants
         applications = Application.objects.filter(event=instance, active=True)
@@ -417,7 +486,16 @@ def update_randonneur_stats(sender, instance, created, **kwargs):
             application.active = False
             application.save()
 
-           
+        # Update global stats
+        try:
+            stats = ClubStatsCache.objects.get(year=instance.date.year)
+        except ObjectDoesNotExist:
+            stats = ClubStatsCache()
+            stats.year = instance.date.year
+        stats.refresh()
+        stats = ClubStatsCache.objects.get(year__isnull=True)
+        stats.refresh()
+
 
 class Result(AbstractModel):
     event = models.ForeignKey(Event, on_delete=models.CASCADE, verbose_name="Бревет")
@@ -463,10 +541,82 @@ class Application(AbstractModel):
         return f"{active_str} {datestring} - заявка от {self.user.get_display_name()} на бревет {self.event}"
 
 
+class ClubStatsCache(AbstractModel):
+    year = models.IntegerField(null=True, default=None)
+    data = models.JSONField(null=False)
+
+    class Meta:
+        verbose_name = "Статистика клуба"
+        verbose_name_plural = "Статистика клуба" 
+
+    def __str__(self):
+        return f"Статистика за {self.year or 'всё время'}"
+
+    def refresh(self):
+        self.data = {}
+        # All results
+        results = Result.objects.filter(event__finished=True)
+        if self.year:
+            results = results.filter(event__date__year=self.year)
+        
+        # LRM, SR600, 1000
+        elite_dist = results.filter(
+            models.Q(event__route__lrm=True) 
+            | models.Q(event__route__sr600=True)
+            | models.Q(event__route__distance=1000)
+            ).order_by('-event__date')
+
+        # Personal stats
+        randonneurs = get_randonneurs(self.year)
+        if self.year:
+            sr = [[r.pk, r.sr.get(str(self.year))] for r in randonneurs if r.sr.get(str(self.year))]
+        else:
+            sr = [[r.pk, sum(r.sr.values())] for r in randonneurs if sum(r.sr.values())]
+
+        distance_rating = []
+        if self.year:
+            distance_rating = [
+                [
+                    randonneur.pk, 
+                    randonneur.get_total_distance(year=self.year), 
+                    randonneur.get_total_brevets(year=self.year)
+                    ] for randonneur in randonneurs]
+            distance_rating = sorted(distance_rating, key=lambda x: x[1], reverse=True)
+        else:
+            sorted_by_distance = Randonneur.objects.filter(total_distance__gt=0).order_by("-total_distance")
+            distance_rating = [
+                [
+                    randonneur.pk, 
+                    randonneur.total_distance, 
+                    randonneur.total_brevets,
+                    ] for randonneur in sorted_by_distance]    
+
+        self.data['years'] = get_event_years()
+        self.data['elite_dist'] = [x.pk for x in elite_dist]
+        self.data['distance_rating'] = distance_rating
+                
+        # Find best results
+        self.data['best_200'] = [x.pk for x in get_best(200, year=self.year, limit=10)]
+        self.data['best_300'] = [x.pk for x in get_best(300, year=self.year, limit=10)]
+        self.data['best_400'] = [x.pk for x in get_best(400, year=self.year, limit=10)]
+        self.data['best_600'] = [x.pk for x in get_best(600, year=self.year, limit=10)]
+        
+        # Calculate total stats
+        self.data['sr'] = sr
+        self.data['total_randonneurs'] = len(randonneurs)
+        self.data['total_distance'] = sum(result.event.route.distance for result in results)
+
+        self.save()
+
+
+
+
 def get_event_years(reverse=True, finished=True):
-    """Returns a list of event years for use in selectors"""
-    years = {x.date.year for x in Event.objects.filter(finished=finished, club=DEFAULT_CLUB_ID)}
-    return sorted(list(years), reverse=reverse)
+    """Returns a list of years with events for use in selectors"""
+    q = Event.objects.filter(finished=finished, club=DEFAULT_CLUB_ID)
+    dates = q.dates('date', 'year')
+    years = sorted([x.year for x in dates], reverse=True)
+    return years
 
 
 def get_best(distance, randonneur=None, year=None, limit=None, unique_randonneurs=False):
@@ -504,6 +654,9 @@ def get_best(distance, randonneur=None, year=None, limit=None, unique_randonneur
 def get_randonneurs(year=None):
     """Returns a list of randonneurs for a given year (or all randonneurs if None). 
     NOTE: randonneurs with no results are omitted on purpose."""
+    if not year:
+        return set(Randonneur.objects.filter(total_distance__gt=0))
+
     randonneurs = set()
     results = Result.objects.filter(event__finished=True)
     if year:

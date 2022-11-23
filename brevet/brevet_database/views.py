@@ -92,62 +92,41 @@ def protocol_yearly(request, year):
 def statistics_total(request, form="html"):
     return statistics(request, year=None, form=form)
 
+def statistics(request, year='', form="html"):
+    if year == '':
+        year=datetime.now().year
 
-def statistics(request, year=datetime.now().year, form="html"):    
-    years = get_event_years()
-    if year:
-        if year not in years:
-            year = max(years)
-        results = list(Result.objects.filter(event__finished=True, event__date__year=year))
+    if year is None:
+        stats = ClubStatsCache.objects.get(year__isnull=True)
     else:
-        results = list(Result.objects.filter(event__finished=True))
-   
-    # LRM, SR600, 1000
-    elite_dist = [x for x in results if x.event.route.lrm or x.event.route.sr600 or x.event.route.distance == 1000] 
-    elite_dist = sorted(elite_dist, key=lambda x: x.event.date, reverse=True)
+        stats = ClubStatsCache.objects.get(year=year)
 
-    # Personal stats 
-    randonneurs = get_randonneurs(year)
-
-    distance_rating = []
-    if year:
-        distance_rating = [[randonneur, randonneur.get_total_distance(year=year), randonneur.get_total_brevets(year=year)] for randonneur in randonneurs]
-        distance_rating = sorted(distance_rating, key=lambda x: x[1], reverse=True)
-    else:
-        sorted_by_distance = Randonneur.objects.filter(total_distance__gt=0).order_by("-total_distance")
-        distance_rating = [[randonneur, randonneur.total_distance, randonneur.total_brevets] for randonneur in sorted_by_distance]
-        
-    # Get SR status
     sr = []
-    for randonneur in randonneurs:
-        if year:
-            randonneur_sr = randonneur.sr.get(str(year)) or 0
-        else:
-            randonneur_sr = sum(randonneur.sr.get(str(y)) or 0 for y in years)
-        if randonneur_sr:
-            sr.append(randonneur)
-            if randonneur_sr > 1:
-                randonneur.sr_string = f" (x{randonneur_sr})"
-            else:
-                randonneur.sr_string = ""
-    sr = sorted(sr, key=lambda x: x.sr_string, reverse=True)
+    for entry in stats.data['sr']:
+        randonneur = Randonneur.objects.get(pk=entry[0])
+        randonneur.sr_string = f" (x{entry[1]})" if entry[1] > 1 else ""
+        randonneur.sr_int = entry[1]
+        sr.append(randonneur)
+    sr.sort(key=lambda x: x.sr_int, reverse=True)
 
-    # Find best results
-    best_200 = get_best(200, year=year, limit=10)
-    best_300 = get_best(300, year=year, limit=10)
-    best_400 = get_best(400, year=year, limit=10)
-    best_600 = get_best(600, year=year, limit=10)
-
-    # Calculate total stats
-    total_sr = len(sr)
-    total_randonneurs = len(randonneurs)
-    total_distance = sum([result.event.route.distance for result in results])
+    distance_rating = [[
+        Randonneur.objects.get(pk=entry[0]),
+        entry[1],
+        entry[2],
+        ] for entry in stats.data['distance_rating']
+        ]
+    
+    elite_dist = [Result.objects.get(pk=x) for x in stats.data['elite_dist']]
+    best_200 = [Result.objects.get(pk=x) for x in stats.data['best_200']]
+    best_300 = [Result.objects.get(pk=x) for x in stats.data['best_300']]
+    best_400 = [Result.objects.get(pk=x) for x in stats.data['best_400']]
+    best_600 = [Result.objects.get(pk=x) for x in stats.data['best_600']]
 
     if form=="html":
         context = {
-            "total_distance" : total_distance,
-            "total_randonneurs" : total_randonneurs,
-            "total_sr" : total_sr,
+            "total_distance" : stats.data['total_distance'],
+            "total_randonneurs" : stats.data['total_randonneurs'],
+            "total_sr" : len(stats.data['sr']),
             "sr" : sr,
             "distance_rating" : distance_rating,
             "best_200" : best_200,
@@ -156,19 +135,15 @@ def statistics(request, year=datetime.now().year, form="html"):
             "best_600" : best_600,
             "elite_dist" : elite_dist,
             "year" : year,
-            "years" : years,
-            "year_min_to_max": str(years[-1]) + " - " + str(years[0])
+            "years" : stats.data['years'],
+            "year_min_to_max": str(stats.data['years'][-1]) + " - " + str(stats.data['years'][0])
         }
-        if year is not None:
-            context.update({
-                "distance_rating" : distance_rating,
-            })
         return render(request, "brevet_database/stats_club.html", context) 
     elif form=="xlsx":
         response = file_generators.get_xlsx_club_stats(
-            total_distance,
-            total_randonneurs,
-            total_sr,
+            stats.data['total_distance'],
+            stats.data['total_randonneurs'],
+            len(stats.data['sr']),
             sr,
             distance_rating,
             best_200,
@@ -177,11 +152,11 @@ def statistics(request, year=datetime.now().year, form="html"):
             best_600,
             elite_dist,
             year,
-            years,
+            stats.data['years'],
             filename=f"{year if year else 'total'}")
         return response     
     else:
-        raise Http404     
+        raise Http404  
       
 
 @never_cache
@@ -438,12 +413,18 @@ def route_stats(request, slug=None, route_id=None):
         }  
     return render(request, "brevet_database/stats_route.html", context)  
 
-
 def personal_stats_index(request):
-    randonneurs = get_randonneurs()
+    stats = ClubStatsCache.objects.get(year__isnull=True)
 
-    rating = []
-    for randonneur in randonneurs:
+    rating = [{
+        'randonneur': Randonneur.objects.get(pk=entry[0]),
+        'total_distance': entry[1],
+        'total_brevets': entry[2],
+        } for entry in stats.data['distance_rating']
+    ]
+
+    for row in rating:
+        randonneur = row['randonneur']
         sr = []
         for year in randonneur.sr:
             sr_times = randonneur.sr[year] 
@@ -451,21 +432,15 @@ def personal_stats_index(request):
                 sr.append (f"{year} (x{sr_times})")
             elif sr_times:
                 sr.append (f"{year}")
-        sr = ", ".join(sr)
+        sr = ", ".join(sr)    
 
-        rating.append({
-            'randonneur': randonneur, 
-            'total_distance': randonneur.total_distance, 
-            'total_brevets': randonneur.total_brevets,
-            'sr': sr,
-            }) 
-    rating = sorted(rating, key=lambda x: x['total_distance'], reverse=True)
-
-
+        row['sr'] = sr       
+        
     context = {
         "rating" : rating,
     }
-    return render(request, "brevet_database/stats_personal_index.html", context)    
+    return render(request, "brevet_database/stats_personal_index.html", context)   
+
 
 def personal_stats(request, surname=None, name=None, uid=None, form="html"):
     if uid:
@@ -503,9 +478,10 @@ def personal_stats(request, surname=None, name=None, uid=None, form="html"):
             sr.append (f"{year}")
 
     sr = ", ".join(sr)
-    years_active = ", ".join(years_active)
+    years_active = ", ".join(str(x) for x in years_active)
 
     if form=="html":
+        chart_distance, chart_events = randonneur.get_stats_charts()
         context = {
             'randonneur' : randonneur,
             'results' : results,
