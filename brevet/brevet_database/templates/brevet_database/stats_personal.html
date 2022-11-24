@@ -36,8 +36,9 @@
             <div class="container-chart no-print">
                 {{ chart_distance|json_script:"chart_distance"}}
                 {{ chart_milestones|json_script:"chart_milestones"}}
-                <canvas id="chart-stats-personal">
-                <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+                <canvas id="chart-stats-personal"></canvas>
+                <script type="module"src="https://cdn.jsdelivr.net/npm/chart.js@4.0.1"></script>
+                <script type="module"src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.0.0"></script>
                 <script type="module" src="{% static 'brevet/js/chart-stats-personal.js' %}"></script>
             </div>
         {% endif %}

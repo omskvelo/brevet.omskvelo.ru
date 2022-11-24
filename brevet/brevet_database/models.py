@@ -193,7 +193,8 @@ class PersonalStatsChart(AbstractModel):
         self.distance = []
         self.milestones = []
         for year in years:
-            i = 0
+            achievements = []
+
             if True in not_completed_brm.values():
                 brm = Result.objects.filter(
                     event__finished=True, 
@@ -205,21 +206,12 @@ class PersonalStatsChart(AbstractModel):
                 for result in brm:
                     if not_completed_brm.get(result.event.route.distance):
                         not_completed_brm[result.event.route.distance] = False
-                        self.milestones.append({
-                            'x': year,
-                            'y': i,
-                            'label': f'Первый бревет {result.event.route.distance} км!'
-                        })
-                        i += 1
+                        achievements.append(f'Первый бревет {result.event.route.distance} км!')
 
-            if self.randonneur.sr.get(str(year)):
-                for _ in range(self.randonneur.sr.get(str(year))):
-                    self.milestones.append({
-                        'x': year,
-                        'y': i,
-                        'label': 'SR'
-                    })
-                    i += 1
+            sr = self.randonneur.sr.get(str(year))
+            if sr:
+                postfix = f" (x{sr})" if sr > 1 else ""
+                achievements.append(f"Суперрандоннёр{postfix}")
 
             sr600 = Result.objects.filter(
                 event__finished=True, 
@@ -228,12 +220,7 @@ class PersonalStatsChart(AbstractModel):
                 event__route__sr600=True
                 )
             for result in sr600:
-                self.milestones.append({
-                    'x': year,
-                    'y': i,
-                    'label': f"{result.event.route.name}"
-                })
-                i += 1
+                achievements.append(f"{result.event.route.name}")
 
             thousands = Result.objects.filter(
                 event__finished=True, 
@@ -243,12 +230,7 @@ class PersonalStatsChart(AbstractModel):
                 event__route__distance=1000
                 )
             for result in thousands:
-                self.milestones.append({
-                    'x': year,
-                    'y': i,
-                    'label': f"{result.event.route.distance} км"
-                })
-                i += 1
+                achievements.append(f"Бревет {result.event.route.distance} км!")
 
             lrm = Result.objects.filter(
                 event__finished=True, 
@@ -257,16 +239,19 @@ class PersonalStatsChart(AbstractModel):
                 event__route__lrm=True
                 )
             for result in lrm:
-                self.milestones.append({
-                    'x': year,
-                    'y': i,
-                    'label': f"{result.event.route.distance} км {result.event.route.name}"
-                })
-                i += 1            
+                achievements.append(f"{result.event.route.distance} км {result.event.route.name}")     
 
+            self.milestones.append({
+                'x': 0,
+                'y': year,
+                'label': "\n".join(achievements)
+            })    
+
+            distance = self.randonneur.get_total_distance(year=year)
             self.distance.append({
-                'x': year,
-                'y': self.randonneur.get_total_distance(year=year),
+                'x': distance,
+                'y': year,
+                'label': f"{distance} км" ,
             })
 
         self.save()
