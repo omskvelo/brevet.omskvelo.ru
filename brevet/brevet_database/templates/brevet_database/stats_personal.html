@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{% load static %}
 
 {% block title %}
 Рандоннёр {{ randonneur.russian_surname }} {{ randonneur.russian_name }} |
@@ -24,11 +25,22 @@
             <h5 class="text-muted">Общая дистанция: {{ total_distance }} км</h5>
             <h5 class="text-muted">Всего бреветов: {{ total_brevets }} </h5>
             <h5 class="text-muted">Первое участие: {{ first_brevet.get_date }} {{ first_brevet.event.route.distance }} км <a href = "{{ first_brevet.event.get_absolute_url }}">{{ first_brevet.event.route.name }}</a></h5>
-            <h5 class="text-muted">Годы активности: {{ years_active }} </h5>
+            <!-- <h5 class="text-muted">Годы активности: {{ years_active }} </h5> -->
             {% if sr %}
                 <h5 class="text-muted" >Суперрандоннёр: {{ sr }} </h5>
             {% endif %}
         </div>
+
+        {% if chart_distance and chart_milestones %}
+            <h5 class="no-print">Дистанция по годам</h5>
+            <div class="container-chart no-print">
+                {{ chart_distance|json_script:"chart_distance"}}
+                {{ chart_milestones|json_script:"chart_milestones"}}
+                <canvas id="chart-stats-personal">
+                <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+                <script type="module" src="{% static 'brevet/js/chart-stats-personal.js' %}"></script>
+            </div>
+        {% endif %}
 
         {% if elite_dist %}
             <h5 class="my-4"> 

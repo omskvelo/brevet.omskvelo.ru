@@ -1,5 +1,6 @@
 from datetime import datetime, timedelta
 
+from django.db import models
 from django.http import Http404
 from django.shortcuts import get_object_or_404, get_list_or_404, redirect, render
 from django.views.decorators.cache import cache_page, never_cache
@@ -459,15 +460,19 @@ def personal_stats(request, surname=None, name=None, uid=None, form="html"):
     else:
         raise Http404
 
-    results = sorted(randonneur.get_results(), key=lambda x: x.event.date, reverse=True)
+    results = randonneur.get_results().order_by('-event__date')
     
-    first_brevet = results[-1] if results else None
+    first_brevet = results.last()
     
     total_distance = randonneur.total_distance
     total_brevets = randonneur.total_brevets
     
-    elite_dist = [x for x in results if x.event.route.lrm or x.event.route.sr600 or x.event.route.distance == 1000] 
-    
+    elite_dist = results.filter(
+        models.Q(event__route__lrm=True) 
+        | models.Q(event__route__sr600=True)
+        | models.Q(event__route__distance=1000)
+        )
+
     best_200 = get_best(200, randonneur)
     best_300 = get_best(300, randonneur)
     best_400 = get_best(400, randonneur)
@@ -488,7 +493,6 @@ def personal_stats(request, surname=None, name=None, uid=None, form="html"):
     years_active = ", ".join(str(x) for x in years_active)
 
     if form=="html":
-        chart_distance, chart_events = randonneur.get_stats_charts()
         context = {
             'randonneur' : randonneur,
             'results' : results,
@@ -502,7 +506,18 @@ def personal_stats(request, surname=None, name=None, uid=None, form="html"):
             'sr' : sr,
             'total_distance' : total_distance,
             'total_brevets' : total_brevets,
-            }  
+        }
+        if results:
+            try:
+                chart = PersonalStatsChart.objects.get(randonneur=randonneur)
+            except ObjectDoesNotExist:
+                chart = PersonalStatsChart()
+                chart.randonneur = randonneur
+                chart.refresh()
+            context.update({
+                'chart_distance': chart.distance,
+                'chart_milestones': chart.milestones,
+                })
         return render(request, "brevet_database/stats_personal.html", context)   
     if form=="xlsx":
         response =  file_generators.get_xlsx_personal_stats(

@@ -484,3 +484,8 @@ table small{
     display: block;
   }
 }
+
+.container-chart {
+  height: 350px;
+  width: auto;
+}

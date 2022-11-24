@@ -164,75 +164,6 @@ class Randonneur(AbstractModel):
 
         return True
 
-    def get_stats_charts(self):
-        active_years = self.get_active_years()
-        years = list(range(min(active_years), max(active_years) + 1))
-
-        not_completed_brm = {
-            200: True, 
-            300: True, 
-            400: True, 
-            600: True}
-        distance = []
-        events = []
-        for year in years:
-            i = 0
-            if True in not_completed_brm.values():
-                brm = Result.objects.filter(event__finished=True, randonneur=self, event__date__year=year, event__route__brm=True, event__route__distance__lt=999).order_by('event__route__distance')
-                for result in brm:
-                    if not_completed_brm.get(result.event.route.distance):
-                        not_completed_brm[result.event.route.distance] = False
-                        events.append({
-                            'x': year,
-                            'y': i,
-                            'label': f'Первый бревет {result.event.route.distance} км!'
-                        })
-                        i += 1
-
-            if self.sr.get(year):
-                for _ in range(self.sr.get(year)):
-                    events.append({
-                        'x': year,
-                        'y': i,
-                        'label': 'SR'
-                    })
-                    i += 1
-
-            sr600 = Result.objects.filter(event__finished=True, randonneur=self, event__date__year=year, event__route__sr600=True)
-            for result in sr600:
-                events.append({
-                    'x': year,
-                    'y': i,
-                    'label': f"{result.event.route.name}"
-                })
-                i += 1
-
-            thousands = Result.objects.filter(event__finished=True, randonneur=self, event__date__year=year, event__route__brm=True, event__route__distance=1000)
-            for result in thousands:
-                events.append({
-                    'x': year,
-                    'y': i,
-                    'label': f"{result.event.route.distance} км"
-                })
-                i += 1
-
-            lrm = Result.objects.filter(event__finished=True, randonneur=self, event__date__year=year, event__route__lrm=True)
-            for result in lrm:
-                events.append({
-                    'x': year,
-                    'y': i,
-                    'label': f"{result.event.route.distance} км {result.event.route.name}"
-                })
-                i += 1            
-
-            distance.append({
-                'x': year,
-                'y': self.get_total_distance(year=year),
-            })
-
-        return distance, events
-
-
     def from_user(user):
         r = Randonneur()
         r.russian_name = user.first_name
@@ -243,6 +174,109 @@ class Randonneur(AbstractModel):
 
     def __str__(self):
         return f"{self.russian_surname} {self.russian_name}"
+
+
+class PersonalStatsChart(AbstractModel):
+    distance = models.JSONField(null=False)
+    milestones = models.JSONField(null=False)
+    randonneur = models.ForeignKey(Randonneur, on_delete=models.CASCADE)
+
+    def refresh(self):
+        active_years = self.randonneur.get_active_years()
+        years = list(range(min(active_years), datetime.now().year + 1))
+
+        not_completed_brm = {
+            200: True, 
+            300: True, 
+            400: True, 
+            600: True}
+        self.distance = []
+        self.milestones = []
+        for year in years:
+            i = 0
+            if True in not_completed_brm.values():
+                brm = Result.objects.filter(
+                    event__finished=True, 
+                    randonneur=self.randonneur, 
+                    event__date__year=year, 
+                    event__route__brm=True, 
+                    event__route__distance__lt=1000
+                    ).order_by('event__route__distance')
+                for result in brm:
+                    if not_completed_brm.get(result.event.route.distance):
+                        not_completed_brm[result.event.route.distance] = False
+                        self.milestones.append({
+                            'x': year,
+                            'y': i,
+                            'label': f'Первый бревет {result.event.route.distance} км!'
+                        })
+                        i += 1
+
+            if self.randonneur.sr.get(str(year)):
+                for _ in range(self.randonneur.sr.get(str(year))):
+                    self.milestones.append({
+                        'x': year,
+                        'y': i,
+                        'label': 'SR'
+                    })
+                    i += 1
+
+            sr600 = Result.objects.filter(
+                event__finished=True, 
+                randonneur=self.randonneur, 
+                event__date__year=year, 
+                event__route__sr600=True
+                )
+            for result in sr600:
+                self.milestones.append({
+                    'x': year,
+                    'y': i,
+                    'label': f"{result.event.route.name}"
+                })
+                i += 1
+
+            thousands = Result.objects.filter(
+                event__finished=True, 
+                randonneur=self.randonneur, 
+                event__date__year=year, 
+                event__route__brm=True, 
+                event__route__distance=1000
+                )
+            for result in thousands:
+                self.milestones.append({
+                    'x': year,
+                    'y': i,
+                    'label': f"{result.event.route.distance} км"
+                })
+                i += 1
+
+            lrm = Result.objects.filter(
+                event__finished=True, 
+                randonneur=self.randonneur, 
+                event__date__year=year, 
+                event__route__lrm=True
+                )
+            for result in lrm:
+                self.milestones.append({
+                    'x': year,
+                    'y': i,
+                    'label': f"{result.event.route.distance} км {result.event.route.name}"
+                })
+                i += 1            
+
+            self.distance.append({
+                'x': year,
+                'y': self.randonneur.get_total_distance(year=year),
+            })
+
+        self.save()
+
+    def __str__(self):
+        return f"Графики для {self.randonneur}"
+
+    class Meta:
+        verbose_name = "Cтатистика личная (графики)"
+        verbose_name_plural = "Cтатистика личная (графики)"
 
 class Route(AbstractModel):
     name = models.CharField(max_length=200, blank=True, verbose_name="Название") 
@@ -474,14 +508,20 @@ class Event(AbstractModel):
 def update_randonneur_stats(sender, instance:Event, created, **kwargs):
     if instance.finished:
         # Update stats of participants
-        applications = Application.objects.filter(event=instance, active=True)
-        results = [a.result for a in applications if a.result]
+        results = Result.objects.filter(event=instance)
         randonneurs = [result.randonneur for result in results]
 
         for randonneur in randonneurs:
             randonneur.update_stats()
+            try:
+                chart = PersonalStatsChart.objects.get(randonneur=randonneur)
+            except ObjectDoesNotExist:
+                chart = PersonalStatsChart()
+                chart.randonneur = randonneur
+            chart.refresh()
 
         # Delete old applications
+        applications = Application.objects.filter(event=instance, active=True)
         for application in applications:
             application.active = False
             application.save()
@@ -495,6 +535,8 @@ def update_randonneur_stats(sender, instance:Event, created, **kwargs):
         stats.refresh()
         stats = ClubStatsCache.objects.get(year__isnull=True)
         stats.refresh()
+
+
 
 
 class Result(AbstractModel):
