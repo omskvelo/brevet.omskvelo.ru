@@ -1,11 +1,15 @@
 const distance = JSON.parse(document.getElementById('chart_distance').textContent)
 const milestones = JSON.parse(document.getElementById('chart_milestones').textContent)
 const canvas = document.getElementById('chart-stats-personal')
+const canvasContainer = document.getElementById('container-stats-personal')
+
+canvasContainer.setAttribute("style",`height: ${distance.length * 50 + 50}px;`)
+
+const mobile = window.screen.width <= 600
+const datalabels_display_milestones = !mobile
+
 
 Chart.register(ChartDataLabels);
-
-let datalabels_display_milestones = window.screen.width > 600
-
 
 const chart = new Chart(canvas, {
   type: 'bar',
