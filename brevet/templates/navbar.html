@@ -13,7 +13,7 @@
     <button class="navbar-toggler  my-3" type="button" data-bs-toggle="collapse" data-bs-target=".multi-collapse" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
-    <div class="collapse navbar-collapse navbar-external-user multi-collapse pt-3">
+    <div class="collapse navbar-collapse navbar-external-user multi-collapse">
     {% if user.is_authenticated %}
       {% if user.is_superuser %}
         <a class="btn btn-light me-2" href="\admin">
