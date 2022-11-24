@@ -311,6 +311,11 @@ body {
   background: none !important;
 }
 
+.container-chart {
+  height: 350px;
+  width: auto;
+}
+
 @media screen and (max-width: 1210px) {
   .nav-item:not(:last-child) {
   margin-right: 8px;
@@ -414,6 +419,12 @@ body {
   .h5, h5 {
     font-size: 1rem;
   }
+
+  .container-chart {
+    height: 200px;
+    width: auto;
+  }
+  
 }
 
 .only-mobile-table {
@@ -485,7 +496,4 @@ table small{
   }
 }
 
-.container-chart {
-  height: 350px;
-  width: auto;
-}
+
