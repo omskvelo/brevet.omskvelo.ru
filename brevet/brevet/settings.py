@@ -4,7 +4,6 @@ import logging
 
 import dotenv 
 
-
 logging.basicConfig(level=logging.DEBUG)
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -26,6 +25,7 @@ INSTALLED_APPS = [
     'brevet',
     'brevet_database',
     'search',
+    'hosting_manager',
     'phonenumber_field',
     'django.contrib.admin',
     'django.contrib.auth',
@@ -111,6 +111,7 @@ AUTH_PASSWORD_VALIDATORS = [
 ]
 
 AUTH_USER_MODEL = 'users.User'
+LOGIN_URL = '/users/login/'
 LOGIN_REDIRECT_URL = 'index'
 LOGOUT_REDIRECT_URL = 'index'
 

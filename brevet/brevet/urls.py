@@ -28,6 +28,7 @@ urlpatterns = [
     path('database/', include ('brevet_database.urls')),
     path('search/', include ('search.urls')),
     path('users/', include ('users.urls')),
+    path('hosting/', include('hosting_manager.urls')),
     path('admin/', admin.site.urls),
 ]
 

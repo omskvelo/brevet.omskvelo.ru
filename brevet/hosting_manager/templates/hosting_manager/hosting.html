@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+
+{% block title %}
+    О хостинге
+{% endblock %}
+
+{% block cover %}
+    О хостинге
+{% endblock %}
+
+{% block content %}
+<table class="table table-striped table-hover">
+    <tbody>
+        {% if server_info %}
+        {% for key,value in server_info.items %}
+        <tr>
+            <td>{{ key }}</td>
+            <td>{{ value }}</td>
+        </tr>
+        {% endfor %}
+        {% else %}
+        <tr>
+            <td>ОШИБКА:</td>
+            <td>{{ exception }}</td>
+        </tr>
+        {% endif %}
+        <tr>
+            <td>
+                Баланс*
+            </td>
+            <td>
+                {{ balance }}
+            </td>
+        </tr>
+    </tbody>
+</table>
+<p>* В день, до которого оплачен сервер, на балансе должно быть достаточно средств для продления.</p>
+<p>Пополнить баланс можно по <a href="{{ payment_url }}" target="blank">ссылке.</a></p> 
+{% endblock %}
