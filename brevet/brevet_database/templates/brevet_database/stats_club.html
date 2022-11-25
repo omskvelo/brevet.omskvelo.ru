@@ -11,26 +11,26 @@
 
 {% block content %}
     <h1 class="only-print">Статистика клуба</h1>
-
+   
     {% if years %}
-        <div class="my-4">
+        <div class="py-4" id="years_pagination">
             {% for y in years %}
                 {% if year == y %}
-                <a class="btn btn-dark me-1 mb-1" href="{% url 'statistics' y %}">
+                <a class="btn btn-dark me-1 mb-1" href="{% url 'statistics' y %}#years_pagination">
                     {{ y }}
                 </a>
                 {% else %}
-                <a class="btn btn-light me-1 mb-1" href="{% url 'statistics' y %}">
+                <a class="btn btn-light me-1 mb-1" href="{% url 'statistics' y %}#years_pagination">
                     {{ y }}
                 </a>
                 {% endif %}
             {% endfor %}   
             {% if year %}
-                <a class="btn btn-light me-1 mb-1" href="{% url 'statistics_total' %}">
+                <a class="btn btn-light me-1 mb-1" href="{% url 'statistics_total' %}#years_pagination">
                     {{ year_min_to_max }}
                 </a>     
             {% else %}   
-                <a class="btn btn-dark me-1 mb-1" href="{% url 'statistics_total' %}">
+                <a class="btn btn-dark me-1 mb-1" href="{% url 'statistics_total' %}#years_pagination">
                     {{ year_min_to_max }}
                 </a>    
             {% endif %} 
@@ -47,17 +47,24 @@
     </h4>
     {% endif %}
 
-    <h5 class="text-muted">
+    <h5>
        Общая дистанция:  <strong>{{ total_distance }} км</strong>
     </h5>
-    <h5 class="text-muted">
-        Всего участников:  <strong>{{ total_randonneurs }}</strong>
-    </h5>   
-
+    {% if chart_distance %}
+    <div id="container-stats-club" class="container-chart no-print">
+        {{ chart_distance|json_script:"chart_distance"}}
+        {{ chart_colors|json_script:"chart_colors"}}
+        <canvas id="chart-stats-club"></canvas>
+        <script type="module"src="https://cdn.jsdelivr.net/npm/chart.js@4.0.1"></script>
+        <script type="module"src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.0.0"></script>
+        <script type="module" src="{% static 'brevet/js/chart-stats-club.js' %}"></script>
+    </div>
+    {% endif %}
+    
+    <h5 class="my-4">
+        <strong>{{ total_randonneurs }}</strong> {{ total_randonneurs_text }}{% if total_sr %}, из них <strong>{{ sr|length }}</strong> {{ total_sr_text }} норматив "Суперрандоннёр":{% else %}.{% endif %}
+    </h5>
     {% if total_sr %}
-        <h5 class="my-4">
-            Суперрандоннёры: <strong>{{ sr|length }}</strong>
-        </h5>
         <ul>
         {% for randonneur in sr %}
             <li>

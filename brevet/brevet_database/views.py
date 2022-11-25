@@ -97,7 +97,7 @@ def statistics_total(request, form="html"):
 def statistics(request, year='', form="html"):
     years = get_event_years()
     if year == '':
-        year=datetime.now().year
+        year=years[0]
 
     try:
         if year is None:
@@ -131,10 +131,30 @@ def statistics(request, year='', form="html"):
     best_600 = [Result.objects.get(pk=x) for x in stats.data['best_600']]
 
     if form=="html":
+        chart_distance = [
+            {
+                'x': s.data['total_distance'],
+                'y': s.year,
+                'label': f"{s.data['total_distance']} км",
+            } for s in ClubStatsCache.objects.filter(year__isnull=False)]
+        chart_colors = ["#FF000055" if y == year else "#36a2eb55" for y in years[::-1]]
+
+        def make_plural(cases, number):
+            number %= 100
+            if number in range(11, 21): return cases[2]
+            if number%10 == 1: return cases[0]
+            if number%10 in range(1, 6): return cases[1]
+            return cases[2]
+
+        total_randonneurs_text = f"{make_plural(['рандоннёр','рандоннёра','рандоннёров'], stats.data['total_randonneurs'])} {make_plural(['принял','приняли','приняли'], stats.data['total_randonneurs'])} участие"
+        total_sr_text = f"{make_plural(['выполнил','выполнили','выполнили'], len(stats.data['sr']))}"
+
         context = {
             "total_distance" : stats.data['total_distance'],
             "total_randonneurs" : stats.data['total_randonneurs'],
+            "total_randonneurs_text": total_randonneurs_text,
             "total_sr" : len(stats.data['sr']),
+            "total_sr_text": total_sr_text,
             "sr" : sr,
             "distance_rating" : distance_rating,
             "best_200" : best_200,
@@ -144,7 +164,10 @@ def statistics(request, year='', form="html"):
             "elite_dist" : elite_dist,
             "year" : year,
             "years" : years,
-            "year_min_to_max": str(years[-1]) + " - " + str(years[0])
+            "year_min_to_max": str(years[-1]) + " - " + str(years[0]),
+            "chart_distance": chart_distance,
+            "chart_colors": chart_colors,
+
         }
         return render(request, "brevet_database/stats_club.html", context) 
     elif form=="xlsx":
