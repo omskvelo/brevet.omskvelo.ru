@@ -137,7 +137,8 @@ def statistics(request, year='', form="html"):
                 'y': s.year,
                 'label': f"{s.data['total_distance']} км",
             } for s in ClubStatsCache.objects.filter(year__isnull=False)]
-        chart_colors = ["#FF000055" if y == year else "#36a2eb55" for y in years[::-1]]
+        chart_distance.sort(key=lambda x: x['y'])
+        chart_colors = ["#FF000055" if s['y'] == year else "#36a2eb55" for s in chart_distance]
 
         def make_plural(cases, number):
             number %= 100
