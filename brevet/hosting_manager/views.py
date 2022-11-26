@@ -14,7 +14,7 @@ def hosting(request):
     try:
         balance = ruvds_get_balance()
     except Exception as e:
-        balance = "Ошибка! {e}"
+        balance = f"Ошибка! {e}"
 
     try:
         server_info = rudvs_get_server_info()[0]

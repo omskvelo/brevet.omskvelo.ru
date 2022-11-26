@@ -9,7 +9,14 @@ password = os.environ['RUVDS_PASSWORD']
 server_id = os.environ['RUVDS_SERVER_ID']
 pay_id = os.environ['RUVDS_PAY_ID']
 
-def ruvds_login():
+def ruvds_assert_login():
+    session_token = os.environ.get('RUVDS_SESSION_TOKEN')
+    if session_token:
+        url = f"https://ruvds.com/api/balance/?sessionToken={session_token}&details=0&currency=RUB"
+        response = json.loads(request.urlopen(url).read().decode('utf-8'))
+        if response.get('rejectReason') == 0:
+            return
+
     url = f"https://ruvds.com/api/logon/?key={api_key}&username={username}&password={password}&endless=0"
     response = json.loads(request.urlopen(url).read().decode('utf-8'))
 
@@ -17,12 +24,15 @@ def ruvds_login():
     os.environ['RUVDS_SESSION_TOKEN'] = session_token
     
 def ruvds_get_balance():
-    if not os.environ.get('RUVDS_SESSION_TOKEN'):
-        ruvds_login()
+    ruvds_assert_login()
     session_token = os.environ.get('RUVDS_SESSION_TOKEN')
 
     url = f"https://ruvds.com/api/balance/?sessionToken={session_token}&details=0&currency=RUB"
     response = json.loads(request.urlopen(url).read().decode('utf-8'))
+
+    if response.get('rejectReason') != 0:
+        raise Exception(f"Request rejected with code {response.get('rejectReason')}")
+        
     currency = ["", "RUB", "UAH", "USD", "EUR"][response.get("currency")]
 
     return f"{response.get('amount')} {currency}"
@@ -32,12 +42,14 @@ def DT_to_datetime(DT):
 
 
 def rudvs_get_server_info():
-    if not os.environ.get('RUVDS_SESSION_TOKEN'):
-        ruvds_login()
+    ruvds_assert_login()
     session_token = os.environ.get('RUVDS_SESSION_TOKEN')
 
     url = f"https://ruvds.com/api/servers/?sessionToken={session_token}&id={server_id}"
     response = json.loads(request.urlopen(url).read().decode('utf-8'))
+
+    if response.get('rejectReason') != 0:
+        raise Exception(f"Request rejected with code {response.get('rejectReason')}")
 
     payment_periods = ['', 'Пробный', '1 месяц', '3 месяца', '6 месяцев', '1 год']
     
