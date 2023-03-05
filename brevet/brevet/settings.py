@@ -110,10 +110,10 @@ SOCIAL_AUTH_FORCE_RANDOM_USERNAME = False
 SOCIAL_AUTH_DEFAULT_USERNAME = 'socialauth_user'
 SOCIAL_AUTH_COMPLETE_URL_NAME = 'socialauth_complete'
 
-SOCIAL_AUTH_VK_APP_ID = os.environ['VK_OAUTH2_CLIENT_ID']
+SOCIAL_AUTH_VK_OPENAPI_APP_ID = os.environ['VK_OAUTH2_CLIENT_ID']
 SOCIAL_AUTH_VK_OAUTH2_SECRET = os.environ['VK_OAUTH2_KEY']
 SOCIAL_AUTH_VK_APP_USER_MODE = 0
-SOCIAL_AUTH_VK_COMPLETE_URL = ''
+SOCIAL_AUTH_VK_COMPLETE_URL = '/'
 
 AUTH_PASSWORD_VALIDATORS = [
     {'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',},
@@ -128,6 +128,18 @@ LOGIN_REDIRECT_URL = 'index'
 LOGOUT_REDIRECT_URL = 'index'
 
 SOCIAL_AUTH_JSONFIELD_ENABLED = True
+
+SOCIAL_AUTH_PIPELINE = (
+    'social_core.pipeline.social_auth.social_details',
+    'social_core.pipeline.social_auth.social_uid',
+    'social_core.pipeline.social_auth.social_user',
+    'social_core.pipeline.user.get_username',
+    'social_core.pipeline.social_auth.associate_by_email',
+    'social_core.pipeline.user.create_user',
+    'social_core.pipeline.social_auth.associate_user',
+    'social_core.pipeline.social_auth.load_extra_data',
+    'social_core.pipeline.user.user_details',
+)
 
 # Internationalization
 # https://docs.djangoproject.com/en/3.2/topics/i18n/
