@@ -9,4 +9,5 @@ urlpatterns = [
     path('change_password/', views.change_password, name="change_password"),
     path('profile/', views.profile, name="user_profile"),
     path('', include ('django.contrib.auth.urls')),
+    path('social/', include('social_django.urls', namespace='social')),
     ]

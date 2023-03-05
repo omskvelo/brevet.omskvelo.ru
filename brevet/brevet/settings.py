@@ -100,8 +100,8 @@ DATABASES = {
 DATA_UPLOAD_MAX_NUMBER_FIELDS = 2000
 
 AUTHENTICATION_BACKENDS = (
-    'social_core.backends.vk.VKontakteOpenAPI',
     'django.contrib.auth.backends.ModelBackend',
+    'social_core.backends.vk.VKontakteOpenAPI',
 )
 
 SOCIAL_AUTH_URL_NAMESPACE = 'social'
