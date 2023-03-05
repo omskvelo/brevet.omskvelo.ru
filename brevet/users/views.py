@@ -1,3 +1,4 @@
+from django.conf import settings
 from django.contrib.auth import login, update_session_auth_hash
 from django.contrib.auth.forms import PasswordChangeForm
 from django.contrib.sites.shortcuts import get_current_site
@@ -89,3 +90,15 @@ def profile(request):
         'events':events
     }
     return render(request, 'registration/profile.html', context)
+
+
+@never_cache
+def begin_auth_vk(request):
+    vk_cookie_name = f"vk_app_{settings.SOCIAL_AUTH_VK_OPENAPI_APP_ID}"
+    vk_cookie = request.COOKIES.get(vk_cookie_name)
+    print(vk_cookie_name)
+    print(vk_cookie)
+
+    from django.http import HttpResponse
+
+    return HttpResponse(f"{vk_cookie_name}\n\n{vk_cookie}")

@@ -36,19 +36,11 @@
         VK.init({ apiId: vkAppId });
     }
     function authVK () {
-        if (!vkAppId) {
-            alert ("Please specify VK.com APP ID in your local settings file");
-            return false;
+        if (vkAppId) {
+          VK.Auth.login(function(response) {
+              window.location = "{% url 'begin_auth_vk' %}";
+          });
         }
-        VK.Auth.login(function(response) {
-            console.log(response)
-            let params = "";
-            if (response.session) {
-                params = "first_name=" + encodeURI(response.session.user.first_name) + "&last_name=" + encodeURI(response.session.user.last_name);
-                params += "&nickname=" + encodeURI(response.session.user.nickname) + "&id=" + encodeURI(response.session.user.id);
-            }
-            // window.location = "{% url 'social:begin' 'vk-openapi' %}?" + params;
-        });
         return false;
     }
   </script>
