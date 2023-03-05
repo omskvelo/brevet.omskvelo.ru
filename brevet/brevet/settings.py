@@ -22,6 +22,7 @@ ALLOWED_HOSTS = ['.omskvelo.ru', '127.0.0.1']
 
 INSTALLED_APPS = [
     'users',
+    'social_django',
     'brevet',
     'brevet_database',
     'search',
@@ -74,6 +75,9 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'social_django.context_processors.backends',
+                'social_django.context_processors.login_redirect',
+                'users.context_processors.access_oauth2_settings',
             ],
         },
     },
@@ -95,25 +99,35 @@ DATABASES = {
 
 DATA_UPLOAD_MAX_NUMBER_FIELDS = 2000
 
+AUTHENTICATION_BACKENDS = (
+    'social_core.backends.vk.VKontakteOpenAPI',
+    'django.contrib.auth.backends.ModelBackend',
+)
+
+SOCIAL_AUTH_URL_NAMESPACE = 'social'
+SOCIAL_AUTH_CREATE_USERS = True
+SOCIAL_AUTH_FORCE_RANDOM_USERNAME = False
+SOCIAL_AUTH_DEFAULT_USERNAME = 'socialauth_user'
+SOCIAL_AUTH_COMPLETE_URL_NAME = 'socialauth_complete'
+
+SOCIAL_AUTH_VK_APP_ID = os.environ['VK_OAUTH2_CLIENT_ID']
+SOCIAL_AUTH_VK_OAUTH2_SECRET = os.environ['VK_OAUTH2_KEY']
+SOCIAL_AUTH_VK_APP_USER_MODE = 0
+SOCIAL_AUTH_VK_COMPLETE_URL = ''
+
 AUTH_PASSWORD_VALIDATORS = [
-    {
-        'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
-    },
-    {
-        'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',
-    },
-    {
-        'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator',
-    },
-    {
-        'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
-    },
+    {'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',},
+    {'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',},
+    {'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator',},
+    {'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',},
 ]
 
 AUTH_USER_MODEL = 'users.User'
 LOGIN_URL = '/users/login/'
 LOGIN_REDIRECT_URL = 'index'
 LOGOUT_REDIRECT_URL = 'index'
+
+SOCIAL_AUTH_JSONFIELD_ENABLED = True
 
 # Internationalization
 # https://docs.djangoproject.com/en/3.2/topics/i18n/

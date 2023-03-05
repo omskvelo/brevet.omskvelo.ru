@@ -30,6 +30,7 @@ urlpatterns = [
     path('users/', include ('users.urls')),
     path('hosting/', include('hosting_manager.urls')),
     path('admin/', admin.site.urls),
+    path('oauth2/', include('social_django.urls', namespace='social')),
 ]
 
 

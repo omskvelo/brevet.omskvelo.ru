@@ -4,6 +4,10 @@
   Вход | 
 {% endblock %}
 
+{% block head %}
+<script src="http://vk.com/js/api/openapi.js" type="text/javascript"></script>
+{% endblock %}
+
 {% block content %}
   <form method="post" action="{% url 'login' %}">
     {% csrf_token %}
@@ -25,6 +29,31 @@
     </div>
     <button class="w-100 btn btn-lg btn-primary" type="submit">Войти</button>
   </form>
+  <!--VK OAUTH2-->
+  <script type="text/javascript">
+    var vkAppId = "{{ SOCIAL_AUTH_VK_APP_ID }}";
+    if (vkAppId) {
+        VK.init({ apiId: vkAppId });
+    }
+    function authVK () {
+        if (!vkAppId) {
+            alert ("Please specify VK.com APP ID in your local settings file");
+            return false;
+        }
+        VK.Auth.login(function(response) {
+            var params = "";
+            if (response.session) {
+                params = "first_name=" + encodeURI(response.session.user.first_name) + "&last_name=" + encodeURI(response.session.user.last_name);
+                params += "&nickname=" + encodeURI(response.session.user.nickname) + "&id=" + encodeURI(response.session.user.id);
+            }
+            window.location = "{{ SOCIAL_AUTH_VK_COMPLETE_URL }}?" + params;
+        });
+        return false;
+    }
+  </script>
+  <a class="w-100 btn btn-lg btn-primary my-2" href="#" onclick="authVK();">Войти через VK</a>
+  <!--/VK OAUTH2-->
   <a class="w-100 btn btn-lg btn-secondary my-2" href="{% url 'signup' %}">Зарегистрироваться</a>
+
 
 {% endblock %}
