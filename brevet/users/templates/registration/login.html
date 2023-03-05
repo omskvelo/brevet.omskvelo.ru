@@ -46,7 +46,7 @@
                 params = "first_name=" + encodeURI(response.session.user.first_name) + "&last_name=" + encodeURI(response.session.user.last_name);
                 params += "&nickname=" + encodeURI(response.session.user.nickname) + "&id=" + encodeURI(response.session.user.id);
             }
-            window.location = "{% url 'social:complete' 'vk-openapi' %}?" + params;
+            window.location = "{% url 'social:begin' 'vk-openapi' %}?" + params;
         });
         return false;
     }
