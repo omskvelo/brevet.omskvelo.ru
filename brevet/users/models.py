@@ -13,6 +13,7 @@ class User(AbstractUser):
     email = models.EmailField(unique=True)
     randonneur = models.ForeignKey("brevet_database.Randonneur", on_delete=models.SET_NULL, null=True, blank=True, default=None)
     phone_number = PhoneNumberField()
+    oauth = models.BooleanField(default=False)
     
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = []

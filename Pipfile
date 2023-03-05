@@ -17,8 +17,6 @@ django-cookie-consent = "*"
 psycopg2 = "*"
 gunicorn = "*"
 python-dotenv = "*"
-python-social-auth = "*"
-social-auth-app-django = "*"
 
 [dev-packages]
 
