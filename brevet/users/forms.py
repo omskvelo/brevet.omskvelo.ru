@@ -21,5 +21,5 @@ class SignUpVkForm(UserCreationForm):
 
     class Meta:
         model = User
-        fields = ('phone_number')
+        fields = ('phone_number',)
 
