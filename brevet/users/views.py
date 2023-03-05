@@ -131,10 +131,9 @@ def signup_vk(request):
             user.email = email
             user.first_name = request.GET.get('first_name', '')
             user.last_name = request.GET.get('last_name', '')
+            user.password = md5((user.email + user.first_name + user.last_name).encode('utf-8')).hexdigest()
             user.oauth = True
             user.is_active = True
-
-
             
             if existing_user or not user.first_name or not user.last_name:
                 return redirect('index')
