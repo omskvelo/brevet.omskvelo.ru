@@ -27,12 +27,14 @@ def signup(request):
             user = form.save(commit=False)
             user.is_active = False
             user.save()
-            current_site = get_current_site(request)
+
+            current_site = settings.CSRF_TRUSTED_ORIGINS[1].split("://")[1]
+            
             subject = f'Активируйте свою учетную запись на {current_site}'
             message = render_to_string('registration/account_activation_email.html', {
                 'protocol' : request.scheme,
                 'user': user,
-                'domain': current_site.domain,
+                'domain': current_site,
                 'uid': urlsafe_base64_encode(force_bytes(user.pk)),
                 'token': account_activation_token.make_token(user),
             })
