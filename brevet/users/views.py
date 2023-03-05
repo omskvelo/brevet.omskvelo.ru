@@ -104,7 +104,7 @@ def begin_auth_vk(request):
     vk_session = parse_cookie(vk_cookie)
 
     email = vk_session.get("mid") + "@vk.com"
-    user = User.objects.get(email=email)
+    user = User.objects.filter(email=email).first()
     if user:
         login(request, user)
         return redirect('index')
@@ -125,7 +125,7 @@ def signup_vk(request):
         form = SignUpVkForm(request.POST)
         if form.is_valid():
             email = "dummy_" + vk_session.get("mid") + "@vk.com"
-            existing_user = User.objects.get(email=email)
+            existing_user = User.objects.filter(email=email).first()
             if existing_user or not user.first_name or not user.last_name:
                 return redirect('index')
 
@@ -135,7 +135,7 @@ def signup_vk(request):
             user.last_name = request.POST.get('last_name', '')
             user.is_active = True
             user.save()
-            
+
             login(request, user)
             return redirect('index')
     else:
