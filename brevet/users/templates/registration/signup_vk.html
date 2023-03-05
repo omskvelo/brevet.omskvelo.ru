@@ -1,0 +1,23 @@
+{% extends "registration/registration_base.html" %}
+
+{% block title %}
+    Регистрация | 
+{% endblock %}
+
+{% block content %}
+  <form method="post">
+    {% csrf_token %}
+    <h3 class="mb-3 fw-normal">Регистрация</h3>
+    <p>
+      Для завершения регистрации введите номер телефона для связи с организатором 
+    </p>
+    <div class="form-floating">
+      <input type="tel" name="phone_number"  class="form-control mb-2" id="floatingTel" placeholder="88002000600" autocomplete="tel">
+      <label for="floatingTel">Телефон</label>
+    </div>
+    {{ form.phone_number.errors }}
+    <button class="w-100 btn btn-lg btn-primary" type="submit">Зарегистрироваться</button>
+  </form>
+  <a class="w-100 btn btn-lg btn-secondary my-2" href="{% url 'login' %}">Войти</a>
+
+{% endblock %} 

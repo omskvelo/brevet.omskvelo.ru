@@ -1,3 +1,6 @@
+from hashlib import md5
+from datetime import datetime
+
 from django.conf import settings
 from django.contrib.auth import login, update_session_auth_hash
 from django.contrib.auth.forms import PasswordChangeForm
@@ -5,13 +8,14 @@ from django.contrib.sites.shortcuts import get_current_site
 from django.contrib import messages
 from django.http import Http404
 from django.shortcuts import render, redirect
+from django.urls import reverse
 from django.utils.encoding import force_bytes
 from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 from django.template.loader import render_to_string
 from django.views.decorators.cache import never_cache
 
 from brevet_database.models import Application
-from .forms import SignUpForm
+from .forms import SignUpForm, SignUpVkForm
 from .tokens import account_activation_token
 from .models import User
 
@@ -94,11 +98,76 @@ def profile(request):
 
 @never_cache
 def begin_auth_vk(request):
+    vk_cookie = get_vk_cookie(request)
+    if not vk_cookie:
+        return redirect('login')
+    vk_session = parse_cookie(vk_cookie)
+
+    email = vk_session.get("mid") + "@vk.com"
+    user = User.objects.get(email=email)
+    if user:
+        login(request, user)
+        return redirect('index')
+    else:
+        url = reverse('signup_vk') + '?' + request.META['QUERY_STRING']
+        return redirect(url)
+
+
+@never_cache
+def signup_vk(request):
+    vk_cookie = get_vk_cookie(request)
+    if not vk_cookie:
+        return redirect('signup')
+    vk_session = parse_cookie(vk_cookie)
+
+    if request.method == 'POST':
+        
+        form = SignUpVkForm(request.POST)
+        if form.is_valid():
+            email = "dummy_" + vk_session.get("mid") + "@vk.com"
+            existing_user = User.objects.get(email=email)
+            if existing_user or not user.first_name or not user.last_name:
+                return redirect('index')
+
+            user = form.save(commit=False)
+            user.email = email
+            user.first_name = request.POST.get('first_name', '')
+            user.last_name = request.POST.get('last_name', '')
+            user.is_active = True
+            user.save()
+            
+            login(request, user)
+            return redirect('index')
+    else:
+        form = SignUpVkForm()
+    return render(request, 'registration/signup_vk.html', {'form': form})  
+
+def get_vk_cookie(request):
     vk_cookie_name = f"vk_app_{settings.SOCIAL_AUTH_VK_OPENAPI_APP_ID}"
     vk_cookie = request.COOKIES.get(vk_cookie_name)
-    print(vk_cookie_name)
-    print(vk_cookie)
+    if validate_vk_cookie(vk_cookie):
+        return vk_cookie
 
-    from django.http import HttpResponse
+def parse_cookie(cookie):
+    result = {}
+    for item in cookie.split("&"):
+        key, value = item.split("=")
+        result[key] = value
 
-    return HttpResponse(f"{vk_cookie_name}\n\n{vk_cookie}")
+    return result
+
+def validate_vk_cookie(cookie):
+    if not cookie:
+        return False
+    if len(cookie.split('&sig=')) != 2:
+        return False
+    expire = int(parse_cookie(cookie).get('expire', '0'))
+    if expire < datetime.now().timestamp():
+        return False
+
+    body, sig = cookie.split('&sig=')
+    body = body.replace("&", "") + settings.SOCIAL_AUTH_VK_OPENAPI_SECRET
+    body = body.encode('ascii')
+    body_sig = md5(body).hexdigest()
+
+    return body_sig == sig

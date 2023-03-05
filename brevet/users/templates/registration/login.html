@@ -38,7 +38,11 @@
     function authVK () {
         if (vkAppId) {
           VK.Auth.login(function(response) {
-              window.location = "{% url 'begin_auth_vk' %}";
+            let params = "";
+            if (response.session && response.status === 'connected') {
+                params = "first_name=" + encodeURI(response.session.user.first_name) + "&last_name=" + encodeURI(response.session.user.last_name);
+                window.location = "{% url 'begin_auth_vk' %}?" + params;
+            }
           });
         }
         return false;

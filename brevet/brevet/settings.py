@@ -111,9 +111,8 @@ SOCIAL_AUTH_DEFAULT_USERNAME = 'socialauth_user'
 SOCIAL_AUTH_COMPLETE_URL_NAME = 'socialauth_complete'
 
 SOCIAL_AUTH_VK_OPENAPI_APP_ID = os.environ['VK_OAUTH2_CLIENT_ID']
-SOCIAL_AUTH_VK_OAUTH2_SECRET = os.environ['VK_OAUTH2_KEY']
-SOCIAL_AUTH_VK_APP_USER_MODE = 0
-# SOCIAL_AUTH_VK_COMPLETE_URL = '/'
+SOCIAL_AUTH_VK_OPENAPI_SECRET = os.environ['VK_OAUTH2_KEY']
+
 
 AUTH_PASSWORD_VALIDATORS = [
     {'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',},

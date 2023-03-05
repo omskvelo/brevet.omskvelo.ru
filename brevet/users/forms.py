@@ -16,3 +16,10 @@ class SignUpForm(UserCreationForm):
         model = User
         fields = ('email', 'first_name', 'last_name', 'phone_number', 'password1', 'password2')
 
+class SignUpVkForm(UserCreationForm):
+    phone_number = PhoneNumberField(help_text = 'Телефон для связи с организатором.')
+
+    class Meta:
+        model = User
+        fields = ('phone_number')
+
