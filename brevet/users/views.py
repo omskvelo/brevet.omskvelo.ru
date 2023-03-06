@@ -149,7 +149,7 @@ def signup_vk(request):
     return render(request, 'registration/signup_vk.html', {'form': form})  
 
 def generate_vk_email(mid:str):
-    return "id" + mid + "@vk_oauth_" + md5(mid).hexdigest()
+    return "id" + mid + "@vk_oauth." + md5(mid).hexdigest()
 
 def get_vk_cookie(request):
     vk_cookie_name = f"vk_app_{settings.SOCIAL_AUTH_VK_OPENAPI_APP_ID}"
