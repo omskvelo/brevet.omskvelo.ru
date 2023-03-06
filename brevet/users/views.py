@@ -105,7 +105,7 @@ def begin_auth_vk(request):
         return redirect('login')
     vk_session = parse_cookie(vk_cookie)
 
-    email = "id" + vk_session.get("mid") + "@vk.com"
+    email = generate_vk_email(vk_session.get("mid"))
     user = User.objects.filter(email=email).first()
     if user:
         login(request, user)
@@ -125,7 +125,7 @@ def signup_vk(request):
     if request.method == 'POST':
         form = SignUpVkForm(request.POST)
         if form.is_valid():
-            email = "id" + vk_session.get("mid") + "@vk.com"
+            email = generate_vk_email(vk_session.get("mid"))
             existing_user = User.objects.filter(email=email).first()
 
             user = User()
@@ -147,6 +147,9 @@ def signup_vk(request):
     else:
         form = SignUpVkForm()
     return render(request, 'registration/signup_vk.html', {'form': form})  
+
+def generate_vk_email(mid:str):
+    return "id" + mid + "@vk_oauth_" + md5(mid).hexdigest()
 
 def get_vk_cookie(request):
     vk_cookie_name = f"vk_app_{settings.SOCIAL_AUTH_VK_OPENAPI_APP_ID}"
