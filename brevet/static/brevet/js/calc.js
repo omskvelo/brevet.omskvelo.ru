@@ -133,13 +133,6 @@ function refresh(){
     distanceFinishLabel.innerText = textContent.distanceFinish
     finishLabel.innerText = textContent.time
 
-    for (const [i, control] of controls.entries()){
-        control.timeLabelDom.textContent = textContent.time
-        control.distanceLabelDom.textContent = `${textContent.cp}${i+1}, ${textContent.km}`
-        if (i == 0) control.distanceDeltaLabelDom.textContent = textContent.from_start
-        else control.distanceDeltaLabelDom.textContent = `${textContent.from_cp}${i}, ${textContent.km}`
-    }
-
     // Calculate
     let start = startDom.value
     let distance = distanceDom.value
@@ -237,7 +230,7 @@ function refresh(){
     }
 
 
-    //Calculate finish delta (must be done AFTER DOM update)
+    // Calculate finish delta (must be done AFTER DOM update)
     if (controls.length == 1){
         distanceFinishDeltaDom.value = distance
         distanceFinishDeltaLabelDom.innerText = textContent.from_start
@@ -246,6 +239,14 @@ function refresh(){
         distanceFinishDeltaDom.value = Number(distance) - controls[controls.length-2].distanceDom.valueAsNumber
         distanceFinishDeltaLabelDom.innerText = `${textContent.from_cp}${controls.length-1}, ${textContent.km}`
     } 
+
+    // Update generated DOM labels
+    for (const [i, control] of controls.entries()){
+        control.timeLabelDom.textContent = textContent.time
+        control.distanceLabelDom.textContent = `${textContent.cp}${i+1}, ${textContent.km}`
+        if (i == 0) control.distanceDeltaLabelDom.textContent = textContent.from_start
+        else control.distanceDeltaLabelDom.textContent = `${textContent.from_cp}${i}, ${textContent.km}`
+    }
 }
 
 function manage_url_param(name, value){
