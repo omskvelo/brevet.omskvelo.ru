@@ -11,26 +11,26 @@
 
 {% block content %}
     <form>
-        <h1 class="mb-3 h3 fw-normal">
+        <h1 class="mb-3 h3 fw-normal" id="header">
             Калькулятор КП
-        </h3>
+        </h1>
         
         <div class="form-floating">
             <input type="number" class="form-control joined_field_upper" id="distance" placeholder="_" value = "200">
-            <label for="distance">Дистанция, км</label>
+            <label for="distance" id="distance-label">Дистанция, км</label>
         </div>
         <div class="form-floating">
             <input type="time"  class="form-control joined_field_lower" id ="start" placeholder="_" value="07:00:00">
-            <label for="start">Старт</label>
+            <label for="start" id="start-label">Старт</label>
         </div>
 
         <div class="form-floating">
             <input type="number" class="form-control joined_field_upper" id="elevation" placeholder="_" hidden>
-            <label for="distance">Набор высоты, м</label>
+            <label for="elevation" id="elevation-label">Набор высоты, м</label>
         </div>
         <div class="form-floating">
             <input type="text"  class="form-control joined_field_lower" id ="extended-limit" placeholder="_" hidden disabled>
-            <label for="start">Расширение лимита</label>
+            <label for="elevation-limit" id="extended-limit-label">Расширение лимита</label>
         </div>
 
         <div id="insertionPoint"></div>
@@ -38,16 +38,16 @@
         <div class="form-twin">
             <div class="form-floating">
                 <input type="number" class="form-control joined_field_upper_left" id="distance-finish" placeholder="_" disabled>
-                <label for="distance-finish">Финиш, км</label>
+                <label for="distance-finish" id="distance-finish-label">Финиш, км</label>
             </div>
             <div class="form-floating">
                 <input type="number" class="form-control joined_field_upper_right" id="distance-finish-delta" placeholder="_" disabled>
-                <label class="label-twin-right" for="distance-finish-delta" id="label-distance-finish-delta"></label>
+                <label class="label-twin-right" for="distance-finish-delta" id="distance-finish-delta-label"></label>
             </div>
         </div>
         <div class="form-floating">
             <input type="text"  class="form-control joined_field_lower" id ="finish" placeholder="_" disabled>
-            <label for="finish">Время</label>
+            <label for="finish" id="finish-label">Время</label>
         </div>
     </form>
 
@@ -60,6 +60,21 @@
 
     <p id="calc-source">
     </p>
+
+    <div class="dropdown">
+        <button class="btn btn-light dropdown-toggle" id="lang-dropdown-ru" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+            <img src="{% static 'brevet/svg/flag_ru.svg' %}"></img>
+        </button>
+        <button class="btn btn-light dropdown-toggle" id="lang-dropdown-en" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+            <img src="{% static 'brevet/svg/flag_uk.svg' %}"></img>
+        </button>
+        </button>
+        <ul class="dropdown-menu">
+          <li><a class="dropdown-item" href="#" id="lang-ru"><img src="{% static 'brevet/svg/flag_ru.svg' %}"></img> Русский</a></li>
+          <li><a class="dropdown-item" href="#" id="lang-en"><img src="{% static 'brevet/svg/flag_uk.svg' %}"></img> English</a></li>
+        </ul>
+      </div>
+
     
     <script src="{% static 'brevet/js/calc.js' %}"></script>
 

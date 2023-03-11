@@ -3,7 +3,7 @@ let inputs = document.querySelectorAll('input')
 const distanceDom = document.querySelector('#distance')
 const distanceFinishDom = document.querySelector('#distance-finish')
 const distanceFinishDeltaDom = document.querySelector('#distance-finish-delta')
-const distanceFinishDeltaLabelDom = document.querySelector('#label-distance-finish-delta')
+const distanceFinishDeltaLabelDom = document.querySelector('#distance-finish-delta-label')
 const startDom = document.querySelector('#start')
 const finishDom = document.querySelector('#finish')
 const container = document.querySelector('form')
@@ -13,23 +13,84 @@ const methodListDom = document.querySelector('#method-list')
 const sourceDom = document.querySelector('#calc-source')
 const elevationDom = document.querySelector('#elevation')
 const extendedLimitDom = document.querySelector('#extended-limit')
+const languageRuIndicatorDom = document.querySelector('#lang-dropdown-ru')
+const languageEnIndicatorDom = document.querySelector('#lang-dropdown-en')
+const languageRuSelectorDom = document.querySelector('#lang-ru')
+const languageEnSelectorDom = document.querySelector('#lang-en')
 
-const methods = {
-    brm: {
-        name: 'BRM',
-        source: 'Источник формул: \
-        <a href="http://www.audax-club-parisien.com/download/plages_horaires_brm_10_FR.xls" target="_blank"> xls-файл </a>, \
-        опубликованный на сайте АСР в разделе \
-        <a href="https://www.audax-club-parisien.com/en/our-organizations/brm-world/"> "BRM". </a>'
-    },
-    lrm: {
-        name: 'LRM',
-        source: 'Источник формул: \
-        <a href="https://www.randonneursmondiaux.org/files/Rules_2019.pdf" target="_blank"> правила LRM </a>'
+const headerLabel = document.querySelector('#header')
+const distanceLabel = document.querySelector('#distance-label')
+const startLabel = document.querySelector('#start-label')
+const elevationLabel = document.querySelector('#elevation-label')
+const extendedLimitLabel = document.querySelector('#extended-limit-label')
+const distanceFinishLabel = document.querySelector('#distance-finish-label')
+const finishLabel = document.querySelector('#finish-label')
+
+const supportedLanguages = ['en', 'ru']
+
+const textContentRu = {
+    header: "Калькулятор КП",
+    distance: "Дистанция, км",
+    start: "Старт",
+    elevation: "Набор высоты, м",
+    extendedLimit: "Расширение лимита",
+    distanceFinish: "Финиш, км",
+    time: "Время",
+    from: "с",
+    to: "по",
+    from_start: "От старта, км",
+    from_cp: "От КП",
+    km: "км",
+    cp: "КП", 
+    methods: {
+        brm: {
+            name: 'BRM',
+            source: 'Источник формул: \
+            <a href="http://www.audax-club-parisien.com/download/plages_horaires_brm_10_FR.xls" target="_blank"> xls-файл </a>, \
+            опубликованный на сайте АСР в разделе \
+            <a href="https://www.audax-club-parisien.com/en/our-organizations/brm-world/"> "BRM". </a>'
+        },
+        lrm: {
+            name: 'LRM',
+            source: 'Источник формул: \
+            <a href="https://www.randonneursmondiaux.org/files/Rules_2019.pdf" target="_blank"> правила LRM </a>'
+        },
     },
 }
 
+const textContentEn = {
+    header: "Control calculator",
+    distance: "Distance, km",
+    start: "Start",
+    elevation: "Elevation, m",
+    extendedLimit: "Extra time",
+    distanceFinish: "Finish, km",
+    time: "Time",
+    from: "",
+    to: "to",
+    from_start: "From start, km",
+    from_cp: "From CP",
+    km: "km",
+    cp: "CP", 
+    methods: {
+        brm: {
+            name: 'BRM',
+            source: 'Source: \
+            <a href="http://www.audax-club-parisien.com/download/plages_horaires_brm_10_FR.xls" target="_blank">xls document</a> \
+            published on the\
+            <a href="https://www.audax-club-parisien.com/en/our-organizations/brm-world/"> BRM page </a>\
+            of the official ACP website'
+        },
+        lrm: {
+            name: 'LRM',
+            source: 'Source: \
+            <a href="https://www.randonneursmondiaux.org/files/Rules_2019.pdf" target="_blank"> LRM Event Regulations 2019</a>'
+        },
+    },
+}
 
+let textContent = {}
+let methods = {}
 
 let controls = []
 
@@ -45,10 +106,12 @@ const limits = {
 let url = new URL(window.location.href)
 let i = 0;
 
+let currentLanguage = url.searchParams.get("lang")     || 'ru'
 let currentMethod = url.searchParams.get("method")     || 'brm'
 startDom.value = url.searchParams.get("start")         || '07:00'
 distanceDom.value = url.searchParams.get("distance")   || '200'
 elevationDom.value = url.searchParams.get("elevation") || '0'
+
 
 if (url.searchParams.get("cp")){
     url.searchParams.get("cp").split(",").map(Number).forEach(control =>{
@@ -61,6 +124,22 @@ if (url.searchParams.get("cp")){
 }
 
 function refresh(){
+    // Static
+    headerLabel.innerText = textContent.header
+    distanceLabel.innerText = textContent.distance
+    startLabel.innerText = textContent.start
+    elevationLabel.innerText = textContent.elevation
+    extendedLimitLabel.innerText = textContent.extendedLimit
+    distanceFinishLabel.innerText = textContent.distanceFinish
+    finishLabel.innerText = textContent.time
+
+    for (const [i, control] of controls.entries()){
+        control.timeLabelDom.textContent = textContent.time
+        control.distanceLabelDom.textContent = `${textContent.cp}${i+1}, ${textContent.km}`
+        if (i == 0) control.distanceDeltaLabelDom.textContent = textContent.from_start
+        else control.distanceDeltaLabelDom.textContent = `${textContent.from_cp}${i}, ${textContent.km}`
+    }
+
     // Calculate
     let start = startDom.value
     let distance = distanceDom.value
@@ -69,7 +148,7 @@ function refresh(){
     distanceFinishDom.value = distance
 
     if (currentMethod == 'brm'){
-        finishDom.value = `c ${calculate_control_open(start,distance)} по ${calculate_finish_close(start,distance)}`
+        finishDom.value = `${textContent.from} ${calculate_control_open(start,distance)} ${textContent.to} ${calculate_finish_close(start,distance)}`
         
         for (const [i, control] of controls.entries()){
             let km = control.distanceDom.value
@@ -88,7 +167,7 @@ function refresh(){
 
             // Time fields
             if (km){
-                control.timeDom.value = `c ${calculate_control_open(start,km)} по ${calculate_control_close(start,km)}`
+                control.timeDom.value = `${textContent.from} ${calculate_control_open(start,km)} ${textContent.to} ${calculate_control_close(start,km)}`
             }
             else{
                 control.timeDom.value = ""
@@ -101,7 +180,7 @@ function refresh(){
         let extra_hours = calculate_lrm_extended_hours(distance, limit)
         extendedLimitDom.value = `${limit}% (${extra_hours})`
 
-        finishDom.value = `c ${calculate_lrm_control_open(start,distance)} по ${calculate_lrm_finish_close(start,distance,distance,limit)}`
+        finishDom.value = `${textContent.from} ${calculate_lrm_control_open(start,distance)} ${textContent.to} ${calculate_lrm_finish_close(start,distance,distance,limit)}`
 
         for (const [i, control] of controls.entries()){
             let km = control.distanceDom.value
@@ -120,7 +199,7 @@ function refresh(){
 
             // Time fields
             if (km){
-                control.timeDom.value = `c ${calculate_lrm_control_open(start,km)} по ${calculate_lrm_control_close(start,km,distance,limit)}`
+                control.timeDom.value = `${textContent.from} ${calculate_lrm_control_open(start,km)} ${textContent.to} ${calculate_lrm_control_close(start,km,distance,limit)}`
             }
             else{
                 control.timeDom.value = ""
@@ -141,6 +220,7 @@ function refresh(){
     manage_url_param("cp", cp)
     manage_url_param('method', currentMethod)
     manage_url_param('elevation', elevation)
+    manage_url_param('lang', currentLanguage)
     
     window.history.pushState({}, '', url)
 
@@ -156,14 +236,15 @@ function refresh(){
             }
     }
 
+
     //Calculate finish delta (must be done AFTER DOM update)
     if (controls.length == 1){
         distanceFinishDeltaDom.value = distance
-        distanceFinishDeltaLabelDom.innerText = "От старта, км"
+        distanceFinishDeltaLabelDom.innerText = textContent.from_start
     }
     else{
         distanceFinishDeltaDom.value = Number(distance) - controls[controls.length-2].distanceDom.valueAsNumber
-        distanceFinishDeltaLabelDom.innerText = `От КП${controls.length-1}, км`
+        distanceFinishDeltaLabelDom.innerText = `${textContent.from_cp}${controls.length-1}, ${textContent.km}`
     } 
 }
 
@@ -326,7 +407,7 @@ function add_cp_dom(){
 
     let labelTopLeft = document.createElement("label")
     labelTopLeft.setAttribute('for', `distance${index}`) 
-    labelTopLeft.textContent = `КП${index}, км`
+    labelTopLeft.setAttribute('id', `distance${index}-label`)
 
     let floatTopRight = document.createElement("div")
     floatTopRight.setAttribute('class', 'form-floating')
@@ -367,8 +448,7 @@ function add_cp_dom(){
 
     let labelTopRight = document.createElement("label")
     labelTopRight.setAttribute('for', `distance${index}-delta`) 
-    if (index == 1) labelTopRight.textContent = `От старта, км`
-    else labelTopRight.textContent = `От КП${index-1}, км`
+    labelTopRight.setAttribute('id', `distance${index}-delta-label`)
 
     let formTop = document.createElement("div")
     formTop.setAttribute('class', 'form-twin')
@@ -386,7 +466,7 @@ function add_cp_dom(){
 
     let labelBottom = document.createElement("label")
     labelBottom.setAttribute('for', `control${index}`)
-    labelBottom.textContent = "Время"
+    labelBottom.setAttribute('id', `control${index}-label`)
 
     floatTopLeft.append(inputTopLeft,labelTopLeft)
     floatTopRight.append(inputTopRight, labelTopRight)
@@ -397,8 +477,11 @@ function add_cp_dom(){
 
     controls[index-1] = {
         timeDom: document.querySelector(`#control${index}`),
+        timeLabelDom: document.querySelector(`#control${index}-label`),
         distanceDom: document.querySelector(`#distance${index}`),
-        distanceDeltaDom: document.querySelector(`#distance${index}-delta`)
+        distanceLabelDom: document.querySelector(`#distance${index}-label`),
+        distanceDeltaDom: document.querySelector(`#distance${index}-delta`),
+        distanceDeltaLabelDom: document.querySelector(`#distance${index}-delta-label`),
     }
 }
 
@@ -437,14 +520,38 @@ function select_method(method){
     refresh()
 }
 
+function select_language(language){
+    if (!supportedLanguages.includes(language)){
+        currentLanguage = 'ru'
+    }
+    else currentLanguage = language
+    
+    if (currentLanguage == 'ru'){
+        languageEnIndicatorDom.setAttribute("hidden", "")
+        languageRuIndicatorDom.removeAttribute("hidden")
+        textContent = textContentRu
+        methods = textContentRu.methods
+    }
+    else if (currentLanguage == 'en'){
+        languageRuIndicatorDom.setAttribute("hidden", "")
+        languageEnIndicatorDom.removeAttribute("hidden")
+        textContent = textContentEn
+        methods = textContentEn.methods
+    }
+    refresh()
+    select_method(currentMethod)
+}
+
 inputs.forEach(input => input.addEventListener('input', refresh))
 
 
 add_cp_dom()
+select_language(currentLanguage)
 load_methods()
 select_method(currentMethod)
-refresh()
 
+languageRuSelectorDom.addEventListener('click', function(){select_language('ru')})
+languageEnSelectorDom.addEventListener('click', function(){select_language('en')})
 
 function test_calc(){
     // Check results against reference dataset: https://www.audax-club-parisien.com/en/our-organizations/brm-world/
