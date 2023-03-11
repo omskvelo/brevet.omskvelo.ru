@@ -17,6 +17,7 @@ django-cookie-consent = "*"
 psycopg2 = "*"
 gunicorn = "*"
 python-dotenv = "*"
+django-debug-toolbar = "*"
 
 [dev-packages]
 
