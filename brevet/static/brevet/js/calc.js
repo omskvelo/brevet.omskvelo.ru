@@ -13,11 +13,6 @@ const methodListDom = document.querySelector('#method-list')
 const sourceDom = document.querySelector('#calc-source')
 const elevationDom = document.querySelector('#elevation')
 const extendedLimitDom = document.querySelector('#extended-limit')
-const languageRuIndicatorDom = document.querySelector('#lang-dropdown-ru')
-const languageEnIndicatorDom = document.querySelector('#lang-dropdown-en')
-const languageRuSelectorDom = document.querySelector('#lang-ru')
-const languageEnSelectorDom = document.querySelector('#lang-en')
-
 const headerLabel = document.querySelector('#header')
 const distanceLabel = document.querySelector('#distance-label')
 const startLabel = document.querySelector('#start-label')
@@ -26,72 +21,7 @@ const extendedLimitLabel = document.querySelector('#extended-limit-label')
 const distanceFinishLabel = document.querySelector('#distance-finish-label')
 const finishLabel = document.querySelector('#finish-label')
 
-const supportedLanguages = ['en', 'ru']
-
-const textContentRu = {
-    header: "Калькулятор КП",
-    distance: "Дистанция, км",
-    start: "Старт",
-    elevation: "Набор высоты, м",
-    extendedLimit: "Расширение лимита",
-    distanceFinish: "Финиш, км",
-    time: "Время",
-    from: "с",
-    to: "по",
-    from_start: "От старта, км",
-    from_cp: "От КП",
-    km: "км",
-    cp: "КП", 
-    methods: {
-        brm: {
-            name: 'BRM',
-            source: 'Источник формул: \
-            <a href="http://www.audax-club-parisien.com/download/plages_horaires_brm_10_FR.xls" target="_blank"> xls-файл </a>, \
-            опубликованный на сайте АСР в разделе \
-            <a href="https://www.audax-club-parisien.com/en/our-organizations/brm-world/"> "BRM". </a>'
-        },
-        lrm: {
-            name: 'LRM',
-            source: 'Источник формул: \
-            <a href="https://www.randonneursmondiaux.org/files/Rules_2019.pdf" target="_blank"> правила LRM </a>'
-        },
-    },
-}
-
-const textContentEn = {
-    header: "Control calculator",
-    distance: "Distance, km",
-    start: "Start",
-    elevation: "Elevation, m",
-    extendedLimit: "Extra time",
-    distanceFinish: "Finish, km",
-    time: "Time",
-    from: "",
-    to: "to",
-    from_start: "From start, km",
-    from_cp: "From CP",
-    km: "km",
-    cp: "CP", 
-    methods: {
-        brm: {
-            name: 'BRM',
-            source: 'Source: \
-            <a href="http://www.audax-club-parisien.com/download/plages_horaires_brm_10_FR.xls" target="_blank">xls document</a> \
-            published on the\
-            <a href="https://www.audax-club-parisien.com/en/our-organizations/brm-world/"> BRM page </a>\
-            of the official ACP website'
-        },
-        lrm: {
-            name: 'LRM',
-            source: 'Source: \
-            <a href="https://www.randonneursmondiaux.org/files/Rules_2019.pdf" target="_blank"> LRM Event Regulations 2019</a>'
-        },
-    },
-}
-
 let textContent = {}
-let methods = {}
-
 let controls = []
 
 const limits = {
@@ -494,12 +424,12 @@ function remove_cp_dom(index){
 }
 
 function load_methods(){
-    for(let method of Object.getOwnPropertyNames(methods)){
+    for(let method of Object.getOwnPropertyNames(textContent.methods)){
         let li = document.createElement('li')
         let item = document.createElement('button')
         item.setAttribute('class','w-100 dropdown-item')
         item.setAttribute('id', `select-${method}`)
-        item.innerText = methods[method]['name']
+        item.innerText = textContent.methods[method]['name']
         item.onclick = e => select_method(method)
 
         li.append(item)
@@ -509,8 +439,8 @@ function load_methods(){
 
 function select_method(method){
     currentMethod = method
-    methodDom.innerText = methods[method]['name']
-    sourceDom.innerHTML = methods[method]['source']
+    methodDom.innerText = textContent.methods[method]['name']
+    sourceDom.innerHTML = textContent.methods[method]['source']
     if (currentMethod == 'lrm'){
         elevationDom.removeAttribute('hidden')
         extendedLimitDom.removeAttribute('hidden')
@@ -521,24 +451,42 @@ function select_method(method){
     refresh()
 }
 
-function select_language(language){
-    if (!supportedLanguages.includes(language)){
-        currentLanguage = 'ru'
+function load_translation(){
+    const langContainerDom = document.querySelector("#lang-container")
+    for (lang of Object.keys(translation)) {
+        let li = document.createElement('li')
+        langContainerDom.append(li)
+        
+        let a = document.createElement('a')
+        a.setAttribute('class', 'dropdown-item')
+        a.setAttribute('href', '#')
+        a.setAttribute('id', `lang-${lang}`)
+        let language = `${lang}`
+        a.addEventListener('click', function(){
+            select_language(language)
+        })
+        li.append(a)
+        
+        let icon = document.createElement('img')
+        icon.setAttribute('src', translation[lang].icon)
+        a.append(icon)
+        a.append(" ")
+        a.append(translation[lang].language)
     }
-    else currentLanguage = language
+}
+
+function select_language(lang){
+    if (!translation.hasOwnProperty(lang)) currentLanguage = 'ru'
+    else currentLanguage = lang
+
+    textContent = translation[currentLanguage]
     
-    if (currentLanguage == 'ru'){
-        languageEnIndicatorDom.setAttribute("hidden", "")
-        languageRuIndicatorDom.removeAttribute("hidden")
-        textContent = textContentRu
-        methods = textContentRu.methods
-    }
-    else if (currentLanguage == 'en'){
-        languageRuIndicatorDom.setAttribute("hidden", "")
-        languageEnIndicatorDom.removeAttribute("hidden")
-        textContent = textContentEn
-        methods = textContentEn.methods
-    }
+    const button = document.querySelector("#lang-selector")
+    button.innerHTML = ""
+    const icon = document.createElement('img')
+    icon.setAttribute('src', translation[lang].icon)
+    button.append(icon)
+
     refresh()
     select_method(currentMethod)
 }
@@ -547,12 +495,10 @@ inputs.forEach(input => input.addEventListener('input', refresh))
 
 
 add_cp_dom()
+load_translation()
 select_language(currentLanguage)
 load_methods()
 select_method(currentMethod)
-
-languageRuSelectorDom.addEventListener('click', function(){select_language('ru')})
-languageEnSelectorDom.addEventListener('click', function(){select_language('en')})
 
 function test_calc(){
     // Check results against reference dataset: https://www.audax-club-parisien.com/en/our-organizations/brm-world/

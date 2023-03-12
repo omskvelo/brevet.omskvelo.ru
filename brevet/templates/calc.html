@@ -62,20 +62,15 @@
     </p>
 
     <div class="dropdown">
-        <button class="btn btn-light dropdown-toggle" id="lang-dropdown-ru" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+        <button class="btn btn-primary dropdown-toggle" id="lang-selector" type="button" data-bs-toggle="dropdown" aria-expanded="false">
             <img src="{% static 'brevet/svg/flag_ru.svg' %}"></img>
         </button>
-        <button class="btn btn-light dropdown-toggle" id="lang-dropdown-en" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-            <img src="{% static 'brevet/svg/flag_uk.svg' %}"></img>
-        </button>
-        </button>
-        <ul class="dropdown-menu">
-          <li><a class="dropdown-item" href="#" id="lang-ru"><img src="{% static 'brevet/svg/flag_ru.svg' %}"></img> Русский</a></li>
-          <li><a class="dropdown-item" href="#" id="lang-en"><img src="{% static 'brevet/svg/flag_uk.svg' %}"></img> English</a></li>
+        <ul class="dropdown-menu" id="lang-container">
         </ul>
-      </div>
+    </div>
 
     
+    <script src="{% static 'brevet/js/calc_translation.js' %}"></script>
     <script src="{% static 'brevet/js/calc.js' %}"></script>
 
 {% endblock %}
