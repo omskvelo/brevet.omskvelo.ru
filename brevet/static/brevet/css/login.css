@@ -3,7 +3,8 @@ html {
 }
 
 body {
-  height: 100%;
+  height: 100vh;
+  height: -webkit-fill-available;
   background-size: cover;
   background-position: center;
   background-attachment: fixed;
@@ -22,8 +23,8 @@ ul {
 }
 
 .form-signin {
-  width: 100%;
-  min-height: 100%;
+  width: 100vh;
+  min-height: 100vh;
   max-width: 330px;
   padding: 15px;
   margin: auto;
