@@ -6,8 +6,6 @@ from . import views
 
 urlpatterns = [
     path("events/", views.event_index, name="event_index"),
-    path("event/<int:distance>/<str:date>/register", views.event_register, name="event_register"),
-    path("event/<int:distance>/<str:date>/cancel_registration", views.event_cancel_registration, name="event_cancel_registration"),
     path("event/<int:distance>/<str:date>/dnf", views.event_dnf, name="event_dnf"),
     path("event/<int:distance>/<str:date>/", views.event, name="event"),
 
@@ -37,4 +35,8 @@ urlpatterns = [
     path("stats/user/<int:uid>/", views.personal_stats, name="personal_stats"), 
     path("stats/user/<int:uid>/<str:form>/", views.personal_stats, name="personal_stats_f"), 
     path("stats/user/<str:surname>_<str:name>/", views.personal_stats, name="person_by_name"), 
+
+    path("hx/event/<int:event_id>/participants/", views.hx_event_load_participants, name="hx_event_load_participants"),
+    path("hx/event/<int:event_id>/participants/apply", views.hx_event_create_application, name="hx_event_create_application"),
+    path("hx/event/<int:event_id>/participants/cancel", views.hx_event_delete_application, name="hx_event_delete_application"),
 ]

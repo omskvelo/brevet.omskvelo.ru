@@ -107,8 +107,7 @@
     {% if not event.finished %}
     <div class="event__brief">
         <div class="event__brief__item">
-            {% include 'brevet_database/event_participants.html' %}
-            {% include 'brevet_database/event_application.html' %}
+            {% include 'brevet_database/hx_participation.html' %}
         </div>
 
         {% if not event.application_allowed and user.randonneur and user in event.get_applicants and not application.result and not application.dnf and not application.dsq and not application.otl %}

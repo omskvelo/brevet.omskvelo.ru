@@ -413,6 +413,15 @@ class Event(AbstractModel):
         date = datetime.strftime(self.date, "%Y%m%d")
         return reverse('event_cancel_registration', kwargs={'distance' : self.route.distance, 'date' : date})
 
+    def get_hx_load_participants_url(self):
+        return reverse('hx_event_load_participants', kwargs={'event_id' : self.pk})
+
+    def get_hx_create_application_url(self):
+        return reverse('hx_event_create_application', kwargs={'event_id' : self.pk})
+
+    def get_hx_delete_application_url(self):
+        return reverse('hx_event_delete_application', kwargs={'event_id' : self.pk})
+
     def get_finisher_count(self):
         return Result.objects.filter(event=self).count()
 

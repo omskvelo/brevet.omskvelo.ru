@@ -4,6 +4,7 @@ from django.db import models
 from django.http import Http404
 from django.shortcuts import get_object_or_404, get_list_or_404, redirect, render
 from django.views.decorators.cache import cache_page, never_cache
+from django.contrib.auth.decorators import login_required
 from django.core.exceptions import ObjectDoesNotExist
 
 import babel.dates
@@ -315,45 +316,48 @@ def event_result_time_form(request, event):
 
     return form, application, errors  
 
+@never_cache
+def hx_event_load_participants(request, event_id):
+    event = get_object_or_404(Event, pk=event_id)
+    context = {
+        'event': event,
+    }
+    return render(request, "brevet_database/hx_participation.html", context)  
 
-def event_register(request, distance, date):
-    if request.user.is_authenticated:
-        try:
-            date = datetime.strptime(date, "%Y%m%d")
-        except Exception:
-            raise Http404
-
-        event = get_object_or_404(Event, route__distance=distance, date=date)
-
-        if not event.application_allowed():
-            return Http404
-
-        application = Application.objects.filter(user=request.user, event__date=date).first() or Application()
+@never_cache
+def hx_event_create_application(request, event_id):
+    event = get_object_or_404(Event, pk=event_id)
+    if (request.user.is_authenticated 
+        and event.application_allowed()
+        and request.user not in event.get_same_date_applicants()
+        ):
+        application = Application.objects.filter(user=request.user, event=event).first() or Application()
         application.event = event
         application.user = request.user
         application.active = True
         application.save()
+    
+    context = {
+        'event': event,
+    }
+    response = render(request, "brevet_database/hx_participation.html", context) 
+    response['hx-trigger'] = 'reload_participants'
+    return  response
 
-        return redirect(request.META.get('HTTP_REFERER'))
-    else:
-        raise Http404
-
-
-def event_cancel_registration(request, distance, date):
-    if request.user.is_authenticated:
-        try:
-            date = datetime.strptime(date, "%Y%m%d")
-        except Exception:
-            raise Http404
-        event = get_object_or_404(Event, route__distance=distance, date=date, )
-
-        application = get_object_or_404(Application, event=event, user=request.user )
+@never_cache
+def hx_event_delete_application(request, event_id):
+    event = get_object_or_404(Event, pk=event_id)
+    if request.user.is_authenticated and event.application_allowed():
+        application = get_object_or_404(Application, user=request.user, event=event)
         application.active = False
         application.save()
-
-        return redirect(request.META.get('HTTP_REFERER'))
-    else:
-        raise Http404
+        
+    context = {
+        'event': event,
+    }
+    response = render(request, "brevet_database/hx_participation.html", context) 
+    response['hx-trigger'] = 'reload_participants'
+    return  response
 
 
 def event_dnf(request, distance, date):
