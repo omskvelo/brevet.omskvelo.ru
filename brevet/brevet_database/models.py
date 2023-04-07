@@ -358,24 +358,20 @@ class Event(AbstractModel):
         verbose_name_plural = "Бреветы"
 
     def get_absolute_url(self):
-        date = datetime.strftime(self.date, "%Y%m%d")
-        return reverse('event', kwargs={'distance' : self.route.distance, 'date' : date})
+        return reverse('event', kwargs={'event_id': self.pk})
 
     def get_protocol_url(self):
-        date = datetime.strftime(self.date, "%Y%m%d")
-        return reverse('protocol', kwargs={'distance' : self.route.distance, 'date' : date})
+        return reverse('protocol', kwargs={'event_id': self.pk})
 
     def get_dnf_url(self):
-        date = datetime.strftime(self.date, "%Y%m%d")
-        return reverse('event_dnf', kwargs={'distance' : self.route.distance, 'date' : date})
+        return reverse('event_dnf', kwargs={'event_id': self.pk})
 
     def get_protocol_xlsx_url(self):
-        date = datetime.strftime(self.date, "%Y%m%d")
-        return reverse('protocol_f', kwargs={'distance' : self.route.distance, 'date' : date, "form" : "xlsx"})  
+        return reverse('protocol_f', kwargs={'event_id': self.pk, "form" : "xlsx"})  
 
     def get_protocol_upload_success_url(self):
         date = datetime.strftime(self.date, "%Y%m%d")
-        return reverse("protocol_upload_success", kwargs={'distance' : self.route.distance, 'date' : date})
+        return reverse("protocol_upload_success", kwargs={'event_id': self.pk})
 
     def get_applications(self):
         return Application.objects.filter(event=self, active=True).order_by(
@@ -406,12 +402,10 @@ class Event(AbstractModel):
         return datetime_start - timedelta_block > datetime.now()
 
     def get_add_application_url(self):
-        date = datetime.strftime(self.date, "%Y%m%d")
-        return reverse('event_register', kwargs={'distance' : self.route.distance, 'date' : date})
+        return reverse('event_register', kwargs={'event_id': self.pk})
 
     def get_cancel_application_url(self):
-        date = datetime.strftime(self.date, "%Y%m%d")
-        return reverse('event_cancel_registration', kwargs={'distance' : self.route.distance, 'date' : date})
+        return reverse('event_cancel_registration', kwargs={'event_id': self.pk})
 
     def get_hx_load_participants_url(self):
         return reverse('hx_event_load_participants', kwargs={'event_id' : self.pk})

@@ -6,16 +6,18 @@ from . import views
 
 urlpatterns = [
     path("events/", views.event_index, name="event_index"),
-    path("event/<int:distance>/<str:date>/register", views.event_register, name="event_register"),
-    path("event/<int:distance>/<str:date>/cancel_registration", views.event_cancel_registration, name="event_cancel_registration"),
-    path("event/<int:distance>/<str:date>/dnf", views.event_dnf, name="event_dnf"),
-    path("event/<int:distance>/<str:date>/", views.event, name="event"),
+    path("event/<int:event_id>/", views.event, name="event"),
+    path("event/<int:distance>/<str:date>/", views.event, name="event_by_params"),
+    path("event/<int:event_id>/register", views.event_register, name="event_register"),
+    path("event/<int:event_id>/cancel_registration", views.event_cancel_registration, name="event_cancel_registration"),
+    path("event/<int:event_id>/dnf", views.event_dnf, name="event_dnf"),
 
     path("protocols/", views.protocol_index, name="protocol_index"),
     path("protocols/<int:year>", views.protocol_index, name="protocol_index_pages"),
-    path("protocol/<int:distance>/<str:date>/success/", views.protocol, kwargs={'upload_success' : True}, name="protocol_upload_success"),
-    path("protocol/<int:distance>/<str:date>/", views.protocol, name="protocol"),
-    path("protocol/<int:distance>/<str:date>/<str:form>", views.protocol, name="protocol_f"),
+
+    path("protocol/<int:event_id>/success/", views.protocol, kwargs={'upload_success' : True}, name="protocol_upload_success"),
+    path("protocol/<int:event_id>/", views.protocol, name="protocol"),
+    path("protocol/<int:event_id>/<str:form>", views.protocol, name="protocol_f"),
     path("protocol/yearly/<int:year>", views.protocol_yearly, name="protocol_yearly"),
 
     path("routes/", views.route_index, name="route_index"), 

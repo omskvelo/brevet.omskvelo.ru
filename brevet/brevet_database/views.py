@@ -29,13 +29,8 @@ MIN_TIME_LIMITS = {
     1000 : timedelta(hours=35, minutes=5),
 }
 
-def protocol(request, distance, date, upload_success=None, form="html"):
-    try:
-        date = datetime.strptime(date, "%Y%m%d")
-    except Exception:
-        raise Http404
-
-    event = get_object_or_404(Event, route__distance=distance, date=date)
+def protocol(request, event_id, upload_success=None, form="html"):
+    event = get_object_or_404(Event, pk=event_id)
     results = get_list_or_404(Result.objects.order_by("randonneur__russian_surname","randonneur__russian_name"), event=event)
 
     if form == "html":
@@ -59,7 +54,7 @@ def protocol(request, distance, date, upload_success=None, form="html"):
         response = render(request, "brevet_database/protocol.html", context)   
 
     if form == "xlsx":
-        response = file_generators.get_xlsx_protocol(event,results,f"{event.date.year}-{event.date.month}-{event.date.day}_{distance}") 
+        response = file_generators.get_xlsx_protocol(event,results,f"{event.date.year}-{event.date.month}-{event.date.day}_{event.route.distance}") 
 
     return response
 
@@ -193,13 +188,16 @@ def statistics(request, year='', form="html"):
       
 
 @never_cache
-def event(request, distance, date):
-    try:
-        date = datetime.strptime(date, "%Y%m%d")
-    except Exception:
-        raise Http404
+def event(request, event_id=None, distance=None, date=None):
+    if event_id is not None:
+        event = get_object_or_404(Event, pk=event_id)
+    elif distance is not None and date is not None:
+        try:
+            date = datetime.strptime(date, "%Y%m%d")
+        except Exception:
+            raise Http404
+        event = get_object_or_404(Event, route__distance=distance, date=date)
 
-    event = get_object_or_404(Event, route__distance=distance, date=date, )
     default_club = event.club.pk == DEFAULT_CLUB_ID
     route = event.route
 
@@ -360,64 +358,49 @@ def hx_event_delete_application(request, event_id):
     return  response
 
 
-def event_register(request, distance, date):
-    if request.user.is_authenticated:
-        try:
-            date = datetime.strptime(date, "%Y%m%d")
-        except Exception:
-            raise Http404
-
-        event = get_object_or_404(Event, route__distance=distance, date=date)
-
-        if not event.application_allowed():
-            return Http404
-
-        application = Application.objects.filter(user=request.user, event__date=date).first() or Application()
-        application.event = event
-        application.user = request.user
-        application.active = True
-        application.save()
-
-        return redirect(request.META.get('HTTP_REFERER'))
-    else:
+def event_register(request, event_id):
+    if not request.user.is_authenticated:
         raise Http404
+    event = get_object_or_404(Event, pk=event_id)
+    if not event.application_allowed():
+        return Http404
+
+    application = Application.objects.filter(event=event, user=request.user).first() or Application()
+    application.event = event
+    application.user = request.user
+    application.active = True
+    application.save()
+
+    return redirect(request.META.get('HTTP_REFERER'))
 
 
-def event_cancel_registration(request, distance, date):
-    if request.user.is_authenticated:
-        try:
-            date = datetime.strptime(date, "%Y%m%d")
-        except Exception:
-            raise Http404
-        event = get_object_or_404(Event, route__distance=distance, date=date, )
-
-        application = get_object_or_404(Application, event=event, user=request.user )
-        application.active = False
-        application.save()
-
-        return redirect(request.META.get('HTTP_REFERER'))
-    else:
+def event_cancel_registration(request, event_id):
+    if not request.user.is_authenticated:
         raise Http404
+    event = get_object_or_404(Event, pk=event_id)
+    if not event.application_allowed():
+        return Http404
+
+    application = get_object_or_404(Application, event=event, user=request.user)
+    application.active = False
+    application.save()
+
+    return redirect(request.META.get('HTTP_REFERER'))
 
 
-def event_dnf(request, distance, date):
-    if request.user.is_authenticated:
-        try:
-            date = datetime.strptime(date, "%Y%m%d")
-        except Exception:
-            raise Http404
-        event = get_object_or_404(Event, route__distance=distance, date=date, )
-
-        application = get_object_or_404(Application, event=event, user=request.user )
-        application.dnf = True
-        if application.result:
-            application.result.delete()
-            application.result = None
-        application.save() 
-
-        return redirect(request.META.get('HTTP_REFERER'))
-    else:
+def event_dnf(request, event_id=None, distance=None, date=None):
+    if not request.user.is_authenticated:
         raise Http404
+    event = get_object_or_404(Event, pk=event_id)
+
+    application = get_object_or_404(Application, event=event, user=request.user)
+    application.dnf = True
+    if application.result:
+        application.result.delete()
+        application.result = None
+    application.save() 
+
+    return redirect(request.META.get('HTTP_REFERER'))
 
 @never_cache
 def event_index(request):
