@@ -474,12 +474,13 @@ def route_stats(request, slug=None, route_id=None):
 
 def personal_stats_index(request):
     stats = ClubStatsCache.objects.get(year__isnull=True)
+    items = 20
 
     rating = [{
         'randonneur': Randonneur.objects.get(pk=entry[0]),
         'total_distance': entry[1],
         'total_brevets': entry[2],
-        } for entry in stats.data['distance_rating']
+        } for entry in stats.data['distance_rating'][:items]
     ]
 
     for row in rating:
@@ -497,9 +498,39 @@ def personal_stats_index(request):
         
     context = {
         "rating" : rating,
+        "next_page": items,
     }
     return render(request, "brevet_database/stats_personal_index.html", context)   
 
+def hx_personal_stats_page(request, line):
+    stats = ClubStatsCache.objects.get(year__isnull=True)
+    next_page = line + 20
+
+    rating = [{
+            'randonneur': Randonneur.objects.get(pk=entry[0]),
+            'total_distance': entry[1],
+            'total_brevets': entry[2],
+            } for entry in stats.data['distance_rating'][line:next_page]
+        ]
+
+    for row in rating:
+        randonneur = row['randonneur']
+        sr = []
+        for year in randonneur.sr:
+            sr_times = randonneur.sr[year] 
+            if sr_times > 1:
+                sr.append (f"{year} (x{sr_times})")
+            elif sr_times:
+                sr.append (f"{year}")
+        sr = ", ".join(sr)    
+
+        row['sr'] = sr       
+        
+    context = {
+        "rating" : rating,
+        "next_page": next_page,
+    }
+    return render(request, "brevet_database/hx_stats_personal_index_page.html", context) 
 
 def personal_stats(request, surname=None, name=None, uid=None, form="html"):
     if uid:

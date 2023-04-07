@@ -1,0 +1,19 @@
+            {% for line in rating%}
+            <tr>
+                <td>
+                    <a href = "{{ line.randonneur.get_absolute_url }}">
+                        {{ line.randonneur }}
+                    </a>
+                </td>
+                <td>{{ line.total_distance }} км</td>
+                <td>{{ line.total_brevets }}</td>
+                <td class="not-mobile">{{ line.sr }}</td>
+            </tr>
+            {% endfor %}
+            {% if rating %}
+            <tr
+            hx-get="{% url 'hx_personal_stats_page' next_page %}"
+            hx-swap="outerHTML"
+            hx-trigger="revealed"
+            ></tr>
+            {% endif %}
