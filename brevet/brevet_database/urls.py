@@ -6,6 +6,8 @@ from . import views
 
 urlpatterns = [
     path("events/", views.event_index, name="event_index"),
+    path("event/<int:distance>/<str:date>/register", views.event_register, name="event_register"),
+    path("event/<int:distance>/<str:date>/cancel_registration", views.event_cancel_registration, name="event_cancel_registration"),
     path("event/<int:distance>/<str:date>/dnf", views.event_dnf, name="event_dnf"),
     path("event/<int:distance>/<str:date>/", views.event, name="event"),
 

@@ -360,6 +360,46 @@ def hx_event_delete_application(request, event_id):
     return  response
 
 
+def event_register(request, distance, date):
+    if request.user.is_authenticated:
+        try:
+            date = datetime.strptime(date, "%Y%m%d")
+        except Exception:
+            raise Http404
+
+        event = get_object_or_404(Event, route__distance=distance, date=date)
+
+        if not event.application_allowed():
+            return Http404
+
+        application = Application.objects.filter(user=request.user, event__date=date).first() or Application()
+        application.event = event
+        application.user = request.user
+        application.active = True
+        application.save()
+
+        return redirect(request.META.get('HTTP_REFERER'))
+    else:
+        raise Http404
+
+
+def event_cancel_registration(request, distance, date):
+    if request.user.is_authenticated:
+        try:
+            date = datetime.strptime(date, "%Y%m%d")
+        except Exception:
+            raise Http404
+        event = get_object_or_404(Event, route__distance=distance, date=date, )
+
+        application = get_object_or_404(Application, event=event, user=request.user )
+        application.active = False
+        application.save()
+
+        return redirect(request.META.get('HTTP_REFERER'))
+    else:
+        raise Http404
+
+
 def event_dnf(request, distance, date):
     if request.user.is_authenticated:
         try:
