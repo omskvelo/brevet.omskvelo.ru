@@ -169,6 +169,17 @@ body {
   border-color: #DAE6F2;
 }
 
+.loader{
+  display: none;
+}
+
+.htmx-request.loader{
+  display: flex;
+  margin: 50px;
+  flex-wrap: wrap;
+  flex-direction: column;
+}
+
 .form-send-result {
   width: 100%;
   max-width: 330px;
@@ -311,8 +322,14 @@ body {
   background: none !important;
 }
 
-.container-chart {
+/* .container-chart {
+  width: 600px;
+  height: 450px;
+} */
+
+.chart-stats-club{
   width: auto;
+  height: 450px;
 }
 
 @media screen and (max-width: 1210px) {
@@ -489,5 +506,3 @@ table small{
     display: block;
   }
 }
-
-

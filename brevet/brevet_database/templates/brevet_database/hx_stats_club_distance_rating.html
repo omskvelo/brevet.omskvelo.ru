@@ -1,0 +1,86 @@
+<h5 class="my-4">
+    Топ-20 рандоннёров по общей дистанции
+</h5>
+<table class="table table-striped table-hover">
+    <thead>
+        <tr>
+            <th>Рандоннёр</th>
+            <th>Общая дистанция</th>
+            <th>Бреветов</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for randonneur in distance_rating %}
+            <tr>
+                <td>
+                    <a href = "{{ randonneur.0.get_absolute_url }}">
+                        {{ randonneur.0 }}
+                    </a>
+                </td>
+                <td>{{ randonneur.1 }} км</td>
+                <td>{{ randonneur.2 }}</td>
+            </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+{% if year %}
+
+    <div
+        hx-get="{% url 'hx_statistics_best_x00' 200 year %}"
+        hx-swap="outerHTML"
+        hx-trigger="revealed"
+        hx-indicator=".loader">
+    </div>
+
+    <div
+        hx-get="{% url 'hx_statistics_best_x00' 300 year %}"
+        hx-swap="outerHTML"
+        hx-trigger="revealed"
+        hx-indicator=".loader">
+    </div>
+
+    <div
+        hx-get="{% url 'hx_statistics_best_x00' 400 year %}"
+        hx-swap="outerHTML"
+        hx-trigger="revealed"
+        hx-indicator=".loader">
+    </div>
+
+    <div
+        hx-get="{% url 'hx_statistics_best_x00' 600 year %}"
+        hx-swap="outerHTML"
+        hx-trigger="revealed"
+        hx-indicator=".loader">
+    </div>
+
+{% else %}
+
+    <div
+        hx-get="{% url 'hx_statistics_best_x00_total' 200 %}"
+        hx-swap="outerHTML"
+        hx-trigger="revealed"
+        hx-indicator=".loader">
+    </div>
+
+    <div
+        hx-get="{% url 'hx_statistics_best_x00_total' 300 %}"
+        hx-swap="outerHTML"
+        hx-trigger="revealed"
+        hx-indicator=".loader">
+    </div>
+
+    <div
+        hx-get="{% url 'hx_statistics_best_x00_total' 400 %}"
+        hx-swap="outerHTML"
+        hx-trigger="revealed"
+        hx-indicator=".loader">
+    </div>
+
+    <div
+        hx-get="{% url 'hx_statistics_best_x00_total' 600 %}"
+        hx-swap="outerHTML"
+        hx-trigger="revealed"
+        hx-indicator=".loader">
+    </div>
+{% endif %}

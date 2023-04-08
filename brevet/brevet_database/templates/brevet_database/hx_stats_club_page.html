@@ -1,0 +1,180 @@
+{% load static %}
+<div id="hx-stats-page">
+    {% if years %}
+        <div class="py-4">
+            {% for y in years %}
+                {% if year == y %}
+                <a class="btn btn-dark me-1 mb-1">
+                    {{ y }}
+                </a>
+                {% else %}
+                <a class="btn btn-light me-1 mb-1" 
+                   hx-get="{% url 'hx_statistics' y %}"
+                   hx-target="#hx-stats-page"
+                   hx-swap="outerHTML"
+                   hx-push-url="{% url 'statistics' y %}"
+                   href="{% url 'statistics' y %}"
+                   >
+                    {{ y }}
+                </a>
+                {% endif %}
+            {% endfor %}   
+            {% if year %}
+                <a class="btn btn-light me-1 mb-1"
+                    hx-get="{% url 'hx_statistics_total' %}"
+                    hx-target="#hx-stats-page"
+                    hx-swap="outerHTML"
+                    hx-push-url="{% url 'statistics_total' %}"
+                    href="{% url 'statistics_total' %}"
+                    >
+                    {{ year_min_to_max }}
+                </a>     
+            {% else %}   
+                <a class="btn btn-dark me-1 mb-1">
+                    {{ year_min_to_max }}
+                </a>    
+            {% endif %} 
+        </div>
+    {% endif %}
+
+    {% if year %}
+    <h4 class="my-4">
+        Показатели за {{ year }} год
+    </h4>
+    {% else %}
+    <h4 class="my-4">
+        Показатели за {{ year_min_to_max }} годы
+    </h4>
+    {% endif %}
+
+    <h5>
+       Общая дистанция:  <strong>{{ total_distance }} км</strong>
+    </h5>
+    {% if chart_distance %}
+    <div id="container-stats-club" class="container-chart no-print">
+        {{ chart_distance|json_script:"chart_distance"}}
+        {{ chart_colors|json_script:"chart_colors"}}
+        <canvas id="chart-stats-club"></canvas>
+    </div>
+    {% endif %}
+    
+    <h5 class="my-4">
+        <strong>{{ total_randonneurs }}</strong> {{ total_randonneurs_text }}{% if total_sr %}, из них <strong>{{ sr|length }}</strong> {{ total_sr_text }} норматив "Суперрандоннёр":{% else %}.{% endif %}
+    </h5>
+    {% if total_sr %}
+        <ul>
+        {% for randonneur in sr %}
+            <li>
+                <a href = "{{ randonneur.get_absolute_url }}">
+                    {{ randonneur }}{{ randonneur.sr_string }}
+                </a>
+            </li>
+        {% endfor %}
+        </ul>
+    </p>
+    {% endif %}
+
+    {% if elite_dist %}
+        <h5 class="my-4"> 
+            Результаты бреветов LRM, SR600, 1000 км  
+        </h5>
+        <table class="table table-striped table-hover not-mobile">
+            <thead>
+                <tr>
+                    <th>Рандоннёр</th>
+                    <th>
+                        <span class="d-none d-lg-block">
+                            Дата
+                        </span>
+                    </th>
+                    <th>Бревет</th>
+                    <th>Дистанция</th>
+                    <th>Результат</th>
+                </tr>
+            </thead>
+            <tbody> 
+                {% for result in elite_dist %}
+                    <tr>
+                        <td>
+                            <a href = "{{ result.randonneur.get_absolute_url }}">
+                                {{ result.randonneur }}
+                            </a>
+                        </td>
+                        <td>
+                            <span class="d-none d-lg-block">
+                                {{ result.get_date }}
+                            </span>
+                        </td>
+                        <td>
+                            <a href="{{ result.event.get_absolute_url }}">
+                                {{ result.event.route.name }}
+                            </a>
+                        </td>
+                        <td>{{ result.event.route.distance }} км</td>
+                        <td>{{ result.get_time }}</td>    
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        <table class="table table-striped table-hover only-mobile-table">
+            <thead>
+                <tr>
+                    <th>Рандоннёр</th>
+                    <th>Бревет</th>
+                    <th>Результат</th>
+                </tr>
+            </thead>
+            <tbody> 
+                {% for result in elite_dist %}
+                    <tr>
+                        <td>
+                            <a href = "{{ result.randonneur.get_absolute_url }}">
+                                {{ result.randonneur }}
+                            </a>
+                        </td>
+                        <td>
+                            <a href = "{{ result.event.get_absolute_url }}">
+                                {{ result.event.route.distance }} км 
+                                <small>
+                                    {{ result.event.route.name }}
+                                </small>
+                            </a>
+                        </td>
+                        <td>{{ result.get_time }}</td>    
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% endif %}
+    {% if year %}
+    
+        <div 
+            hx-get="{% url 'hx_statistics_distance_rating' year %}"
+            hx-swap="outerHTML"
+            hx-trigger="revealed"
+            hx-indicator=".loader">
+        </div>
+
+    {% else %}
+
+    <div 
+        hx-get="{% url 'hx_statistics_distance_rating_total' %}"
+        hx-swap="outerHTML"
+        hx-trigger="revealed"
+        hx-indicator=".loader">
+    </div>
+
+    {% endif %}
+    <div class="loader">
+        <img class="htmx-indicator" src="{% static 'brevet/svg/loader.svg'%}"></img>
+    </div>
+
+    <a class="btn btn-dark" href="./xlsx/">
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-download" viewBox="0 0 16 16">
+            <path d="M.5 9.9a.5.5 0 0 1 .5.5v2.5a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-2.5a.5.5 0 0 1 1 0v2.5a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2v-2.5a.5.5 0 0 1 .5-.5z"/>
+            <path d="M7.646 11.854a.5.5 0 0 0 .708 0l3-3a.5.5 0 0 0-.708-.708L8.5 10.293V1.5a.5.5 0 0 0-1 0v8.793L5.354 8.146a.5.5 0 1 0-.708.708l3 3z"/>
+        </svg>
+        xlsx
+    </a>
+
+</div>

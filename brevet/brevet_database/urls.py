@@ -17,6 +17,7 @@ urlpatterns = [
 
     path("protocols/", views.protocol_index, name="protocol_index"),
     path("protocols/<int:year>", views.protocol_index, name="protocol_index_pages"),
+    path("hx/protocols/<int:year>", views.hx_protocol_index, name="hx_protocol_index_pages"),
 
     path("protocol/<int:event_id>/success/", views.protocol, kwargs={'upload_success' : True}, name="protocol_upload_success"),
     path("protocol/<int:event_id>/", views.protocol, name="protocol"),
@@ -25,6 +26,8 @@ urlpatterns = [
 
     path("routes/", views.route_index, name="route_index"), 
     path("routes/<int:distance>/", views.route_index, name="route_index_distance"),
+    path("hx/routes/<int:distance>/", views.hx_route_index, name="hx_route_index_distance"),
+
     path("route/<int:route_id>/", views.route, name="route_id"), 
     path("route/<str:slug>/", views.route, name="route"), # Alternative
 
@@ -37,6 +40,12 @@ urlpatterns = [
     path("stats/club/<int:year>/", views.statistics, name="statistics"),
     path("stats/club/<str:form>/", views.statistics, name="statistics_default_f"),    
     path("stats/club/<int:year>/<str:form>/", views.statistics, name="statistics_f"),
+    path("hx/stats/club/total", views.hx_statistics, name="hx_statistics_total"),
+    path("hx/stats/club/<int:year>", views.hx_statistics, name="hx_statistics"),
+    path("hx/stats/club/distance_rating/", views.hx_statistics_distance_rating, name="hx_statistics_distance_rating_total"),
+    path("hx/stats/club/distance_rating/<int:year>", views.hx_statistics_distance_rating, name="hx_statistics_distance_rating"),
+    path("hx/stats/club/best/<int:distance>/<int:year>", views.hx_statistics_best_x00, name="hx_statistics_best_x00"),
+    path("hx/stats/club/best/<int:distance>/", views.hx_statistics_best_x00, name="hx_statistics_best_x00_total"),
 
     path("stats/user/", views.personal_stats_index, name = "personal_stats_index"),
     path("stats/user/<int:uid>/", views.personal_stats, name="personal_stats"), 

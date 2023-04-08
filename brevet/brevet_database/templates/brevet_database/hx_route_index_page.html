@@ -1,0 +1,42 @@
+<div id =hx-routes-page>
+    <div class="my-4">
+        {% for d in distances %}
+            {% if distance == d %}
+            <a class="btn btn-dark">
+                {{ d }}
+            </a>
+            {% else %}
+            <a class="btn btn-light" 
+               hx-get="{% url 'hx_route_index_distance' d %}"
+               hx-target="#hx-routes-page"
+               hx-swap="outerHTML"
+               hx-push-url="{% url 'route_index_distance' d %}"
+               href="{% url 'route_index_distance' d %}">
+                {{ d }}
+            </a>
+            {% endif %}
+        {% endfor %}
+    </div>
+
+    <ul class="row row-cols-auto route-list">
+        {% for route in routes %}
+            <li class="col my-3">
+                <div class="route-card" style="background-image: 
+                    linear-gradient(to bottom, rgba(255, 255, 255, 0), rgba(0, 0, 0, 0.35)),
+                    url('{{route.get_image_url}}')">
+                    <a class="h4 route-card-title" href="{{ route.get_absolute_url }}">
+                        {{ route.name }}
+                        <small>
+                            {{ route.distance }} км
+                        </small>
+                    </a>
+                </div>
+                {% if route.text_brief %}
+                <p class="route-card-caption">
+                    {{ route.text_brief }}
+                </p>
+                {% endif %}
+            </li>
+        {% endfor %}
+    </ul>
+</div>

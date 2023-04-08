@@ -75,6 +75,23 @@ def protocol_index(request, year=datetime.now().year):
     }
     return render(request, "brevet_database/protocol_index.html", context)
 
+
+def hx_protocol_index(request, year=datetime.now().year):
+    years = get_event_years()
+    if year not in years:
+        year = max(years)
+    events = Event.objects.filter(finished=True, club=DEFAULT_CLUB_ID, date__year=year)
+    unfinished_events = Event.objects.filter(finished=False, club=DEFAULT_CLUB_ID, date__year=year)
+    season_closed = len(unfinished_events) == 0
+
+    context = {
+        "events" : events,
+        "year" : year,
+        "years" : years,
+        "season_closed" : season_closed,
+    }
+    return render(request, "brevet_database/hx_protocol_index_page.html", context)
+
 @never_cache
 def protocol_yearly(request, year):
     years = get_event_years()
@@ -185,6 +202,111 @@ def statistics(request, year='', form="html"):
         return response     
     else:
         raise Http404  
+    
+
+def hx_statistics(request, year=None):
+    years = get_event_years()
+    if year == '':
+        year=years[0]
+
+    try:
+        if year is None:
+            stats = ClubStatsCache.objects.get(year__isnull=True)
+        else:
+            stats = ClubStatsCache.objects.get(year=year)
+    except ObjectDoesNotExist:
+        stats = ClubStatsCache()
+        stats.year = year
+        stats.refresh()
+
+    sr = []
+    for entry in stats.data['sr']:
+        randonneur = Randonneur.objects.get(pk=entry[0])
+        randonneur.sr_string = f" (x{entry[1]})" if entry[1] > 1 else ""
+        randonneur.sr_int = entry[1]
+        sr.append(randonneur)
+    sr.sort(key=lambda x: x.sr_int, reverse=True)
+
+    elite_dist = [Result.objects.get(pk=x) for x in stats.data['elite_dist']]
+
+    chart_distance = [
+        {
+            'x': s.data['total_distance'],
+            'y': s.year,
+            'label': f"{s.data['total_distance']} км",
+        } for s in ClubStatsCache.objects.filter(year__isnull=False)]
+    chart_distance.sort(key=lambda x: x['y'])
+    chart_colors = ["#FF000055" if s['y'] == year else "#36a2eb55" for s in chart_distance]
+
+    def make_plural(cases, number):
+        number %= 100
+        if number in range(11, 21): return cases[2]
+        if number%10 == 1: return cases[0]
+        if number%10 in range(1, 6): return cases[1]
+        return cases[2]
+
+    total_randonneurs_text = f"{make_plural(['рандоннёр','рандоннёра','рандоннёров'], stats.data['total_randonneurs'])} {make_plural(['принял','приняли','приняли'], stats.data['total_randonneurs'])} участие"
+    total_sr_text = f"{make_plural(['выполнил','выполнили','выполнили'], len(stats.data['sr']))}"
+
+    context = {
+        "total_distance" : stats.data['total_distance'],
+        "total_randonneurs" : stats.data['total_randonneurs'],
+        "total_randonneurs_text": total_randonneurs_text,
+        "total_sr" : len(stats.data['sr']),
+        "total_sr_text": total_sr_text,
+        "sr" : sr,
+        "elite_dist" : elite_dist,
+        "year" : year,
+        "years" : years,
+        "year_min_to_max": str(years[-1]) + " - " + str(years[0]),
+        "chart_distance": chart_distance,
+        "chart_colors": chart_colors,
+
+    }
+    return render(request, "brevet_database/hx_stats_club_page.html", context) 
+
+
+def hx_statistics_distance_rating(request, year=None):
+    try:
+        if year is None:
+            stats = ClubStatsCache.objects.get(year__isnull=True)
+        else:
+            stats = ClubStatsCache.objects.get(year=year)
+    except ObjectDoesNotExist:
+        stats = ClubStatsCache()
+        stats.year = year
+        stats.refresh()
+
+    distance_rating = [[
+        Randonneur.objects.get(pk=entry[0]),
+        entry[1],
+        entry[2],
+        ] for entry in stats.data['distance_rating']
+        ][:20]
+
+    context = {
+        "distance_rating" : distance_rating,
+    }
+    return render(request, "brevet_database/hx_stats_club_distance_rating.html", context) 
+    
+
+def hx_statistics_best_x00(request, distance, year=None):
+    try:
+        if year is None:
+            stats = ClubStatsCache.objects.get(year__isnull=True)
+        else:
+            stats = ClubStatsCache.objects.get(year=year)
+    except ObjectDoesNotExist:
+        stats = ClubStatsCache()
+        stats.year = year
+        stats.refresh()
+    
+    results = [Result.objects.get(pk=x) for x in stats.data.get(f'best_{distance}') or []]
+    context = {
+        "distance": distance,
+        "results": results,
+    }
+    return render(request, "brevet_database/hx_stats_club_best_x00.html", context) 
       
 
 @never_cache
@@ -436,7 +558,6 @@ def route(request, slug=None, route_id=None):
         }  
     return render(request, "brevet_database/route.html", context)       
 
-@never_cache
 def route_index(request, distance=200):
     routes = get_list_or_404(Route, active=True, distance=distance, club=DEFAULT_CLUB_ID)
 
@@ -445,9 +566,18 @@ def route_index(request, distance=200):
         'distance' : distance,
         'distances' : [200,300,400,600,1000],
     } 
-    return render(request, "brevet_database/route_index.html", context)         
+    return render(request, "brevet_database/route_index.html", context)      
+   
+def hx_route_index(request, distance):
+    routes = get_list_or_404(Route, active=True, distance=distance, club=DEFAULT_CLUB_ID)
 
-@never_cache
+    context = {
+        'routes' : routes,
+        'distance' : distance,
+        'distances' : [200,300,400,600,1000],
+    } 
+    return render(request, "brevet_database/hx_route_index_page.html", context)         
+
 def route_stats(request, slug=None, route_id=None):
     if slug:
         route = get_object_or_404(Route, slug=slug)

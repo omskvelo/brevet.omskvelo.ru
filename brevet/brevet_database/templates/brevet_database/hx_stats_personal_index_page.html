@@ -15,5 +15,6 @@
             hx-get="{% url 'hx_personal_stats_page' next_page %}"
             hx-swap="outerHTML"
             hx-trigger="revealed"
+            hx-indicator=".loader"
             ></tr>
             {% endif %}
