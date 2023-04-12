@@ -55,6 +55,7 @@ if (url.searchParams.get("cp")){
 
 function refresh(){
     // Static
+    document.title = textContent.header
     headerLabel.innerText = textContent.header
     distanceLabel.innerText = textContent.distance
     startLabel.innerText = textContent.start

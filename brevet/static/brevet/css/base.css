@@ -322,14 +322,9 @@ body {
   background: none !important;
 }
 
-/* .container-chart {
-  width: 600px;
-  height: 450px;
-} */
-
 .chart-stats-club{
   width: auto;
-  height: 450px;
+  height: 650px;
 }
 
 @media screen and (max-width: 1210px) {
