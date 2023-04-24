@@ -76,7 +76,7 @@ const translation = {
         time: "Horaires",
         from: "",
         to: "à",
-        from_start: "Depuis le départ",
+        from_start: "Depuis le départ, km",
         from_cp: "Depuis CP",
         km: "km",
         cp: "CP", 
@@ -90,6 +90,34 @@ const translation = {
             lrm: {
                 name: 'LRM',
                 source: 'Origine: \
+                <a href="https://www.randonneursmondiaux.org/files/Rules_2019.pdf" target="_blank">LRM Event Regulations 2019</a>'
+            },
+        },
+    },
+    gr: {
+        language: "Ελληνικά",
+        icon: "/static/brevet/svg/flag_gr.svg",
+        header: "Υπολογιστής σημείων ελέγχου",
+        distance: "Απόσταση, χλμ",
+        start: "Εκκινηση",
+        elevation: "Υψόμετρο, μ",
+        extendedLimit: "Πρόσθετος χρόνος",
+        distanceFinish: "Τερματισμός, χλμ",
+        time: "Ώρες",
+        from: "από",
+        to: "έως",
+        from_start: "Από την εκκίνηση, χλμ",
+        from_cp: "Από σημ. ελέγχου ",
+        km: "χλμ",
+        cp: "Σημ. ελέγχου ", 
+        methods: {
+            brm: {
+                name: 'BRM',
+                source: 'Πηγή: <a href="https://www.audax-club-parisien.com/en/our-organizations/brm-world/" target="_blank">Audax Club Parisien</a>'
+            },
+            lrm: {
+                name: 'LRM',
+                source: 'Πηγή: \
                 <a href="https://www.randonneursmondiaux.org/files/Rules_2019.pdf" target="_blank">LRM Event Regulations 2019</a>'
             },
         },

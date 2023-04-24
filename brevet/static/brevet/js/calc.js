@@ -104,7 +104,7 @@ function refresh(){
         let extra_hours = calculate_lrm_extended_hours(distance, limit)
         extendedLimitDom.value = `${limit}% (${extra_hours})`
 
-        finishDom.value = `${textContent.from} ${calculate_lrm_control_open(start,distance)} ${textContent.to} ${calculate_lrm_finish_close(start,distance,distance,limit)}`
+        finishDom.value = `${textContent.from} ${calculate_lrm_control_open(start, distance)} ${textContent.to} ${calculate_lrm_finish_close(start, distance, distance, limit)}`
 
         for (const [i, control] of controls.entries()){
             let km = control.distanceDom.value
@@ -123,7 +123,7 @@ function refresh(){
 
             // Time fields
             if (km){
-                control.timeDom.value = `${textContent.from} ${calculate_lrm_control_open(start,km)} ${textContent.to} ${calculate_lrm_control_close(start,km,distance,limit)}`
+                control.timeDom.value = `${textContent.from} ${calculate_lrm_control_open(start, km)} ${textContent.to} ${calculate_lrm_control_close(start, km, distance, limit)}`
             }
             else{
                 control.timeDom.value = ""
@@ -171,12 +171,36 @@ function refresh(){
         distanceFinishDeltaLabelDom.innerText = `${textContent.from_cp}${controls.length-1}, ${textContent.km}`
     } 
 
+    // Tweaks to fit longer strings
+    if (distanceFinishLabel.textContent.length > 15) {
+        distanceFinishLabel.classList.add("reduced")
+    } else {
+        distanceFinishLabel.classList.remove("reduced")
+    }
+    if (distanceFinishDeltaLabelDom.textContent.length > 15) {
+        distanceFinishDeltaLabelDom.classList.add("reduced")
+    } else {
+        distanceFinishDeltaLabelDom.classList.remove("reduced")
+    }
+
     // Update generated DOM labels
     for (const [i, control] of controls.entries()){
         control.timeLabelDom.textContent = textContent.time
-        control.distanceLabelDom.textContent = `${textContent.cp}${i+1}, ${textContent.km}`
+        control.distanceLabelDom.textContent = `${textContent.cp}${i+1}, ${textContent.km}`  
         if (i == 0) control.distanceDeltaLabelDom.textContent = textContent.from_start
         else control.distanceDeltaLabelDom.textContent = `${textContent.from_cp}${i}, ${textContent.km}`
+        
+        // Tweaks to fit longer strings
+        if (control.distanceLabelDom.textContent.length > 15) {
+            control.distanceLabelDom.classList.add("reduced")
+        } else {
+            control.distanceLabelDom.classList.remove("reduced")
+        }
+        if (control.distanceDeltaLabelDom.textContent.length > 15) {
+            control.distanceDeltaLabelDom.classList.add("reduced")
+        } else {
+            control.distanceDeltaLabelDom.classList.remove("reduced")
+        }
     }
 }
 

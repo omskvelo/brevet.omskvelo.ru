@@ -68,3 +68,13 @@ ul {
   display: flex;
   flex-direction: row;
 }
+
+.form-signin label.reduced{
+  padding-right: 0;
+  font-size: 0.75em;
+}
+
+.form-floating>.form-control:focus~label.reduced, .form-floating>.form-control:not(:placeholder-shown)~label.reduced, .form-floating>.form-select~label.reduced {
+  opacity: .75;
+  transform: translateY(-0.5rem);
+}
