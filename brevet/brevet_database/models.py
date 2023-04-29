@@ -7,7 +7,7 @@ from django.urls import reverse
 from django.dispatch import receiver
 from django.core.exceptions import ObjectDoesNotExist
 
-from transliterate import translit
+import iuliia
 
 from . import file_processors
 
@@ -168,8 +168,8 @@ class Randonneur(AbstractModel):
         r = Randonneur()
         r.russian_name = user.first_name
         r.russian_surname = user.last_name
-        r.name = translit(user.first_name, 'ru', reversed=True)
-        r.surname = translit(user.last_name, 'ru', reversed=True)
+        r.name = iuliia.translate(user.first_name, iuliia.YANDEX_MAPS)
+        r.surname = iuliia.translate(user.last_name, iuliia.YANDEX_MAPS)
         return r
 
     def __str__(self):

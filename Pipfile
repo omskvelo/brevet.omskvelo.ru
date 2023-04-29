@@ -12,12 +12,12 @@ pillow = "==8.4.0"
 xlrd = "*"
 django-phonenumber-field = "*"
 phonenumbers = "*"
-transliterate = "*"
 django-cookie-consent = "*"
 psycopg2 = "*"
 gunicorn = "*"
 python-dotenv = "*"
 django-debug-toolbar = "*"
+iuliia = "*"
 
 [dev-packages]
 
