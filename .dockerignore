@@ -1,0 +1,7 @@
+# Ignore everything
+*
+
+!Pipfile
+!Pipfile.lock
+!brevet/
+!.env

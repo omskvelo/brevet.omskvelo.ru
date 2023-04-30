@@ -12,15 +12,20 @@ ENV PYTHONUNBUFFERED 1
 ENV PYTHONFAULTHANDLER 1
 
 # Install pre-reqs
-RUN pip install --upgrade pip
 # psycopg2
 RUN apk update && apk add postgresql-dev gcc python3-dev musl-dev
 # pillow
 RUN apk add zlib-dev jpeg-dev gcc musl-dev
 
+# Install tools
+RUN apk add nano
+
 # Install dependencies
-COPY requirements.txt .
-RUN pip install -r requirements.txt
+RUN pip install --upgrade pip
+RUN pip install pipenv
+COPY Pipfile .
+COPY Pipfile.lock .
+RUN pipenv install --deploy --system
 
 # Install application
 COPY . /home/brevet/web
