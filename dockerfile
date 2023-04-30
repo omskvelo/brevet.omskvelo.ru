@@ -1,8 +1,6 @@
 FROM python:3.9-alpine
 
-RUN mkdir -p /home/brevet/web
-
-WORKDIR /home/brevet
+WORKDIR /home
 
 # Setup environment
 ENV LANG C.UTF-8
@@ -28,10 +26,10 @@ COPY Pipfile.lock .
 RUN pipenv install --deploy --system
 
 # Install application
-COPY . /home/brevet/web
+COPY . /home
 
 # Create user and set ownership
 RUN addgroup -S  brevet 
 RUN adduser -S brevet -G brevet
-RUN chown -R brevet:brevet /home/brevet
+RUN chown -R brevet:brevet /home
 USER brevet

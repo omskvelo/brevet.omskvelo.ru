@@ -4,13 +4,13 @@ services:
   web:
     build: .
     command: sh -c "
-      cd /home/brevet/web/brevet
+      cd /home/brevet
       && python manage.py migrate
       && python manage.py createcachetable
       && python manage.py collectstatic --noinput
       && gunicorn brevet.wsgi --bind 0.0.0.0:8000"
     volumes:
-      - media:/home/brevet/web/brevet/media
+      - media:/home/brevet/media
     expose:
       - 8000
     depends_on:
@@ -36,7 +36,7 @@ services:
   nginx:
     build: ./nginx
     volumes:
-      - media:/home/brevet/web/brevet/media
+      - media:/home/brevet/media
     ports:
       - 1337:80
     restart: unless-stopped

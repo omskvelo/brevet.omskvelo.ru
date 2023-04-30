@@ -4,4 +4,4 @@
 !Pipfile
 !Pipfile.lock
 !brevet/
-!.env
+brevet/*.json
