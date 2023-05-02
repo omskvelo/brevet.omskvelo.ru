@@ -481,7 +481,7 @@ def hx_event_delete_application(request, event_id):
 
 def hx_event_payment_info(request, event_id):
     event = get_object_or_404(Event, pk=event_id)
-    payment_info = event.payment_info
+    payment_info = (event.payment_info, None)[event.finished]
     context = {
         'payment_info': payment_info,
     }

@@ -85,11 +85,11 @@
         {% endfor %}
     {% endif %}
 
-    {% if event.payment_info and not event.finished %}
-        <div class="alert alert-primary my-3">
-            {{ event.payment_info.text }}
-        </div>
-    {% endif %}
+    <div 
+    hx-get="{% url 'hx_event_payment_info' event.id %}"
+    hx-swap="outerHTML"
+    hx-trigger="revealed"
+    ></div>
 
     {% if event.warning_text %}
         <div class = "alert alert-danger my-3">
