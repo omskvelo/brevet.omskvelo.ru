@@ -14,6 +14,7 @@ urlpatterns = [
     path("hx/event/<int:event_id>/participants/", views.hx_event_load_participants, name="hx_event_load_participants"),
     path("hx/event/<int:event_id>/participants/apply", views.hx_event_create_application, name="hx_event_create_application"),
     path("hx/event/<int:event_id>/participants/cancel", views.hx_event_delete_application, name="hx_event_delete_application"),
+    path("hx/event/<int:event_id>/payment_info/", views.hx_event_payment_info, name='hx_event_payment_info'),
 
     path("protocols/", views.protocol_index, name="protocol_index"),
     path("protocols/<int:year>", views.protocol_index, name="protocol_index_pages"),
@@ -52,6 +53,5 @@ urlpatterns = [
     path("stats/user/<int:uid>/<str:form>/", views.personal_stats, name="personal_stats_f"), 
     path("stats/user/<str:surname>_<str:name>/", views.personal_stats, name="person_by_name"), 
     path("hx/stats/user/<int:line>/", views.hx_personal_stats_page, name = "hx_personal_stats_page"),
-
 
 ]

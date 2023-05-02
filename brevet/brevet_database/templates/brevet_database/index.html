@@ -67,11 +67,11 @@
                                 {% include 'brevet_database/alert_lights.html' %}
                             {% endif %}
 
-                            {% if event.payment_info %}
-                                <div class="alert alert-primary my-3">
-                                    {{ event.payment_info.text }}
-                                </div>
-                            {% endif %}
+                            <div 
+                                hx-get="{% url 'hx_event_payment_info' event.id %}"
+                                hx-swap="outerHTML"
+                                hx-trigger="revealed"
+                            ></div>
 
                             <a class="btn btn-dark mt-2" href="{{ event.get_absolute_url }}">
                                 Подробнее...

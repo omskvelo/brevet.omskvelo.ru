@@ -479,6 +479,14 @@ def hx_event_delete_application(request, event_id):
     response['hx-trigger'] = 'reload_participants'
     return  response
 
+def hx_event_payment_info(request, event_id):
+    event = get_object_or_404(Event, pk=event_id)
+    payment_info = event.payment_info
+    context = {
+        'payment_info': payment_info,
+    }
+    response = render(request, "brevet_database/hx_payment_info.html", context) 
+    return response
 
 def event_register(request, event_id):
     if not request.user.is_authenticated:
