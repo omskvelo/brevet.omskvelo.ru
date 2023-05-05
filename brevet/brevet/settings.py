@@ -17,6 +17,7 @@ DEBUG = False
 SECRET_KEY = os.environ['DJANGO_SECRET']
 
 ALLOWED_HOSTS = ['.omskvelo.ru', '127.0.0.1']
+SITE_ID = 2
 
 # Application definition
 
@@ -33,6 +34,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django.contrib.sites',
     'whitenoise.runserver_nostatic',
     "debug_toolbar",
 ]
