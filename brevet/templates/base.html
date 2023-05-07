@@ -18,6 +18,7 @@
 
     <!-- Site CSS -->
     <link href="{% static 'brevet/css/base.css' %}" rel="stylesheet">
+    <link href="{% static 'brevet/css/notification.css' %}" rel="stylesheet">
 
     <!-- Dynamic styles -->
     {% load split %}
@@ -72,6 +73,8 @@
       {% block content %}
       {% endblock %}
     </div>
+
+    <div class="notification">notification</div>
 
     {% include 'footer.html' %}
     {% include 'js.html' %}
