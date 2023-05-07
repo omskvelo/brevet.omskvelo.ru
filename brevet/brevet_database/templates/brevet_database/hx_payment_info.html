@@ -1,5 +1,12 @@
+{% load static %}
+
 {% if payment_info %}
-    <div class="alert alert-primary my-3">
+    <div class="alert alert-primary my-3 insert-copy-btn">
         {{ payment_info.text }}
     </div>
+    <script> 
+        let toClipboardImg = "{% static 'brevet/svg/clipboard-plus.svg' %}"
+    </script>
+    <script src="{% static 'brevet/js/event_copy_card_num.js' %}"></script>
+
 {% endif %}
