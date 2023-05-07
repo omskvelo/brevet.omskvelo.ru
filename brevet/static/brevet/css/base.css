@@ -221,6 +221,11 @@ body {
   padding-bottom: 40px;
 }
 
+.btn-card-copy {
+  padding-left: 0.1em;
+  padding-right: 0.1em;
+}
+
 .ievent__brief__item:last-child {
   padding-right: 0px;
 }

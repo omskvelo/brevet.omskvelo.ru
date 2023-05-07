@@ -4,7 +4,7 @@
     targetTextBlock.innerHTML = targetTextBlock.innerText.replace(splitPattern, "$1 <a>$2</a> $3")
     targetTextBlock.classList.remove('insert-copy-btn')
     let cardLink = targetTextBlock.querySelector('a')
-    cardLink.setAttribute('class', 'btn btn-light')
+    cardLink.setAttribute('class', 'btn btn-light btn-card-copy')
 
     cardLink.addEventListener('click', function(event) {
         navigator.clipboard.writeText(cardLink.innerText).then(
