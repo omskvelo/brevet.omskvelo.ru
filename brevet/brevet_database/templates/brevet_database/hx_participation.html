@@ -1,7 +1,7 @@
 <div id="hx-participants-{{ event.pk }}"
     hx-get="{{ event.get_hx_load_participants_url }}"
     hx-swap="outerHTML"
-    hx-trigger="every 10s, reload_participants from:body">
+    hx-trigger="every 30s, reload_participants from:body">
     <h3 class="h4">Кто едет?</h3>
     {% if event.get_applications %}
     <ul>
