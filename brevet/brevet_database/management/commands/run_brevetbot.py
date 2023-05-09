@@ -61,7 +61,7 @@ class Command(BaseCommand):
                 response = urlopen(request)
                 logging.info(f"BrevetBot: Event id{event.pk} posted: {response.status} {response.reason}")
                 response_body = json.loads(response.read().decode())
-                event.omskvelo_xref = response_body['forum']['url']
+                event.omskvelo_xref = response_body['url']
                 event.save()
                 
             except Exception:
