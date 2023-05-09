@@ -56,9 +56,7 @@ class Command(BaseCommand):
             request.add_header("Content-Length", "0")
             request.add_header("Host", "omskvelo.ru")
             request.add_header("User-Agent", "HTTPie")
-            print(request.header_items())
-            print(request.full_url)
-            
+
             try:
                 response = urlopen(request)
                 logging.info(f"BrevetBot: Event id{event.pk} posted: {response.status} {response.reason}")
