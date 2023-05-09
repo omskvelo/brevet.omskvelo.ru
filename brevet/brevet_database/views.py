@@ -285,7 +285,8 @@ def hx_statistics_distance_rating(request, year=None):
         ][:20]
 
     context = {
-        "distance_rating" : distance_rating,
+        "distance_rating": distance_rating,
+        "year": year,
     }
     return render(request, "brevet_database/hx_stats_club_distance_rating.html", context) 
     
