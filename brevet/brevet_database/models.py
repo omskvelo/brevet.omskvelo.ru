@@ -489,8 +489,8 @@ class Event(AbstractModel):
         return [x for x in self.text.split("\n") if x]
 
     def __str__(self):
-        club = str(self.club) if self.club.id != DEFAULT_CLUB_ID else ""
-        return f"{self.get_date()} {self.route.distance} км {self.route.name} {club}"  
+        club = f" {self.club}" if self.club.id != DEFAULT_CLUB_ID else ""
+        return f"{self.get_date()}, {self.get_time()}. Бревет {self.route.distance} км {self.route.name}{club}"  
 
 @receiver(models.signals.post_save, sender=Event)
 def update_randonneur_stats(sender, instance:Event, created, **kwargs):
