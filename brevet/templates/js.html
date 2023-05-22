@@ -9,6 +9,11 @@
 <script type="module"src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.0.0"></script>
 <!--table-sort-js-->
 <script src="https://cdn.jsdelivr.net/npm/table-sort-js/table-sort.js"></script>
+<script>
+    document.addEventListener('htmx:afterRequest', function(evt) {
+        tableSortJs();
+});
+</script>
 <!--site js-->
 <script type="module" src="{% static 'brevet/js/chart-stats-club.js' %}"></script>
 <script type="module" src="{% static 'brevet/js/notification.js' %}"></script>
