@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from inventory.models import Medal
+from inventory.models import Medal, Price
 
 
 class MedalAdmin(admin.ModelAdmin):
@@ -8,3 +8,4 @@ class MedalAdmin(admin.ModelAdmin):
  
     
 admin.site.register(Medal, MedalAdmin)
+admin.site.register(Price)
