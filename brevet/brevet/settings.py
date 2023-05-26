@@ -27,6 +27,7 @@ INSTALLED_APPS = [
     'brevet_database',
     'search',
     'hosting_manager',
+    'inventory',
     'phonenumber_field',
     'django.contrib.admin',
     'django.contrib.auth',
