@@ -3,8 +3,7 @@ html {
 }
 
 body {
-  height: 100vh;
-  height: -webkit-fill-available;
+  min-height: 100svh;
   background-size: cover;
   background-position: center;
   background-attachment: fixed;
