@@ -1,0 +1,3 @@
+# Django management commands to be executed as cron jobs
+0 1 */1 * * python /home/brevet/manage.py run_brevetbot
+# An empty line is required at the end of this file for a valid cron file.

@@ -28,6 +28,11 @@ RUN pipenv install --deploy --system
 # Install application
 COPY . /home
 
+# Install cron jobs
+COPY crontab .
+RUN chmod 0644 crontab
+RUN apk add supercronic shadow
+
 # Create user and set ownership
 RUN addgroup -S  brevet 
 RUN adduser -S brevet -G brevet

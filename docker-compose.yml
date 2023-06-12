@@ -1,46 +1,60 @@
-version: '2.1'
+version: '3.7'
 
 services:
   web:
+    container_name: brevet-web
     build: .
     command: sh -c "
-      cd /home/brevet
+      supercronic /home/crontab
+      & cd /home/brevet
       && python manage.py migrate
       && python manage.py createcachetable
       && python manage.py collectstatic --noinput
       && gunicorn brevet.wsgi --bind 0.0.0.0:8000"
     volumes:
       - media:/home/brevet/media
+      - static:/home/brevet/static
     expose:
       - 8000
     depends_on:
       db:
         condition: service_healthy
     env_file: .env
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "200k"
+        max-file: "10"
     restart: unless-stopped
 
 
   db:
+    container_name: brevet-db
     image: postgres:14.2-alpine
     volumes:
       - postgres_data:/var/lib/postgresql/data
     env_file: .env
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      test: pg_isready -U postgres
       interval: 2s
-      timeout: 2s
-      retries: 15
+      timeout: 3s
+      retries: 30
     restart: unless-stopped
 
 
   nginx:
+    container_name: brevet-nginx
     build: ./nginx
     volumes:
       - media:/home/brevet/media
+      - static:/home/static
+      - /etc/letsencrypt:/etc/letsencrypt
     ports:
-      - 1337:80
+      - 80:80
+      - 443:443
     restart: unless-stopped
 
 volumes:
   postgres_data:
   media:
+  static:
