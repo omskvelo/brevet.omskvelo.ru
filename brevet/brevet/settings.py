@@ -2,14 +2,10 @@ from pathlib import Path
 import os
 import logging
 
-import dotenv 
-
 logging.basicConfig(level=logging.DEBUG)
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
-
-dotenv.load_dotenv(BASE_DIR.parent / '.env')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
@@ -36,7 +32,6 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django.contrib.sites',
-    'whitenoise.runserver_nostatic',
     "debug_toolbar",
 ]
 
@@ -54,7 +49,6 @@ CACHE_MIDDLEWARE_KEY_PREFIX = ""
 MIDDLEWARE = [
     'django.middleware.cache.UpdateCacheMiddleware',
     'django.middleware.security.SecurityMiddleware',
-    'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -138,9 +132,6 @@ STATICFILES_DIRS = [
 
 STATIC_ROOT = BASE_DIR / 'staticfiles'
 STATIC_URL = 'static/'
-
-STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
-WHITENOISE_MANIFEST_STRICT = False
 
 MEDIA_ROOT = BASE_DIR / 'media'
 MEDIA_URL = '/media/'
