@@ -13,7 +13,7 @@ services:
       && gunicorn brevet.wsgi --bind 0.0.0.0:8000"
     volumes:
       - media:/home/brevet/media
-      - static:/home/brevet/static
+      - static:/home/brevet/staticfiles
     expose:
       - 8000
     depends_on:
