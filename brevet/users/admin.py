@@ -6,6 +6,7 @@ from .models import User
 
 class UserAdmin(admin.ModelAdmin):
     autocomplete_fields = ['randonneur']
+    search_fields = ['first_name', 'last_name']
     change_form_template = 'admin/change_user.html'
 
     def response_change(self, request, obj):

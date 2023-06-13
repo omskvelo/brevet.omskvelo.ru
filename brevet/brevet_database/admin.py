@@ -49,11 +49,15 @@ class RandonneurAdmin(admin.ModelAdmin):
 
 class ApplicationAdmin(admin.ModelAdmin):
     raw_id_fields = ['result']
+    autocomplete_fields = ['user', 'event']
+
+class EventAdmin(admin.ModelAdmin):
+    search_fields = ['route__name']
 
 admin.site.register(Club)
 admin.site.register(Randonneur, RandonneurAdmin)
 admin.site.register(Route)
-admin.site.register(Event)
+admin.site.register(Event, EventAdmin)
 admin.site.register(Result, ResultAdmin)
 admin.site.register(Application, ApplicationAdmin)
 admin.site.register(PaymentInfo)
