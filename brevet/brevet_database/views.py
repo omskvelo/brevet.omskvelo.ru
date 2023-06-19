@@ -12,6 +12,7 @@ import babel.dates
 from .models import *
 from .forms import *
 from . import file_generators
+from inventory.models import Price
 
 TIME_LIMITS = {
     200 : timedelta(hours=13, minutes=30),
@@ -31,7 +32,10 @@ MIN_TIME_LIMITS = {
 
 def protocol(request, event_id, upload_success=None, form="html"):
     event = get_object_or_404(Event, pk=event_id)
-    results = get_list_or_404(Result.objects.order_by("randonneur__russian_surname","randonneur__russian_name"), event=event)
+    try:
+        results = Result.objects.filter(event=event).order_by("randonneur__russian_surname","randonneur__russian_name")
+    except Result.DoesNotExist:
+        raise Http404
 
     if form == "html":
         upload_exception = None
@@ -54,10 +58,29 @@ def protocol(request, event_id, upload_success=None, form="html"):
         response = render(request, "brevet_database/protocol.html", context)   
 
     if form == "xlsx":
-        response = file_generators.get_xlsx_protocol(event,results,f"{event.date.year}-{event.date.month}-{event.date.day}_{event.route.distance}") 
+        response = file_generators.get_xlsx_protocol(event, results, f"{event.date.year}-{event.date.month}-{event.date.day}_{event.route.distance}") 
+
+    if form == "letter":
+        registration_price = int(Price.objects.filter(item="Registration").first() or 0)
+        medal_price = int(Price.objects.filter(item="Medal").first() or 0)
+        card_num = int(Price.objects.filter(item="CardN").first() or 0)
+        
+        registrations = len(results)
+        registrations_payment = registrations * registration_price
+        medals = len(results.filter(medal=True))
+        medals_payment = medals*medal_price
+
+        context = {
+            'event': event,
+            'registrations': registrations,
+            'registrations_payment': registrations_payment,
+            'medals': medals,
+            'medals_payment': medals_payment,
+            'card_num': card_num,
+        }
+        response = render(request, "brevet_database/orvm_letter.html", context)   
 
     return response
-
 
 def protocol_index(request, year=datetime.now().year):
     years = get_event_years()

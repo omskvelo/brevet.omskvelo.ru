@@ -50,7 +50,7 @@ class Medal(AbstractModel):
 
 
 @receiver(models.signals.post_save, sender=Event)
-def update_randonneur_stats(sender, instance:Event, created, **kwargs):
+def add_medals(sender, instance:Event, created, **kwargs):
     if instance.finished:
         results = Result.objects.filter(event=instance, medal=True)
         price = Price.objects.filter(item='Medal').first() or 0
@@ -73,6 +73,8 @@ class Price(models.Model):
         verbose_name="Предмет",
         choices=[
             ("Medal", "Медаль"),
+            ("Registration", "Регистрация"),
+            ("CardN", "Последние 4 цифры карты ОРВМ")
         ])
 
     price = models.IntegerField(verbose_name="Цена")

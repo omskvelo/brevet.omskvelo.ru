@@ -369,6 +369,9 @@ class Event(AbstractModel):
     def get_protocol_xlsx_url(self):
         return reverse('protocol_f', kwargs={'event_id': self.pk, "form" : "xlsx"})  
 
+    def get_protocol_letter_url(self):
+        return reverse('protocol_f', kwargs={'event_id': self.pk, "form" : "letter"})  
+
     def get_protocol_upload_success_url(self):
         date = datetime.strftime(self.date, "%Y%m%d")
         return reverse("protocol_upload_success", kwargs={'event_id': self.pk})
